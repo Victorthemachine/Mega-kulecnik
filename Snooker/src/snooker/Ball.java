@@ -7,7 +7,7 @@ package snooker;
 
 /**
  *
- * @author Tanya
+ * @author martin
  */
 public class Ball {
     
