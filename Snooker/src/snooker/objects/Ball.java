@@ -14,7 +14,7 @@ import javafx.scene.shape.Circle;
 public class Ball {
 
     private Circle bounds;
-    private double[] center;
+    private double[] center = {0.0, 0.0};
     private double radius;
 
     public Ball(Circle bounds) {
@@ -35,4 +35,9 @@ public class Ball {
         bounds = new Circle(radius);
     }
 
+    public Circle getBounds() {
+        return bounds;
+    }
+
+    
 }

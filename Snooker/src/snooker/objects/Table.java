@@ -15,17 +15,17 @@ public class Table {
 
     double xCord;
     double yCord;
-    int width;
-    int height;
+    double width;
+    double height;
     Rectangle bounds;
 
-    public Table(int width, int height) {
+    public Table(double width, double height) {
         this.width = width;
         this.height = height;
         bounds = new Rectangle(width, height);
     }
 
-    public Table(int xCord, int yCord, int width, int height) {
+    public Table(double xCord, double yCord, double width, double height) {
         this.xCord = xCord;
         this.yCord = yCord;
         this.width = width;
@@ -35,8 +35,8 @@ public class Table {
     public Table(Rectangle rect) {
         this.xCord = rect.getX() == 0 ? rect.getLayoutX() : rect.getX();
         this.yCord = rect.getY() == 0 ? rect.getLayoutY() : rect.getY();
-        this.width = (int)rect.getWidth();
-        this.height = (int)rect.getHeight();
+        this.width = rect.getWidth();
+        this.height = rect.getHeight();
         bounds = rect;
 //        bounds.setX(xCord);
 //        bounds.setY(yCord);
@@ -50,21 +50,21 @@ public class Table {
         return yCord;
     }
 
-    public void setxCord(int xCord) {
+    public void setxCord(double xCord) {
         this.xCord = xCord;
         bounds.setX(xCord);
     }
 
-    public void setyCord(int yCord) {
+    public void setyCord(double yCord) {
         this.yCord = yCord;
         bounds.setY(yCord);
     }
 
-    public int getHeight() {
+    public double getHeight() {
         return height;
     }
 
-    public int getWidth() {
+    public double getWidth() {
         return width;
     }
     
