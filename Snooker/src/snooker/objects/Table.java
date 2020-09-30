@@ -13,8 +13,8 @@ import javafx.scene.shape.Rectangle;
  */
 public class Table {
 
-    int xCord;
-    int yCord;
+    double xCord;
+    double yCord;
     int width;
     int height;
     Rectangle bounds;
@@ -32,20 +32,32 @@ public class Table {
         this.height = height;
     }
 
-    public int getxCord() {
+    public Table(Rectangle rect) {
+        this.xCord = rect.getX() == 0 ? rect.getLayoutX() : rect.getX();
+        this.yCord = rect.getY() == 0 ? rect.getLayoutY() : rect.getY();
+        this.width = (int)rect.getWidth();
+        this.height = (int)rect.getHeight();
+        bounds = rect;
+//        bounds.setX(xCord);
+//        bounds.setY(yCord);
+    }
+    
+    public double getxCord() {
         return xCord;
     }
 
-    public int getyCord() {
+    public double getyCord() {
         return yCord;
     }
 
     public void setxCord(int xCord) {
         this.xCord = xCord;
+        bounds.setX(xCord);
     }
 
     public void setyCord(int yCord) {
         this.yCord = yCord;
+        bounds.setY(yCord);
     }
 
     public int getHeight() {

@@ -11,10 +11,10 @@ import javafx.scene.Parent;
 import javafx.scene.Scene;
 import javafx.scene.layout.AnchorPane;
 import javafx.scene.paint.Color;
-import javafx.scene.paint.Paint;
 import javafx.scene.shape.Rectangle;
 import javafx.scene.shape.StrokeLineCap;
 import javafx.stage.Stage;
+import snooker.objects.Table;
 
 /**
  *
@@ -23,6 +23,7 @@ import javafx.stage.Stage;
 public class Snooker extends Application {
 
     private Rectangle rect;
+    private Table table;
 
     @Override
     public void start(Stage stage) throws Exception {
@@ -33,14 +34,28 @@ public class Snooker extends Application {
         rect.setStroke(Color.BLACK);
         rect.setStrokeWidth(10);
         rect.setStrokeLineCap(StrokeLineCap.ROUND);
-        AnchorPane testPane = new AnchorPane(rect);
+        AnchorPane testPane = new AnchorPane();
         testPane.setStyle("-fx-background-color:white");
+        testPane.setPrefSize(1100, 650);
+        double[] cords = cords(new Rectangle(testPane.getPrefWidth(), testPane.getPrefHeight()), rect);
+        rect.setLayoutX(cords[0]);
+        rect.setLayoutY(cords[1]);
+        table = new Table(rect);
+        System.out.println(table.getBounds() + "\n" + table.getxCord() + " " + rect.getX());
+        testPane.getChildren().add(rect);
         Scene test = new Scene(testPane);
         stage.setScene(test);
         stage.setTitle("Snooker");
         stage.show();
     }
-
+    public static double[] cords(Rectangle screen, Rectangle obj) {
+        double[] cordinates = {0, 0};
+        cordinates[0] = (screen.getWidth() - obj.getWidth())/2;
+        System.out.println(cordinates[0]);
+        cordinates[1] = (screen.getWidth() - obj.getWidth())/2;
+        System.out.println(cordinates[1]);
+        return cordinates;
+    }
     /**
      * @param args the command line arguments
      */
