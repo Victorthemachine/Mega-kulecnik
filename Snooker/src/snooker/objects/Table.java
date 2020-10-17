@@ -17,6 +17,7 @@ public class Table {
     double yCord;
     double width;
     double height;
+    double friction;
     Rectangle bounds;
 
     public Table(double width, double height) {
@@ -70,6 +71,14 @@ public class Table {
     
     public Rectangle getBounds() {
         return bounds;
+    } 
+
+    public double getFriction() {
+        return friction;
     }
 
+    public void setFriction(double friction) {
+        this.friction = friction;
+    }
+    
 }

@@ -16,12 +16,15 @@ public class Ball {
     private Circle bounds;
     private double[] center = {0.0, 0.0};
     private double radius;
+    private Force force;
 
     public Ball(Circle bounds) {
         this.bounds = bounds;
         center[0] = bounds.getCenterX();
         center[1] = bounds.getCenterY();
         radius = bounds.getRadius();
+        double[] temp = {bounds.getCenterX(), bounds.getCenterY()};
+        force = new Force(1, new Vector(temp));
     }
 
     public Ball(double[] center, double radius) {
@@ -39,5 +42,19 @@ public class Ball {
         return bounds;
     }
 
+    public void setCenter(double[] center) {
+        this.center = center;
+    }
+
+    public double[] getCenter() {
+        return center;
+    }
     
+    public void fetchMove(Vector apply) {
+/*        double[] temp = force.getCurrentForce(apply);
+        double[] returnTemp = {temp[0], temp[1]};
+        setCenter(returnTemp);*/
+        double[] temp = getCenter();
+        setCenter(new double[]{temp[0] + 25, temp[1] + 25});
+    }
 }

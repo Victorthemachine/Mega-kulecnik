@@ -7,12 +7,9 @@ package snooker;
 
 import java.util.ArrayList;
 import java.util.List;
-import java.util.Timer;
 import java.util.concurrent.Executors;
 import java.util.concurrent.ScheduledExecutorService;
 import java.util.concurrent.TimeUnit;
-import java.util.logging.Level;
-import java.util.logging.Logger;
 import javafx.application.Application;
 import javafx.fxml.FXMLLoader;
 import javafx.scene.Parent;
@@ -26,6 +23,7 @@ import javafx.scene.shape.StrokeLineCap;
 import javafx.stage.Stage;
 import snooker.objects.Ball;
 import snooker.objects.Table;
+import snooker.objects.Vector;
 
 /**
  *
@@ -45,7 +43,7 @@ public class Snooker extends Application {
         Parent root = FXMLLoader.load(getClass().getResource("./FXMLDocument.fxml"));
         balls = new ArrayList();
 //        Ball white = new Ball(new Circle(0, 0, 50));    // <<< Neprotina
-        Ball white = new Ball(new Circle(200, 200, 50)); // <<< Protina
+        Ball white = new Ball(new Circle(200, 200, 20)); // <<< Protina
         balls.add(white);
         rect = new Rectangle(900, 450, Color.WHITE);
         test = new Rectangle(900, 450, Color.GREEN);
@@ -59,7 +57,7 @@ public class Snooker extends Application {
         double[] cords = cords(new Rectangle(testPane.getPrefWidth(), testPane.getPrefHeight()), rect);
         rect.setLayoutX(cords[0]);
         rect.setLayoutY(cords[1]);
-        test.setLayoutX(cords[0] -  rect.getStrokeDashOffset());
+        test.setLayoutX(cords[0] - rect.getStrokeDashOffset());
         test.setLayoutY(cords[1] - rect.getStrokeDashOffset());
         table = new Table(rect);
         System.out.println(table.getBounds() + "\n" + table.getxCord() + " " + rect.getX());
@@ -69,6 +67,12 @@ public class Snooker extends Application {
         stage.setTitle("Snooker");
         stage.show();
         runCollisionCheck();
+        for (int i = 0; i < 10; i++) {
+            testPane.getChildren().add(new Circle(balls.get(0).getCenter()[0], balls.get(0).getCenter()[1], 20));
+            balls.get(0).fetchMove(new Vector(cords));
+            testPane.getChildren().remove(balls.get(0).getBounds());
+            testPane.getChildren().add(balls.get(0).getBounds());
+        }
     }
 
     public static double[] cords(Rectangle screen, Rectangle obj) {
@@ -92,8 +96,8 @@ public class Snooker extends Application {
             System.out.println(el.getBounds());
             Shape intersect = Shape.intersect(el.getBounds(), table.getBounds());
             Shape safeIntersect = Shape.intersect(el.getBounds(), test);
-            if (intersect.getBoundsInLocal().getWidth() != -1 && safeIntersect.getBoundsInLocal().getWidth() != el.getBounds().getRadius()*2) {
-                System.out.println(safeIntersect.getBoundsInLocal().getWidth() != el.getBounds().getRadius()*2);
+            if (intersect.getBoundsInLocal().getWidth() != -1 && safeIntersect.getBoundsInLocal().getWidth() != el.getBounds().getRadius() * 2) {
+                System.out.println(safeIntersect.getBoundsInLocal().getWidth() != el.getBounds().getRadius() * 2);
                 System.out.println(intersect.getBoundsInLocal().getWidth());
                 System.out.println(el.getBounds());
                 System.out.println("Collision!");
