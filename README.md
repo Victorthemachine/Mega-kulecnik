@@ -1,2 +1,2 @@
 # Mega-creativni-kulecnik
-Best kulecnik ever
+Best kulecnik ever AKA Vžum
