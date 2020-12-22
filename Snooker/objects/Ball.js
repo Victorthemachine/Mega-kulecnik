@@ -1,4 +1,4 @@
-const radius = 57.2; //57,2mm
+const radius = 28.6; //57.2mm, White = 60.3mm
 
 //15 balls and one white
 module.exports = class Ball {
@@ -9,7 +9,7 @@ module.exports = class Ball {
         this.y = options.y;
         this.x = options.x;
         this.hidden = options.hidden || false;
-        this.radius = radius;
+        this.radius = id === 0 ? 30.15 : radius;
         this.imageURL = this.fetchImageURL(id);
         this.color = this.fetchColor(id);
     }

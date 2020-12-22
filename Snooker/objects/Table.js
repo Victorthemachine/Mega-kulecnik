@@ -7,8 +7,8 @@ const Ball = require('./Ball.js');
 module.exports = class Table {
 
     constructor() {
-        this.width = 275;
-        this.height = 120;
+        this.width = 254;
+        this.height = 127;
         this.x = 0;
         this.y = 0;
     }
