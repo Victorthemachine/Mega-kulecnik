@@ -6,6 +6,9 @@ const Ball = require('./Ball.js');
  */
 module.exports = class Table {
 
+    /**
+     * Creates a table for the game
+     */
     constructor() {
         this.width = 254;
         this.height = 127;

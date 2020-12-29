@@ -1,14 +1,24 @@
+const Game = require('../Game.js');
+const Vector = require('./Vector.js');
 const radius = 28.6; //57.2mm, White = 60.3mm
 
 //15 balls and one white
 module.exports = class Ball {
 
+    /**
+     * Creates ball object with id 0-15 (16 balls) and game that owns it
+     * 
+     * @param {Number} id 
+     * @param {Game} game 
+     * @param {JSON} [options] x: Number, y: Number, hidden: Boolean, vector: Vector
+     */
     constructor(id, game, options = {}) {
         this.id = id;
         this.game = game;
         this.y = options.y;
         this.x = options.x;
         this.hidden = options.hidden || false;
+        this.vector = options.vector;
         this.radius = id === 0 ? 30.15 : radius;
         this.imageURL = this.fetchImageURL(id);
         this.color = this.fetchColor(id);
@@ -83,5 +93,15 @@ module.exports = class Ball {
         });
         if (this.game.checkCollisionBtT(this)) answer.withTable = true;
         return answer;
+    }
+
+    /**
+     * Moves the ball by the supplied vector.
+     * 
+     * @param {Vector} vector 
+     */
+    moveByVector(vector) {
+        this.x += vector.x;
+        this.y += vector.y;
     }
 }
