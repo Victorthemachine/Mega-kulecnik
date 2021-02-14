@@ -204,4 +204,14 @@ module.exports = class Game {
         ball.vector.setVector(bounceAngle, ball.vector.force);
 
     }
+
+    /**
+     * Computes collision of two balls
+     * 
+     * @param {Ball} ball_1 
+     * @param {Ball} ball_2
+     */
+    computeBtTCollision(ball_1, ball_2) {
+    
+    }
 }

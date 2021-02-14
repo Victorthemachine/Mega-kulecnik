@@ -1,0 +1,17 @@
+.col {
+    display: inline-flex;
+    flex-direction: column;
+    column-gap: 20px;
+    align-content: space-between;
+    flex-basis: 20%;
+    margin:0 -15px;
+}
+
+button {
+    padding: 20px 40px;
+    text-align: center;
+    text-decoration: none;
+    display: inline-block;
+    font-size: 16px;
+    border-radius: 4px;
+}

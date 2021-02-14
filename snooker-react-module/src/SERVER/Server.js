@@ -1,6 +1,6 @@
 const express = require('express');
 const https = require('https');
-const configuration = require('./config.json');
+const configuration = require('./../config.json');
 const Game = require('./Game.js');
 const Vector = require('./objects/Vector.js');
 

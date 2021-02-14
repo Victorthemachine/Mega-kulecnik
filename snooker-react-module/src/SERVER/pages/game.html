@@ -1,0 +1,68 @@
+<!DOCTYPE html>
+<html lang="en">
+
+    <head>
+        <meta charset="UTF-8">
+
+        <title>8-Ball</title>
+        <meta name="description" content="TestTemplate">
+        <meta name="author" content="Victorthemachine">
+    </head>
+
+    <body>
+
+        <canvas id="canvas" width="750" height="400" style="border:1px solid lightgrey;">
+            Your browser does not support the HTML5 canvas tag.
+        </canvas>
+
+        <script>
+            "use strict";
+            let canvas;
+            let context;
+
+            window.onload = init;
+
+            function init() {
+                canvas = document.getElementById('canvas');
+                context = canvas.getContext('2d');
+
+                // Start the first frame request
+                window.requestAnimationFrame(gameLoop);
+            }
+
+            let rectX = 0;
+            let rectY = 0;
+
+            let secondsPassed = 0;
+            let oldTimeStamp = 0;
+            let movingSpeed = 50;
+
+            function gameLoop(timeStamp) {
+                // Calculate how much time has passed
+                secondsPassed = (timeStamp - oldTimeStamp) / 1000;
+                oldTimeStamp = timeStamp;
+
+                // Pass the time to the update
+                update(secondsPassed);
+                draw();
+
+                window.requestAnimationFrame(gameLoop);
+            }
+
+            function update(secondsPassed) {
+                // Use time to calculate new position
+                rectX += (movingSpeed * secondsPassed);
+                rectY += (movingSpeed * secondsPassed);
+            }
+            
+            function draw() {
+                // Clear the entire canvas
+                context.clearRect(0, 0, canvas.width, canvas.height);
+
+                context.fillStyle = '#ff8080';
+                context.fillRect(rectX, rectY, 150, 100);
+            }
+        </script>
+    </body>
+
+</html>
