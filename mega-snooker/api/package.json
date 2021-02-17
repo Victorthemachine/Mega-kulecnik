@@ -14,6 +14,18 @@
     "jstransformer": "^1.0.0",
     "morgan": "~1.10.0",
     "npm-check-updates": "^11.1.4",
-    "pug": "^3.0.0"
+    "pug": "^3.0.0",
+    "simple-svg-tools": "^1.1.12",
+    "svg-to-jsx": "^1.0.2"
+  },
+  "devDependencies": {
+    "@babel/core": "^7.12.16",
+    "@babel/preset-env": "^7.12.16",
+    "babel-loader": "^8.2.2",
+    "html-loader": "^2.0.0",
+    "html-webpack-plugin": "^5.1.0",
+    "webpack": "^5.22.0",
+    "webpack-cli": "^4.5.0",
+    "webpack-node-externals": "^2.5.2"
   }
 }

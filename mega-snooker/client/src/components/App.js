@@ -1,6 +1,10 @@
 import logo from './../logo.svg';
 import './../styles/App.css';
-import { Component } from 'react';
+import React, { Component } from 'react';
+import Image from './partial-components/Image';
+
+const apiTool = require('./../utilities/apiTool');
+const API = new apiTool();
 
 /* This is a test class, I will be transfering the entire API mechanism into a separete Util class (to be able to reuse it).
  * Therefore, feel free to look at it and familirize yourself with "basic" React.js and Node.js relation.
@@ -9,41 +13,45 @@ import { Component } from 'react';
 class App extends Component {
   constructor(props) {
     super(props);
-    this.state = { apiResponse: "" };
+    this.state = { apiResponse: "", assets: "" };
   }
 
-  callAPI() {
-    fetch("http://localhost:9000/testAPI")
-      .then(res => res.text())
-      .then(res => this.setState({ apiResponse: res }));
-  }
-
-  componentWillMount() {
-    this.callAPI();
+  componentDidMount() {
+    API.pingTest().then(res => {
+      this.setState({ apiResponse: res.data })
+      console.log(this.state.apiResponse);
+    });
+    API.fetchAsset('balls', '1').then(res => {
+      console.log('RESPONSE:')
+      console.log(res);
+      this.setState({ assets: res });
+    })
   }
 
   render() {
-    return (
-      <div className="App">
-        <p className="App-intro">
-          {this.state.apiResponse}
-        </p>
-        <header className="App-header">
-          <img src={logo} className="App-logo" alt="logo" />
-          <p>
-            Edit <code>src/App.js</code> and save to reload.
+    /*  return (
+        <div className="App">
+          <p className="App-intro">
+            {this.state.apiResponse}
           </p>
-          <a
-            className="App-link"
-            href="https://reactjs.org"
-            target="_blank"
-            rel="noopener noreferrer"
-          >
-            Learn React
-          </a>
-        </header>
-      </div>
-    );
+          <header className="App-header">
+            <img src={logo} className="App-logo" alt="logo" />
+            <p>
+              Edit <code>src/App.js</code> and save to reload.
+            </p>
+            <a
+              className="App-link"
+              href="https://reactjs.org"
+              target="_blank"
+              rel="noopener noreferrer"
+            >
+              Learn React
+            </a>
+          </header>
+          <Image />
+        </div>
+      );*/
+    return <div>        <h1>Webpack + React setup</h1>      </div>
   }
 }
 

@@ -10,9 +10,9 @@ import {
 
 import Menu from './components/Menu';
 import App from './components/App';
+import Lobby from './components/Lobby';
 
 ReactDOM.render(
-
   <React.StrictMode>
     <Router>
       <Switch>
@@ -21,6 +21,9 @@ ReactDOM.render(
         </Route>
         <Route path="/menu">
           <Menu />
+        </Route>
+        <Route path="/lobby">
+          <Lobby />
         </Route>
       </Switch>
     </Router>

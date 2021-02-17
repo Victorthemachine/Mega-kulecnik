@@ -1,0 +1,5 @@
+{
+    "serverAddress": "http://localhost:",
+    "port": "9000",
+    "pingTestPath": "/testAPI"
+}
