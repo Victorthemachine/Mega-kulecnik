@@ -3,6 +3,11 @@ const HtmlWebpackPlugin = require("html-webpack-plugin");
 const InterpolateHtmlPlugin = require('interpolate-html-plugin');
 
 module.exports = {
+    devServer: {
+        contentBase: path.join(__dirname, 'dist'),
+        compress: true,
+        port: 3000,
+    },
     //This property defines starting point of application (main entry)
     entry: "./src/index.js",
     //This property defines the file path and the file name which will be used for deploying the final production bundle
@@ -36,7 +41,7 @@ module.exports = {
             },
             {
                 test: /\.svg$/,
-                loader: 'svg-inline-loader'
+                use: ['@svgr/webpack'],
             }
         ],
     },

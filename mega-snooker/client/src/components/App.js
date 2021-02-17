@@ -1,7 +1,6 @@
-import logo from './../logo.svg';
 import './../styles/App.css';
 import React, { Component } from 'react';
-import Image from './partial-components/Image';
+import Test from './../assets/balls/1.svg';
 
 const apiTool = require('./../utilities/apiTool');
 const API = new apiTool();
@@ -53,7 +52,7 @@ class App extends Component {
       );*/
     return (
       <div>
-        <h1>Webpack + React setup</h1>
+        <Test />
       </div>
     );
   }
