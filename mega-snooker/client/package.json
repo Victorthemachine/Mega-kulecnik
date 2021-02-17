@@ -33,7 +33,7 @@
     "xml2js": "^0.4.23"
   },
   "scripts": {
-    "start": "webpack serve --mode development --open --hot",
+    "start": "webpack serve --mode development --open --hot --inline --content-base . --history-api-fallback",
     "build": "webpack --mode production",
     "eject": "react-scripts eject"
   },

@@ -51,7 +51,11 @@ class App extends Component {
           <Image />
         </div>
       );*/
-    return <div>        <h1>Webpack + React setup</h1>      </div>
+    return (
+      <div>
+        <h1>Webpack + React setup</h1>
+      </div>
+    );
   }
 }
 

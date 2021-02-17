@@ -9,6 +9,7 @@ module.exports = {
     output: {
         path: path.join(__dirname, "/dist"),
         filename: "index_bundle.js",
+        publicPath: '/'
     },
     //Setup loaders
     module: {
