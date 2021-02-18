@@ -1,6 +1,7 @@
 import './../styles/App.css';
 import React, { Component } from 'react';
-import Test from './../assets/balls/1.svg';
+import Test from './../assets/balls/koule1/Koule-1.1.svg';
+import { Link } from 'react-router-dom';
 
 const apiTool = require('./../utilities/apiTool');
 const API = new apiTool();
@@ -52,8 +53,15 @@ class App extends Component {
       );*/
     return (
       <div>
+        <header className="App-header">{this.state.apiResponse || 'API not working! Check if your server is running'}</header>
+        <h1>^^^ Check api status to see if it works ^^^
+          <br /><br />Check if image is loaded
+        </h1>
         <Test />
-      </div>
+        <div>
+          <Link className="link" to="/menu">To menu!</Link>
+        </div>
+      </div >
     );
   }
 }
