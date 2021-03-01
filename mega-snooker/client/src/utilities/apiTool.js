@@ -72,4 +72,19 @@ module.exports = class apiTool {
         }, 2000);
     }
 
+    /**
+     * Logs errors from React to API
+     * 
+     * @param {Error} error 
+     * @param {import('react').ErrorInfo} errorInfo 
+     */
+    log(error, errorInfo) {
+        axios.post(address + config.pingTestPath, {
+            error: error,
+            errorInfo: errorInfo
+        }, {}).catch(err => {
+            console.error(err);
+        })
+    }
+
 }

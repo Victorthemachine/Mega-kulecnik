@@ -54,6 +54,7 @@ module.exports = {
             title: "Custom template",
             // Load a custom template (lodash by default)
             template: "./public/index.html",
+            favicon: './src/assets/other/favicon.ico',
             meta: {
                 viewport: "width=device-width, initial-scale=1, shrink-to-fit=no",
                 // Will generate: <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
