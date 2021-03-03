@@ -9,8 +9,8 @@
    xmlns:sodipodi="http://sodipodi.sourceforge.net/DTD/sodipodi-0.dtd"
    xmlns:inkscape="http://www.inkscape.org/namespaces/inkscape"
    width="50mm"
-   height="9.9999997e-06mm"
-   viewBox="0 0 50 9.9999997e-06"
+   height="50mm"
+   viewBox="0 0 50 50"
    version="1.1"
    id="svg8"
    inkscape:version="1.0.1 (3bc2e813f5, 2020-09-07)"
@@ -49,7 +49,7 @@
        fx="54.447247"
        fy="49.531189"
        r="32.127975"
-       gradientTransform="matrix(0.77813809,0,0,0.77813812,-3.3823588,4.411762)"
+       gradientTransform="matrix(0.77813809,0,0,0.77813812,-3.3823611,4.4117627)"
        gradientUnits="userSpaceOnUse" />
     <radialGradient
        inkscape:collect="always"
@@ -60,7 +60,7 @@
        fx="26.274075"
        fy="14.800471"
        r="32.127975"
-       gradientTransform="matrix(0.77813809,0,0,0.77813812,-3.3823607,4.411762)"
+       gradientTransform="matrix(0.77813809,0,0,0.77813812,-3.3823628,4.4117617)"
        gradientUnits="userSpaceOnUse" />
   </defs>
   <sodipodi:namedview
@@ -71,8 +71,8 @@
      inkscape:pageopacity="0.0"
      inkscape:pageshadow="2"
      inkscape:zoom="0.98994949"
-     inkscape:cx="222.59462"
-     inkscape:cy="231.88183"
+     inkscape:cx="176.99516"
+     inkscape:cy="73.596064"
      inkscape:document-units="mm"
      inkscape:current-layer="layer1"
      inkscape:document-rotation="0"
@@ -110,27 +110,25 @@
        cx="25.000002"
        cy="23.187006"
        r="9.8315496" />
-    <text
-       xml:space="preserve"
-       style="font-style:normal;font-variant:normal;font-weight:normal;font-stretch:normal;font-size:20.8139px;line-height:1.25;font-family:'Berlin Sans FB Demi';-inkscape-font-specification:'Berlin Sans FB Demi';display:inline;stroke-width:0.264583"
-       x="20.274429"
-       y="28.938179"
-       id="text1149"><tspan
-         sodipodi:role="line"
-         id="tspan1147"
-         x="20.274429"
-         y="28.938179"
-         style="font-style:normal;font-variant:normal;font-weight:normal;font-stretch:normal;font-size:20.8139px;font-family:'Berlin Sans FB Demi';-inkscape-font-specification:'Berlin Sans FB Demi';stroke-width:0.264583">2</tspan></text>
+    <g
+       aria-label="2"
+       id="text1149"
+       style="font-style:normal;font-variant:normal;font-weight:normal;font-stretch:normal;font-size:20.8139px;line-height:1.25;font-family:'Berlin Sans FB Demi';-inkscape-font-specification:'Berlin Sans FB Demi';display:inline;stroke-width:0.264583">
+      <path
+         d="m 30.864314,26.041713 q 0,0.23375 -0.05082,0.70125 -0.05082,0.4675 -0.05082,0.711413 0,0.243912 -0.01016,0.77239 -0.01016,0.518315 -0.01016,0.772391 0,0.254076 -0.335381,0.254076 -0.121956,0 -0.955325,-0.193098 -0.924837,-0.20326 -3.455433,-0.20326 -0.782554,0 -2.347661,0.0813 -1.565108,0.09147 -2.327336,0.09147 -0.264239,0 -0.294728,-0.254076 -0.03049,-0.345543 -0.152445,-1.026466 -0.254076,-1.03663 -0.254076,-1.189076 0,-0.223586 0.853695,-0.33538 0.995977,-0.132119 1.280542,-0.365869 1.026467,-0.863858 2.103749,-2.185053 1.37201,-1.666738 1.37201,-2.500107 0,-0.721576 -0.528478,-1.209402 -0.518315,-0.497989 -1.23989,-0.497989 -0.813043,0 -1.615923,0.325218 -0.538641,0.20326 -1.128097,0.589456 -0.497989,0.315054 -0.548804,0.315054 -0.345544,0 -0.345544,-0.813043 0,-0.630108 -0.05082,-0.914673 -0.02033,-0.13212 -0.152445,-0.548804 -0.121957,-0.355707 -0.121957,-0.528478 0,-0.13212 0.172772,-0.254076 0.843532,-0.599619 2.256194,-0.945163 1.260217,-0.304891 2.449292,-0.304891 1.930977,0 3.231846,0.853695 1.534618,0.995978 1.534618,2.835488 0,2.449292 -3.709508,5.72179 2.632226,-0.13212 4.126193,-0.13212 0.304891,0 0.304891,0.376032 z"
+         style="font-style:normal;font-variant:normal;font-weight:normal;font-stretch:normal;font-size:20.8139px;font-family:'Berlin Sans FB Demi';-inkscape-font-specification:'Berlin Sans FB Demi';stroke-width:0.264583"
+         id="path842" />
+    </g>
     <circle
        style="display:inline;opacity:0.88141;mix-blend-mode:normal;fill:url(#radialGradient1561-9);fill-opacity:1;stroke:none;stroke-width:0.212909;stroke-opacity:1;paint-order:markers fill stroke"
        id="path1129-9"
-       cx="25.000002"
+       cx="25"
        cy="25"
        r="25" />
     <circle
        style="display:inline;opacity:0.88141;mix-blend-mode:normal;fill:url(#radialGradient1561);fill-opacity:1;stroke:none;stroke-width:0.212909;stroke-opacity:1;paint-order:markers fill stroke"
        id="path1129"
-       cx="25.000002"
+       cx="25"
        cy="25"
        r="25" />
   </g>
