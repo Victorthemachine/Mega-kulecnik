@@ -49,7 +49,7 @@
        fx="54.447247"
        fy="49.531189"
        r="32.127975"
-       gradientTransform="matrix(0.77813809,0,0,0.77813812,-3.3823613,4.412129)"
+       gradientTransform="matrix(0.77813809,0,0,0.77813812,-3.3823598,4.4117579)"
        gradientUnits="userSpaceOnUse" />
     <radialGradient
        inkscape:collect="always"
@@ -60,7 +60,7 @@
        fx="26.274075"
        fy="14.800471"
        r="32.127975"
-       gradientTransform="matrix(0.77813809,0,0,0.77813812,-3.3823613,4.412129)"
+       gradientTransform="matrix(0.77813809,0,0,0.77813812,-3.3823629,4.4117593)"
        gradientUnits="userSpaceOnUse" />
   </defs>
   <sodipodi:namedview
@@ -90,7 +90,7 @@
         <dc:format>image/svg+xml</dc:format>
         <dc:type
            rdf:resource="http://purl.org/dc/dcmitype/StillImage" />
-        <dc:title></dc:title>
+        <dc:title />
       </cc:Work>
     </rdf:RDF>
   </metadata>
@@ -114,17 +114,15 @@
        id="path991"
        style="display:inline;fill:#ffffff;fill-opacity:1;stroke:#000000;stroke-width:0.27064;stroke-opacity:1;paint-order:markers fill stroke"
        d="M 24.98142,0.13531999 A 24.864681,24.864681 0 0 0 7.7390612,7.103371 H 42.260983 a 24.864681,24.864681 0 0 0 -17.26096,-6.96805101 24.864681,24.864681 0 0 0 -0.0186,0 z" />
-    <text
-       xml:space="preserve"
-       style="font-style:normal;font-variant:normal;font-weight:normal;font-stretch:normal;font-size:20.8139px;line-height:1.25;font-family:'Berlin Sans FB Demi';-inkscape-font-specification:'Berlin Sans FB Demi';display:inline;stroke-width:0.264583"
-       x="1.0893555"
-       y="29.851065"
-       id="text1149-1"><tspan
-         sodipodi:role="line"
-         id="tspan1147-2"
-         x="1.0893555"
-         y="29.851065"
-         style="font-style:normal;font-variant:normal;font-weight:normal;font-stretch:normal;font-size:20.8139px;font-family:'Berlin Sans FB Demi';-inkscape-font-specification:'Berlin Sans FB Demi';stroke-width:0.264583">9</tspan></text>
+    <g
+       aria-label="9"
+       id="text1149-1"
+       style="font-style:normal;font-variant:normal;font-weight:normal;font-stretch:normal;font-size:20.8139px;line-height:1.25;font-family:'Berlin Sans FB Demi';-inkscape-font-specification:'Berlin Sans FB Demi';display:inline;stroke-width:0.264583">
+      <path
+         d="m 12.289022,22.940199 q 0,3.333477 -2.4797807,5.376247 -2.3171725,1.910651 -5.7217899,1.910651 -0.2032607,0 -0.3150541,-0.274402 -0.7215757,-1.768368 -0.7215757,-2.296846 0,-0.325218 0.4776628,-0.325218 3.2521718,0 4.2176604,-1.666738 0.1321195,-0.223586 0.1321195,-0.325217 0,-0.06098 -0.060978,-0.06098 -0.050815,0 -0.2337498,0.0813 -0.8536951,0.396359 -1.9309771,0.396359 -1.7785315,0 -2.9066286,-1.056956 -1.1585862,-1.067119 -1.1585862,-2.835487 0,-2.296847 1.5346186,-3.526574 1.4024991,-1.138261 3.7501607,-1.138261 2.5305962,0 4.0042364,1.626086 1.412662,1.565108 1.412662,4.11603 z M 8.4778834,21.964548 q 0,-0.772391 -0.4370106,-1.321195 -0.4776627,-0.599619 -1.2297274,-0.599619 -1.6870642,0 -1.6870642,1.768368 0,0.721576 0.4573367,1.209402 0.4573366,0.477662 1.1687492,0.477662 0.7215757,0 1.2094015,-0.396358 0.5183148,-0.437011 0.5183148,-1.13826 z"
+         style="font-style:normal;font-variant:normal;font-weight:normal;font-stretch:normal;font-size:20.8139px;font-family:'Berlin Sans FB Demi';-inkscape-font-specification:'Berlin Sans FB Demi';stroke-width:0.264583"
+         id="path848" />
+    </g>
     <rect
        style="display:inline;opacity:1;fill:#000101;fill-opacity:1;stroke:#000000;stroke-width:0.260045;stroke-opacity:1;paint-order:markers fill stroke"
        id="rect1007-3-5"
@@ -136,13 +134,13 @@
        style="display:inline;opacity:0.88141;mix-blend-mode:normal;fill:url(#radialGradient1561-9-67);fill-opacity:1;stroke:none;stroke-width:0.212909;stroke-opacity:1;paint-order:markers fill stroke"
        id="path1129-9-5"
        cx="25"
-       cy="25.000372"
+       cy="25"
        r="25" />
     <circle
        style="display:inline;opacity:0.88141;mix-blend-mode:normal;fill:url(#radialGradient1561-637);fill-opacity:1;stroke:none;stroke-width:0.212909;stroke-opacity:1;paint-order:markers fill stroke"
        id="path1129-41"
        cx="25"
-       cy="25.000372"
+       cy="25"
        r="25" />
   </g>
 </svg>
