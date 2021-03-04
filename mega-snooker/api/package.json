@@ -19,7 +19,8 @@
     "npm-check-updates": "^11.1.4",
     "pug": "^3.0.0",
     "simple-svg-tools": "^1.1.12",
-    "svg-to-jsx": "^1.0.2"
+    "svg-to-jsx": "^1.0.2",
+    "uuid": "^8.3.2"
   },
   "devDependencies": {
     "@babel/core": "^7.12.16",

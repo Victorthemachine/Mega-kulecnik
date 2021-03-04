@@ -2,6 +2,8 @@ import './../styles/App.css';
 import React, { Component } from 'react';
 import Test from './../assets/balls/1/1-1.svg';
 import { Link } from 'react-router-dom';
+import Table from './../components/Table';
+
 //import balls from './../utilities/assetTool';
 //import Image from './../utilities/Image';
 
@@ -56,6 +58,7 @@ class App extends Component {
       );*/
     return (
       <div>
+        <Table />
         <header className="App-header">{this.state.apiResponse || 'API not working! Check if your server is running'}</header>
         <h1>^^^ Check api status to see if it works ^^^
           <br /><br />Check if image is loaded

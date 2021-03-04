@@ -1,0 +1,271 @@
+[
+    {
+        "status": "ACTIVE / FINISHED / PAUSED ...",
+        "connectionWizard": {
+            "gameInfo": {
+                "id": "EXAMPLE ID",
+                "pass": "EXAMPLE PASSPHRASE"
+            },
+            "game": {}
+        }
+    },
+    {
+        "status": "STARTING",
+        "connectionWizard": {
+            "game": {
+                "table": {
+                    "width": 2594,
+                    "height": 1297,
+                    "x": -17,
+                    "y": 0
+                },
+                "balls": [
+                    {
+                        "id": 0,
+                        "y": 0,
+                        "x": -17,
+                        "hidden": false,
+                        "vector": {
+                            "x": null,
+                            "y": null,
+                            "force": null,
+                            "angle": null,
+                            "owner": 0
+                        },
+                        "radius": 143.59642857142856,
+                        "color": "WHITE_FULL"
+                    },
+                    {
+                        "id": 1,
+                        "y": 1,
+                        "x": -16,
+                        "hidden": false,
+                        "vector": {
+                            "x": null,
+                            "y": null,
+                            "force": null,
+                            "angle": null,
+                            "owner": 1
+                        },
+                        "radius": 132.01607142857142,
+                        "color": "YELLOW_FULL"
+                    },
+                    {
+                        "id": 2,
+                        "y": 2,
+                        "x": -15,
+                        "hidden": false,
+                        "vector": {
+                            "x": null,
+                            "y": null,
+                            "force": null,
+                            "angle": null,
+                            "owner": 2
+                        },
+                        "radius": 132.01607142857142,
+                        "color": "BLUE_FULL"
+                    },
+                    {
+                        "id": 3,
+                        "y": 3,
+                        "x": -14,
+                        "hidden": false,
+                        "vector": {
+                            "x": null,
+                            "y": null,
+                            "force": null,
+                            "angle": null,
+                            "owner": 3
+                        },
+                        "radius": 132.01607142857142,
+                        "color": "RED_FULL"
+                    },
+                    {
+                        "id": 4,
+                        "y": 4,
+                        "x": -13,
+                        "hidden": false,
+                        "vector": {
+                            "x": null,
+                            "y": null,
+                            "force": null,
+                            "angle": null,
+                            "owner": 4
+                        },
+                        "radius": 132.01607142857142,
+                        "color": "PURPLE_FULL"
+                    },
+                    {
+                        "id": 5,
+                        "y": 5,
+                        "x": -12,
+                        "hidden": false,
+                        "vector": {
+                            "x": null,
+                            "y": null,
+                            "force": null,
+                            "angle": null,
+                            "owner": 5
+                        },
+                        "radius": 132.01607142857142,
+                        "color": "ORANGE_FULL"
+                    },
+                    {
+                        "id": 6,
+                        "y": 6,
+                        "x": -11,
+                        "hidden": false,
+                        "vector": {
+                            "x": null,
+                            "y": null,
+                            "force": null,
+                            "angle": null,
+                            "owner": 6
+                        },
+                        "radius": 132.01607142857142,
+                        "color": "GREEN_FULL"
+                    },
+                    {
+                        "id": 7,
+                        "y": 7,
+                        "x": -10,
+                        "hidden": false,
+                        "vector": {
+                            "x": null,
+                            "y": null,
+                            "force": null,
+                            "angle": null,
+                            "owner": 7
+                        },
+                        "radius": 132.01607142857142,
+                        "color": "MAROON_FULL"
+                    },
+                    {
+                        "id": 8,
+                        "y": 8,
+                        "x": -9,
+                        "hidden": false,
+                        "vector": {
+                            "x": null,
+                            "y": null,
+                            "force": null,
+                            "angle": null,
+                            "owner": 8
+                        },
+                        "radius": 132.01607142857142,
+                        "color": "BLACK_FULL"
+                    },
+                    {
+                        "id": 9,
+                        "y": 9,
+                        "x": -8,
+                        "hidden": false,
+                        "vector": {
+                            "x": null,
+                            "y": null,
+                            "force": null,
+                            "angle": null,
+                            "owner": 9
+                        },
+                        "radius": 132.01607142857142,
+                        "color": "YELLOW_STRIPE"
+                    },
+                    {
+                        "id": 10,
+                        "y": 10,
+                        "x": -7,
+                        "hidden": false,
+                        "vector": {
+                            "x": null,
+                            "y": null,
+                            "force": null,
+                            "angle": null,
+                            "owner": 10
+                        },
+                        "radius": 132.01607142857142,
+                        "color": "BLUE_STRIPE"
+                    },
+                    {
+                        "id": 11,
+                        "y": 11,
+                        "x": -6,
+                        "hidden": false,
+                        "vector": {
+                            "x": null,
+                            "y": null,
+                            "force": null,
+                            "angle": null,
+                            "owner": 11
+                        },
+                        "radius": 132.01607142857142,
+                        "color": "RED_STRIPE"
+                    },
+                    {
+                        "id": 12,
+                        "y": 12,
+                        "x": -5,
+                        "hidden": false,
+                        "vector": {
+                            "x": null,
+                            "y": null,
+                            "force": null,
+                            "angle": null,
+                            "owner": 12
+                        },
+                        "radius": 132.01607142857142,
+                        "color": "BLUE_STRIPE"
+                    },
+                    {
+                        "id": 13,
+                        "y": 13,
+                        "x": -4,
+                        "hidden": false,
+                        "vector": {
+                            "x": null,
+                            "y": null,
+                            "force": null,
+                            "angle": null,
+                            "owner": 13
+                        },
+                        "radius": 132.01607142857142,
+                        "color": "ORANGE_STRIPE"
+                    },
+                    {
+                        "id": 14,
+                        "y": 14,
+                        "x": -3,
+                        "hidden": false,
+                        "vector": {
+                            "x": null,
+                            "y": null,
+                            "force": null,
+                            "angle": null,
+                            "owner": 14
+                        },
+                        "radius": 132.01607142857142,
+                        "color": "GREEN_STRIPE"
+                    },
+                    {
+                        "id": 15,
+                        "y": 15,
+                        "x": -2,
+                        "hidden": false,
+                        "vector": {
+                            "x": null,
+                            "y": null,
+                            "force": null,
+                            "angle": null,
+                            "owner": 15
+                        },
+                        "radius": 132.01607142857142,
+                        "color": "MAROON_STRIPE"
+                    }
+                ]
+            },
+            "gameInfo": {
+                "id": "f87de7b4-abfe-40fd-9dc8-f7a882739201",
+                "pass": "30XKX"
+            }
+        }
+    }
+]

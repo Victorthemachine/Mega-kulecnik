@@ -8,10 +8,11 @@ module.exports = class Table {
 
     /**
      * Creates a table for the game
+     * NOTE: These are inner dimensions!
      */
     constructor() {
-        this.width = 254;
-        this.height = 127;
+        this.width = 224;
+        this.height = 112;
         this.x = 0;
         this.y = 0;
     }

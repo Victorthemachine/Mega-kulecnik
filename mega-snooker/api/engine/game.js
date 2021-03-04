@@ -1,6 +1,7 @@
 const Ball = require('../objects/Ball.js');
 const Table = require('../objects/Table.js');
 const Vector = require('../objects/Vector.js');
+const FileManager = require('./../utilities/fileManager');
 
 const parameters = require('./parameters.json');
 
@@ -96,14 +97,13 @@ module.exports = class Game {
      */
     initBalls() {
         for (let i = 0; i < 16; i++) {
-            balls.push(new Ball(i, this, {
+            balls.push(new Ball(i, {
                 x: i,
                 y: i,
                 hidden: false,
             }))
-            console.log(balls[i]);
             balls[i].vector = new Vector(i + 2, i, undefined, undefined, {
-                owner: balls[i]
+                owner: balls[i].id
             })
         }
     }
@@ -211,7 +211,33 @@ module.exports = class Game {
      * @param {Ball} ball_1 
      * @param {Ball} ball_2
      */
-    computeBtTCollision(ball_1, ball_2) {
+    /*computeBtBCollision(ball_1, ball_2) {
     
+    }*/
+
+    /**
+     * Updates sizes based on supplied parameters
+     * 
+     * @param {JSON} data 
+     */
+    updateSizes(id, data) {
+        const tableWidth = this.table.width * (data.height / this.table.height);
+        this.table.width = tableWidth;
+        this.table.height = data.height;
+
+        const offsetWidth = (data.windowWidth - this.table.width) / 2;
+        this.table.x = offsetWidth;
+
+        this.balls.forEach((el, index) => {
+            if (index === 0) {
+                el.x = el.x + offsetWidth;
+                el.radius = data.radiusWhite;
+            } else {
+                el.x = el.x + offsetWidth;
+                el.radius = data.radius;
+            }
+        });
+
+        FileManager.updateGames(id, 'game', this)
     }
 }

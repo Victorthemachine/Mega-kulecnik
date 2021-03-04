@@ -32,11 +32,11 @@ module.exports = class apiTool {
                     //resolve(this.parser.parseFromString(res.data, "image/svg+xml"));
                     //resolve(this.serializer.serializeToString(this.parser.parseFromString(res.data, "image/svg+xml")));
                     resolve(res.data);
-/*                    this.toJSParser.parseString(res.data, (error, obj) => {
-                        if (error) console.error(error);
-                        console.log(obj);
-                        resolve(obj);
-                    });*/
+                    /*                    this.toJSParser.parseString(res.data, (error, obj) => {
+                                            if (error) console.error(error);
+                                            console.log(obj);
+                                            resolve(obj);
+                                        });*/
                 })
                 .catch(error => {
                     console.log(error);
@@ -85,6 +85,28 @@ module.exports = class apiTool {
         }, {}).catch(err => {
             console.error(err);
         })
+    }
+
+    createGame(options) {
+        return new Promise(resolve => {
+            axios.post(address + config.port + config.initPath, options, {
+                headers: {
+                    Token: config.token
+                }
+            }).then(res => {
+                resolve(res);
+            }).catch(error => {
+                console.error(error);
+            })                
+        });
+    }
+
+    gameIntialPlacement(GAME_ID, options) {
+        
+    }
+
+    gameUpdatePositions(GAME_ID, ballMap, options) {
+
     }
 
 }

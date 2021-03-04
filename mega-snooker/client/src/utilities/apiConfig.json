@@ -1,5 +1,8 @@
 {
     "serverAddress": "http://localhost:",
     "port": "9000",
-    "pingTestPath": "/testAPI"
+    "token": "4887f2f3-a7e9-4461-b6c2-3051e83fa42a",
+    "pingTestPath": "/testAPI",
+    "loggerPath": "/log",
+    "initPath": "/init"
 }

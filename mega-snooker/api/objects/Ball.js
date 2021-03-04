@@ -1,4 +1,3 @@
-const Game = require('../game.js');
 const Vector = require('./Vector.js');
 const radius = 28.6; //57.2mm, White = 60.3mm
 
@@ -9,18 +8,15 @@ module.exports = class Ball {
      * Creates ball object with id 0-15 (16 balls) and game that owns it
      * 
      * @param {Number} id 
-     * @param {Game} game 
      * @param {JSON} [options] x: Number, y: Number, hidden: Boolean, vector: Vector
      */
-    constructor(id, game, options = {}) {
+    constructor(id, options = {}) {
         this.id = id;
-        this.game = game;
         this.y = options.y;
         this.x = options.x;
         this.hidden = options.hidden || false;
         this.vector = options.vector;
         this.radius = id === 0 ? 30.15 : radius;
-        this.imageURL = this.fetchImageURL(id);
         this.color = this.fetchColor(id);
     }
 
@@ -59,15 +55,6 @@ module.exports = class Ball {
                 return "GREEN_STRIPE";
             case 15:
                 return "MAROON_STRIPE";
-        }
-    }
-
-    fetchImageURL(id) {
-        const filePath = __dirname + './../Assets/Balls/';
-        switch (id) {
-            case 0:
-                return filePath + 'CueBall.png';
-            //TODO rest of the cases when we get assets..
         }
     }
 

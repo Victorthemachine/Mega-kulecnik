@@ -11,6 +11,8 @@ const svgTool = new SVGTool();
 const indexRouter = require('./routes/index');
 const usersRouter = require('./routes/users');
 const testAPIRouter = require("./routes/testAPI");
+const initGameRouter = require('./routes/init');
+const gameManagerRouter = require('./routes/gameManager');
 
 const app = express();
 
@@ -34,6 +36,8 @@ app.use(express.static(path.join(__dirname, 'public')));
 app.use('/', indexRouter);
 app.use('/users', usersRouter);
 app.use("/testAPI", testAPIRouter);
+app.use('/init', initGameRouter)
+app.use('/gameManager', gameManagerRouter);
 
 app.get('/assets/:name/:id', (req, res) => {
   svgTool.convertSVGtoJSX(path.join(__dirname, '/assets/', req.params.name, `${req.params.id}.svg`))
