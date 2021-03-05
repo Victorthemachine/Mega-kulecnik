@@ -1,29 +1,19 @@
 [
     {
-        "status": "ACTIVE / FINISHED / PAUSED ...",
-        "connectionWizard": {
-            "gameInfo": {
-                "id": "EXAMPLE ID",
-                "pass": "EXAMPLE PASSPHRASE"
-            },
-            "game": {}
-        }
-    },
-    {
         "status": "STARTING",
         "connectionWizard": {
             "game": {
                 "table": {
-                    "width": 2594,
-                    "height": 1297,
-                    "x": -17,
+                    "width": 1787.52,
+                    "height": 1197,
+                    "x": 386.24,
                     "y": 0
                 },
                 "balls": [
                     {
                         "id": 0,
-                        "y": 0,
-                        "x": -17,
+                        "y": 598.5,
+                        "x": 446.88,
                         "hidden": false,
                         "vector": {
                             "x": null,
@@ -32,13 +22,13 @@
                             "angle": null,
                             "owner": 0
                         },
-                        "radius": 143.59642857142856,
+                        "radius": 71.79821428571428,
                         "color": "WHITE_FULL"
                     },
                     {
                         "id": 1,
-                        "y": 1,
-                        "x": -16,
+                        "y": 499.48794642857143,
+                        "x": 1858.8960714285713,
                         "hidden": false,
                         "vector": {
                             "x": null,
@@ -47,13 +37,13 @@
                             "angle": null,
                             "owner": 1
                         },
-                        "radius": 132.01607142857142,
+                        "radius": 66.00803571428571,
                         "color": "YELLOW_FULL"
                     },
                     {
                         "id": 2,
-                        "y": 2,
-                        "x": -15,
+                        "y": 664.5080357142857,
+                        "x": 1726.8799999999999,
                         "hidden": false,
                         "vector": {
                             "x": null,
@@ -62,13 +52,13 @@
                             "angle": null,
                             "owner": 2
                         },
-                        "radius": 132.01607142857142,
+                        "radius": 66.00803571428571,
                         "color": "BLUE_FULL"
                     },
                     {
                         "id": 3,
-                        "y": 3,
-                        "x": -14,
+                        "y": 631.5040178571428,
+                        "x": 1858.8960714285713,
                         "hidden": false,
                         "vector": {
                             "x": null,
@@ -77,13 +67,13 @@
                             "angle": null,
                             "owner": 3
                         },
-                        "radius": 132.01607142857142,
+                        "radius": 66.00803571428571,
                         "color": "RED_FULL"
                     },
                     {
                         "id": 4,
-                        "y": 4,
-                        "x": -13,
+                        "y": 697.5120535714286,
+                        "x": 1858.8960714285713,
                         "hidden": false,
                         "vector": {
                             "x": null,
@@ -92,13 +82,13 @@
                             "angle": null,
                             "owner": 4
                         },
-                        "radius": 132.01607142857142,
+                        "radius": 66.00803571428571,
                         "color": "PURPLE_FULL"
                     },
                     {
                         "id": 5,
-                        "y": 5,
-                        "x": -12,
+                        "y": 631.5040178571428,
+                        "x": 1594.8639285714285,
                         "hidden": false,
                         "vector": {
                             "x": null,
@@ -107,13 +97,13 @@
                             "angle": null,
                             "owner": 5
                         },
-                        "radius": 132.01607142857142,
+                        "radius": 66.00803571428571,
                         "color": "ORANGE_FULL"
                     },
                     {
                         "id": 6,
-                        "y": 6,
-                        "x": -11,
+                        "y": 565.4959821428572,
+                        "x": 1594.8639285714285,
                         "hidden": false,
                         "vector": {
                             "x": null,
@@ -122,13 +112,13 @@
                             "angle": null,
                             "owner": 6
                         },
-                        "radius": 132.01607142857142,
+                        "radius": 66.00803571428571,
                         "color": "GREEN_FULL"
                     },
                     {
                         "id": 7,
-                        "y": 7,
-                        "x": -10,
+                        "y": 466.4839285714286,
+                        "x": 1990.9121428571427,
                         "hidden": false,
                         "vector": {
                             "x": null,
@@ -137,13 +127,13 @@
                             "angle": null,
                             "owner": 7
                         },
-                        "radius": 132.01607142857142,
+                        "radius": 66.00803571428571,
                         "color": "MAROON_FULL"
                     },
                     {
                         "id": 8,
-                        "y": 8,
-                        "x": -9,
+                        "y": 598.5,
+                        "x": 1726.8799999999999,
                         "hidden": false,
                         "vector": {
                             "x": null,
@@ -152,13 +142,13 @@
                             "angle": null,
                             "owner": 8
                         },
-                        "radius": 132.01607142857142,
+                        "radius": 66.00803571428571,
                         "color": "BLACK_FULL"
                     },
                     {
                         "id": 9,
-                        "y": 9,
-                        "x": -8,
+                        "y": 664.5080357142857,
+                        "x": 1990.9121428571427,
                         "hidden": false,
                         "vector": {
                             "x": null,
@@ -167,13 +157,13 @@
                             "angle": null,
                             "owner": 9
                         },
-                        "radius": 132.01607142857142,
+                        "radius": 66.00803571428571,
                         "color": "YELLOW_STRIPE"
                     },
                     {
                         "id": 10,
-                        "y": 10,
-                        "x": -7,
+                        "y": 598.5,
+                        "x": 1462.847857142857,
                         "hidden": false,
                         "vector": {
                             "x": null,
@@ -182,13 +172,13 @@
                             "angle": null,
                             "owner": 10
                         },
-                        "radius": 132.01607142857142,
+                        "radius": 66.00803571428571,
                         "color": "BLUE_STRIPE"
                     },
                     {
                         "id": 11,
-                        "y": 11,
-                        "x": -6,
+                        "y": 532.4919642857143,
+                        "x": 1726.8799999999999,
                         "hidden": false,
                         "vector": {
                             "x": null,
@@ -197,13 +187,13 @@
                             "angle": null,
                             "owner": 11
                         },
-                        "radius": 132.01607142857142,
+                        "radius": 66.00803571428571,
                         "color": "RED_STRIPE"
                     },
                     {
                         "id": 12,
-                        "y": 12,
-                        "x": -5,
+                        "y": 598.5,
+                        "x": 1990.9121428571427,
                         "hidden": false,
                         "vector": {
                             "x": null,
@@ -212,13 +202,13 @@
                             "angle": null,
                             "owner": 12
                         },
-                        "radius": 132.01607142857142,
+                        "radius": 66.00803571428571,
                         "color": "BLUE_STRIPE"
                     },
                     {
                         "id": 13,
-                        "y": 13,
-                        "x": -4,
+                        "y": 730.5160714285714,
+                        "x": 1990.9121428571427,
                         "hidden": false,
                         "vector": {
                             "x": null,
@@ -227,13 +217,13 @@
                             "angle": null,
                             "owner": 13
                         },
-                        "radius": 132.01607142857142,
+                        "radius": 66.00803571428571,
                         "color": "ORANGE_STRIPE"
                     },
                     {
                         "id": 14,
-                        "y": 14,
-                        "x": -3,
+                        "y": 565.4959821428572,
+                        "x": 1858.8960714285713,
                         "hidden": false,
                         "vector": {
                             "x": null,
@@ -242,13 +232,13 @@
                             "angle": null,
                             "owner": 14
                         },
-                        "radius": 132.01607142857142,
+                        "radius": 66.00803571428571,
                         "color": "GREEN_STRIPE"
                     },
                     {
                         "id": 15,
-                        "y": 15,
-                        "x": -2,
+                        "y": 532.4919642857143,
+                        "x": 1990.9121428571427,
                         "hidden": false,
                         "vector": {
                             "x": null,
@@ -257,14 +247,273 @@
                             "angle": null,
                             "owner": 15
                         },
-                        "radius": 132.01607142857142,
+                        "radius": 66.00803571428571,
                         "color": "MAROON_STRIPE"
                     }
                 ]
             },
             "gameInfo": {
-                "id": "f87de7b4-abfe-40fd-9dc8-f7a882739201",
-                "pass": "30XKX"
+                "id": "0a28119c-84e3-40cf-9908-b421c8cf8abf",
+                "pass": "53RYP"
+            }
+        }
+    },
+    {
+        "status": "STARTING",
+        "connectionWizard": {
+            "game": {
+                "table": {
+                    "width": 1787.5200000000002,
+                    "height": 1197,
+                    "x": 386.2399999999999,
+                    "y": 0
+                },
+                "balls": [
+                    {
+                        "id": 0,
+                        "y": 598.5,
+                        "x": 446.88000000000005,
+                        "hidden": false,
+                        "vector": {
+                            "x": null,
+                            "y": null,
+                            "force": null,
+                            "angle": null,
+                            "owner": 0
+                        },
+                        "radius": 71.79821428571428,
+                        "color": "WHITE_FULL"
+                    },
+                    {
+                        "id": 1,
+                        "y": 565.4959821428572,
+                        "x": 1594.8639285714287,
+                        "hidden": false,
+                        "vector": {
+                            "x": null,
+                            "y": null,
+                            "force": null,
+                            "angle": null,
+                            "owner": 1
+                        },
+                        "radius": 66.00803571428571,
+                        "color": "YELLOW_FULL"
+                    },
+                    {
+                        "id": 2,
+                        "y": 598.5,
+                        "x": 1990.912142857143,
+                        "hidden": false,
+                        "vector": {
+                            "x": null,
+                            "y": null,
+                            "force": null,
+                            "angle": null,
+                            "owner": 2
+                        },
+                        "radius": 66.00803571428571,
+                        "color": "BLUE_FULL"
+                    },
+                    {
+                        "id": 3,
+                        "y": 664.5080357142857,
+                        "x": 1726.88,
+                        "hidden": false,
+                        "vector": {
+                            "x": null,
+                            "y": null,
+                            "force": null,
+                            "angle": null,
+                            "owner": 3
+                        },
+                        "radius": 66.00803571428571,
+                        "color": "RED_FULL"
+                    },
+                    {
+                        "id": 4,
+                        "y": 565.4959821428572,
+                        "x": 1858.8960714285715,
+                        "hidden": false,
+                        "vector": {
+                            "x": null,
+                            "y": null,
+                            "force": null,
+                            "angle": null,
+                            "owner": 4
+                        },
+                        "radius": 66.00803571428571,
+                        "color": "PURPLE_FULL"
+                    },
+                    {
+                        "id": 5,
+                        "y": 631.5040178571428,
+                        "x": 1594.8639285714287,
+                        "hidden": false,
+                        "vector": {
+                            "x": null,
+                            "y": null,
+                            "force": null,
+                            "angle": null,
+                            "owner": 5
+                        },
+                        "radius": 66.00803571428571,
+                        "color": "ORANGE_FULL"
+                    },
+                    {
+                        "id": 6,
+                        "y": 499.48794642857143,
+                        "x": 1858.8960714285715,
+                        "hidden": false,
+                        "vector": {
+                            "x": null,
+                            "y": null,
+                            "force": null,
+                            "angle": null,
+                            "owner": 6
+                        },
+                        "radius": 66.00803571428571,
+                        "color": "GREEN_FULL"
+                    },
+                    {
+                        "id": 7,
+                        "y": 466.4839285714286,
+                        "x": 1990.912142857143,
+                        "hidden": false,
+                        "vector": {
+                            "x": null,
+                            "y": null,
+                            "force": null,
+                            "angle": null,
+                            "owner": 7
+                        },
+                        "radius": 66.00803571428571,
+                        "color": "MAROON_FULL"
+                    },
+                    {
+                        "id": 8,
+                        "y": 598.5,
+                        "x": 1726.88,
+                        "hidden": false,
+                        "vector": {
+                            "x": null,
+                            "y": null,
+                            "force": null,
+                            "angle": null,
+                            "owner": 8
+                        },
+                        "radius": 66.00803571428571,
+                        "color": "BLACK_FULL"
+                    },
+                    {
+                        "id": 9,
+                        "y": 532.4919642857143,
+                        "x": 1726.88,
+                        "hidden": false,
+                        "vector": {
+                            "x": null,
+                            "y": null,
+                            "force": null,
+                            "angle": null,
+                            "owner": 9
+                        },
+                        "radius": 66.00803571428571,
+                        "color": "YELLOW_STRIPE"
+                    },
+                    {
+                        "id": 10,
+                        "y": 697.5120535714286,
+                        "x": 1858.8960714285715,
+                        "hidden": false,
+                        "vector": {
+                            "x": null,
+                            "y": null,
+                            "force": null,
+                            "angle": null,
+                            "owner": 10
+                        },
+                        "radius": 66.00803571428571,
+                        "color": "BLUE_STRIPE"
+                    },
+                    {
+                        "id": 11,
+                        "y": 631.5040178571428,
+                        "x": 1858.8960714285715,
+                        "hidden": false,
+                        "vector": {
+                            "x": null,
+                            "y": null,
+                            "force": null,
+                            "angle": null,
+                            "owner": 11
+                        },
+                        "radius": 66.00803571428571,
+                        "color": "RED_STRIPE"
+                    },
+                    {
+                        "id": 12,
+                        "y": 664.5080357142857,
+                        "x": 1990.912142857143,
+                        "hidden": false,
+                        "vector": {
+                            "x": null,
+                            "y": null,
+                            "force": null,
+                            "angle": null,
+                            "owner": 12
+                        },
+                        "radius": 66.00803571428571,
+                        "color": "BLUE_STRIPE"
+                    },
+                    {
+                        "id": 13,
+                        "y": 598.5,
+                        "x": 1462.8478571428573,
+                        "hidden": false,
+                        "vector": {
+                            "x": null,
+                            "y": null,
+                            "force": null,
+                            "angle": null,
+                            "owner": 13
+                        },
+                        "radius": 66.00803571428571,
+                        "color": "ORANGE_STRIPE"
+                    },
+                    {
+                        "id": 14,
+                        "y": 730.5160714285714,
+                        "x": 1990.912142857143,
+                        "hidden": false,
+                        "vector": {
+                            "x": null,
+                            "y": null,
+                            "force": null,
+                            "angle": null,
+                            "owner": 14
+                        },
+                        "radius": 66.00803571428571,
+                        "color": "GREEN_STRIPE"
+                    },
+                    {
+                        "id": 15,
+                        "y": 532.4919642857143,
+                        "x": 1990.912142857143,
+                        "hidden": false,
+                        "vector": {
+                            "x": null,
+                            "y": null,
+                            "force": null,
+                            "angle": null,
+                            "owner": 15
+                        },
+                        "radius": 66.00803571428571,
+                        "color": "MAROON_STRIPE"
+                    }
+                ]
+            },
+            "gameInfo": {
+                "id": "d8a699cd-c47d-4623-bd9e-3d6c8d5d1e43",
+                "pass": "618OZ"
             }
         }
     }

@@ -20,6 +20,14 @@ module.exports = class Ball {
         this.color = this.fetchColor(id);
     }
 
+    refactorCordinate() {
+        const point = {
+            x: this.x - this.radius,
+            y: this.y - this.radius
+        }
+        return point;
+    }
+
     fetchColor(id) {
         switch (id) {
             case 0:

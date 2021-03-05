@@ -21,7 +21,12 @@ const store = createStore(
   reducer, /* preloadedState, */
   window.__REDUX_DEVTOOLS_EXTENSION__ && window.__REDUX_DEVTOOLS_EXTENSION__(),
 );
-
+/**
+ * If you cannot see your pages, you need to have them written down here.
+ * As you can see we use the react router for this. Add your route and pages
+ * into the router node so that it is displayed when the route is triggered.
+ * Don't forget the ErrorBoundary, it will protect the project from crashing.
+ */
 ReactDOM.render(
   <React.StrictMode>
     <Router>

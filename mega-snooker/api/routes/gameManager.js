@@ -11,10 +11,11 @@ router.post('/:option', function (req, res, next) {
     if (response) {
         FileManager.readGames().then(activeGames => {
             console.log(req.get('ID'));
-            const { connectionWizard: wizardChild } = activeGames.find(({ connectionWizard }) => {
+            const wizardChild = activeGames.find(({ connectionWizard }) => {
                 return connectionWizard.gameInfo.id === req.get('ID');
             });
-            const wizard = Object.assign(new ConnectionWizard, wizardChild);
+            if (wizardChild === undefined) return res.send('Error, invalid game')
+            const wizard = Object.assign(new ConnectionWizard, wizardChild.connectionWizard);
             console.log(wizard);
             switch (req.params.option) {
                 case 'startpos':

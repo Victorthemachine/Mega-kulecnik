@@ -20,8 +20,10 @@ module.exports = class Game {
      */
     constructor() {
         this.table = table;
-        this.initBalls();
         this.balls = balls;
+        if (this.balls.length === 0) {
+            this.initBalls();
+        }
     }
 
     /**
@@ -55,7 +57,7 @@ module.exports = class Game {
                 break;
             case 'RIGHT BOTTOM':
                 pointOnTable.first = { x: ball.x, y: table.y };
-                pointOnTable.second = { x: table.width, y: ball.y };
+                pointOnTable.second = { x: table.width + table.x, y: ball.y };
                 break;
             case 'LEFT TOP':
                 pointOnTable.first = { x: ball.x, y: table.height };
@@ -63,7 +65,7 @@ module.exports = class Game {
                 break;
             case 'RIGHT TOP':
                 pointOnTable.first = { x: ball.x, y: table.height };
-                pointOnTable.second = { x: table.width, y: ball.y };
+                pointOnTable.second = { x: table.width + table.x, y: ball.y };
                 break;
         }
         if (Math.sqrt(Math.pow(ball.x - pointOnTable.first.x, 2) + Math.pow(ball.y - pointOnTable.first.y, 2)) <= ball.radius || Math.sqrt(Math.pow(ball.x - pointOnTable.second.x, 2) + Math.pow(ball.y - pointOnTable.second.y, 2)) <= ball.radius) {
@@ -96,6 +98,7 @@ module.exports = class Game {
      * For now just a dummy method later make sure to adjust x,y
      */
     initBalls() {
+        console.log('Hi!')
         for (let i = 0; i < 16; i++) {
             balls.push(new Ball(i, {
                 x: i,
@@ -144,7 +147,7 @@ module.exports = class Game {
                 break;
             case 'RIGHT BOTTOM':
                 pointOnTable.first = { x: ball.x, y: table.y };
-                pointOnTable.second = { x: table.width, y: ball.y };
+                pointOnTable.second = { x: table.width + table.x, y: ball.y };
                 break;
             case 'LEFT TOP':
                 pointOnTable.first = { x: ball.x, y: table.height };
@@ -152,7 +155,7 @@ module.exports = class Game {
                 break;
             case 'RIGHT TOP':
                 pointOnTable.first = { x: ball.x, y: table.height };
-                pointOnTable.second = { x: table.width, y: ball.y };
+                pointOnTable.second = { x: table.width + table.x, y: ball.y };
                 break;
         }
         let point;
@@ -221,11 +224,12 @@ module.exports = class Game {
      * @param {JSON} data 
      */
     updateSizes(id, data) {
-        const tableWidth = this.table.width * (data.height / this.table.height);
+        //FIX THIS TO COUNT WITH INNER DIMENSIONS NOT OUTER!
+        const tableWidth = ((this.table.width * (262/224)) * ((data.height) / (this.table.height* (150/112)))) * (224/262);
         this.table.width = tableWidth;
         this.table.height = data.height;
 
-        const offsetWidth = (data.windowWidth - this.table.width) / 2;
+        const offsetWidth = (data.windowWidth - tableWidth) / 2;
         this.table.x = offsetWidth;
 
         this.balls.forEach((el, index) => {
@@ -238,6 +242,127 @@ module.exports = class Game {
             }
         });
 
-        FileManager.updateGames(id, 'game', this)
+        FileManager.updateGames(id, 'game', {
+            table: this.table,
+            balls: this.balls
+        })
+    }
+
+    computeInitialPositions(id) {
+        const strictPosArray = [];
+        const randomizePosArray = [];
+
+        this.balls[0].x = (this.table.width / 4) + table.x;
+        this.balls[0].y = this.table.height / 2;
+
+        const centerBall = {
+            x: ((this.table.width / 4) * 3) + this.table.x,
+            y: this.table.height / 2
+        };
+        randomizePosArray.push({
+            x: centerBall.x - (4 * this.balls[1].radius),
+            y: centerBall.y
+        });
+        strictPosArray.push(centerBall, {
+            x: centerBall.x + (4 * this.balls[1].radius),
+            y: centerBall.y + (4 * this.balls[1].radius)/2
+        }, {
+            x: centerBall.x + (4 * this.balls[1].radius),
+            y: centerBall.y - (4 * this.balls[1].radius)/2
+        });
+        randomizePosArray.push({
+            x: centerBall.x - (2 * this.balls[1].radius),
+            y: centerBall.y + (this.balls[1].radius)/2,
+        }, {
+            x: centerBall.x,
+            y: centerBall.y + (2 * this.balls[1].radius)/2
+        }, {
+            x: centerBall.x + (2 * this.balls[1].radius),
+            y: centerBall.y + (this.balls[1].radius)/2,
+        }, {
+            x: centerBall.x + (2 * this.balls[1].radius),
+            y: centerBall.y + (3 * this.balls[1].radius)/2,
+        }, {
+            x: centerBall.x + (4 * this.balls[1].radius),
+            y: centerBall.y
+        }, {
+            x: centerBall.x + (4 * this.balls[1].radius),
+            y: centerBall.y + (2 * this.balls[1].radius)/2,
+        }, { //opposite vv
+            x: centerBall.x - (2 * this.balls[1].radius),
+            y: centerBall.y - (this.balls[1].radius)/2,
+        }, {
+            x: centerBall.x,
+            y: centerBall.y - (2 * this.balls[1].radius)/2
+        }, {
+            x: centerBall.x + (2 * this.balls[1].radius),
+            y: centerBall.y - (this.balls[1].radius)/2,
+        }, {
+            x: centerBall.x + (2 * this.balls[1].radius),
+            y: centerBall.y - (3 * this.balls[1].radius)/2,
+        }, {
+            x: centerBall.x + (4 * this.balls[1].radius),
+            y: centerBall.y - (2 * this.balls[1].radius)/2,
+        }, {
+            x: centerBall.x + (4 * this.balls[1].radius),
+            y: centerBall.y - (2 * this.balls[1].radius)/2,
+        });
+
+        //Adjust fixed positions
+        this.balls[8].x = strictPosArray[0].x;
+        this.balls[8].y = strictPosArray[0].y;
+
+        const ballsToGoThrough = [1, 2, 3, 4, 5, 6, 7, 9, 10, 11, 12, 13, 14, 15];
+        if ((Math.random() * 10) % 2 === 0) {
+            console.log('EVEN');
+            let nominee = Math.floor(Math.random() * 7);
+            console.log(nominee);
+            this.balls[ballsToGoThrough[nominee]].x = strictPosArray[1].x;
+            this.balls[ballsToGoThrough[nominee]].y = strictPosArray[1].y;
+            ballsToGoThrough.splice(nominee, 1);
+            console.log(ballsToGoThrough);
+            nominee = Math.floor(Math.random() * (ballsToGoThrough.length - 6) + 6);
+            console.log(nominee);
+            this.balls[ballsToGoThrough[nominee]].x = strictPosArray[2].x;
+            this.balls[ballsToGoThrough[nominee]].y = strictPosArray[2].y;
+            ballsToGoThrough.splice(nominee, 1);
+            console.log(ballsToGoThrough);
+        } else {
+            console.log('ODD');
+            let nominee = Math.floor(Math.random() * (ballsToGoThrough.length - 7) + 7);
+            console.log(nominee);
+            this.balls[ballsToGoThrough[nominee]].x = strictPosArray[1].x;
+            this.balls[ballsToGoThrough[nominee]].y = strictPosArray[1].y;
+            ballsToGoThrough.splice(nominee, 1);
+            console.log(ballsToGoThrough);
+            nominee = Math.floor(Math.random() * 7);
+            console.log(nominee);
+            this.balls[ballsToGoThrough[nominee]].x = strictPosArray[2].x;
+            this.balls[ballsToGoThrough[nominee]].y = strictPosArray[2].y;
+            ballsToGoThrough.splice(nominee, 1);
+            console.log(ballsToGoThrough);
+        }
+        console.log(ballsToGoThrough);
+        let lenghtOfArray = ballsToGoThrough.length;
+        for (let i = 0; i < lenghtOfArray; i++) {
+            let nominee = Math.floor(Math.random() * (ballsToGoThrough.length - 1));
+            console.log(`Lenght: ${ballsToGoThrough.length}, Random: ${nominee}`);
+            console.log(ballsToGoThrough);
+            console.log(randomizePosArray[i]);
+            console.log(this.balls[nominee]);
+            this.balls[ballsToGoThrough[nominee]].x = randomizePosArray[i].x;
+            this.balls[ballsToGoThrough[nominee]].y = randomizePosArray[i].y;
+            ballsToGoThrough.splice(nominee, 1);
+        }
+        FileManager.updateGames(id, 'balls', this.balls);
+        let response = {};
+        this.balls.forEach((el, index) => {
+            response[index] = {
+                x: el.x < (this.table.width / 2 + table.x) ? -el.x - el.radius : el.x / 2 - 4*el.radius,
+                y: -el.y
+            }
+        });
+        console.log(response);
+        return response;
     }
 }

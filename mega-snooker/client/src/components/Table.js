@@ -1,6 +1,11 @@
 import React, { useState, useEffect, useRef } from 'react'
 import TableImage from './../assets/table/table.min.pepa.svg';
 
+/**
+ * Table component, it is critical not to touch viewbox nor preserveAspectRatio!
+ * @param {*} props 
+ * @returns 
+ */
 export default function Table(props) {
     const offsetTop = window.innerHeight / 20;
 /*    const [height, setHeight] = useState(0);

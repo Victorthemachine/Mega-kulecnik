@@ -32,13 +32,29 @@ module.exports = new class FileManager {
         switch (child) {
             case 'game':
                 this.readGames().then(pastData => {
-                    pastData.forEach(({ connectionWizard }) => {
-                        if (connectionWizard.gameInfo.id === id) {
-                            connectionWizard.game = data;
+                    console.log(data);
+                    let writeThis = pastData;
+                    pastData.forEach((el, index) => {
+                        if (el.connectionWizard.gameInfo.id === id) {
+                            writeThis[index].connectionWizard.game = data;
                         }
                     });
-                    fs.writeFile(gameJSONPath, JSON.stringify(pastData), err => console.error(err));
-                })
+                    console.log(writeThis);
+                    fs.writeFile(gameJSONPath, JSON.stringify(writeThis), err => console.error(err));
+                });
+                break;
+            case 'balls':
+                this.readGames().then(pastData => {
+                    console.log(data);
+                    let writeThis = pastData;
+                    pastData.forEach((el, index) => {
+                        if (el.connectionWizard.gameInfo.id === id) {
+                            writeThis[index].connectionWizard.game.balls = data;
+                        }
+                    });
+                    console.log(writeThis);
+                    fs.writeFile(gameJSONPath, JSON.stringify(writeThis), err => console.error(err));
+                });
             default:
                 return 'Something went wrong, there is no such child!';
         }

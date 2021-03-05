@@ -4,6 +4,10 @@ const xml2js = require('xml2js');
 //const fs = require('fs');
 const address = config.serverAddress + config.port;
 
+/**
+ * Request handler, or in other words our API interface.
+ * Write your requests, adjust them so that you get the desired effect.
+ */
 module.exports = class apiTool {
 
     constructor() {
@@ -89,12 +93,13 @@ module.exports = class apiTool {
 
     createGame(options) {
         return new Promise(resolve => {
-            axios.post(address + config.port + config.initPath, options, {
+            axios.post(address + config.initPath, options, {
                 headers: {
                     Token: config.token
                 }
             }).then(res => {
-                resolve(res);
+                console.log(res.data);
+                resolve(res.data);
             }).catch(error => {
                 console.error(error);
             })                
@@ -102,11 +107,35 @@ module.exports = class apiTool {
     }
 
     gameIntialPlacement(GAME_ID, options) {
-        
+        return new Promise(resolve => {
+            axios.post(address + config.gameManagerPath + '/startpos', options, {
+                headers: {
+                    Token: config.token,
+                    ID: GAME_ID
+                }
+            }).then(res => {
+                console.log(res.data);
+                resolve(res.data);
+            }).catch(error => {
+                console.error(error);
+            })                
+        });
     }
 
     gameUpdatePositions(GAME_ID, ballMap, options) {
-
+        return new Promise(resolve => {
+            axios.post(address + config.gameManagerPath + '/updatesize', ballMap, {
+                headers: {
+                    Token: config.token,
+                    ID: GAME_ID
+                }
+            }).then(res => {
+                console.log(res.data);
+                resolve(res.data);
+            }).catch(error => {
+                console.error(error);
+            })                
+        });
     }
 
 }
