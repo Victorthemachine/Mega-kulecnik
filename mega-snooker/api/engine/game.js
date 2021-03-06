@@ -225,19 +225,23 @@ module.exports = class Game {
      */
     updateSizes(id, data) {
         //FIX THIS TO COUNT WITH INNER DIMENSIONS NOT OUTER!
-        const tableWidth = ((this.table.width * (262/224)) * ((data.height) / (this.table.height* (150/112)))) * (224/262);
-        this.table.width = tableWidth;
-        this.table.height = data.height;
+//        const tableWidth = ((this.table.width * (262/224)) * ((data.height) / (this.table.height* (150/112)))) * (224/262);
+        this.table.width = (data.height* (224/150)) * (224/262);
+        this.table.height = data.height * 112/150;
 
-        const offsetWidth = (data.windowWidth - tableWidth) / 2;
+        const offsetWidth = (data.windowWidth - this.table.width) / 2;
         this.table.x = offsetWidth;
+        const offsetHeight = (data.height - this.table.height) / 2;
+        this.table.y = offsetHeight;
 
         this.balls.forEach((el, index) => {
             if (index === 0) {
-                el.x = el.x + offsetWidth;
+                el.x += offsetWidth;
+                el.y += offsetHeight;
                 el.radius = data.radiusWhite;
             } else {
                 el.x = el.x + offsetWidth;
+                el.y += offsetHeight;
                 el.radius = data.radius;
             }
         });
@@ -253,58 +257,61 @@ module.exports = class Game {
         const randomizePosArray = [];
 
         this.balls[0].x = (this.table.width / 4) + table.x;
-        this.balls[0].y = this.table.height / 2;
+        this.balls[0].y = (this.table.height / 2) + this.table.y;
+
+        const somethingLikeTheRadiusButNotQuite = this.balls[1].radius * 0.88;
 
         const centerBall = {
             x: ((this.table.width / 4) * 3) + this.table.x,
-            y: this.table.height / 2
+            y: (this.table.height / 2) + this.table.y
         };
+        console.log((this.table.height / 2) + this.table.y)
         randomizePosArray.push({
-            x: centerBall.x - (4 * this.balls[1].radius),
+            x: centerBall.x - (4 * somethingLikeTheRadiusButNotQuite),
             y: centerBall.y
         });
         strictPosArray.push(centerBall, {
-            x: centerBall.x + (4 * this.balls[1].radius),
+            x: centerBall.x + (4 * somethingLikeTheRadiusButNotQuite),
             y: centerBall.y + (4 * this.balls[1].radius)/2
         }, {
-            x: centerBall.x + (4 * this.balls[1].radius),
+            x: centerBall.x + (4 * somethingLikeTheRadiusButNotQuite),
             y: centerBall.y - (4 * this.balls[1].radius)/2
         });
         randomizePosArray.push({
-            x: centerBall.x - (2 * this.balls[1].radius),
+            x: centerBall.x - (2 * somethingLikeTheRadiusButNotQuite),
             y: centerBall.y + (this.balls[1].radius)/2,
         }, {
             x: centerBall.x,
             y: centerBall.y + (2 * this.balls[1].radius)/2
         }, {
-            x: centerBall.x + (2 * this.balls[1].radius),
+            x: centerBall.x + (2 * somethingLikeTheRadiusButNotQuite),
             y: centerBall.y + (this.balls[1].radius)/2,
         }, {
-            x: centerBall.x + (2 * this.balls[1].radius),
+            x: centerBall.x + (2 * somethingLikeTheRadiusButNotQuite),
             y: centerBall.y + (3 * this.balls[1].radius)/2,
         }, {
-            x: centerBall.x + (4 * this.balls[1].radius),
+            x: centerBall.x + (4 * somethingLikeTheRadiusButNotQuite),
             y: centerBall.y
         }, {
-            x: centerBall.x + (4 * this.balls[1].radius),
+            x: centerBall.x + (4 * somethingLikeTheRadiusButNotQuite),
             y: centerBall.y + (2 * this.balls[1].radius)/2,
         }, { //opposite vv
-            x: centerBall.x - (2 * this.balls[1].radius),
+            x: centerBall.x - (2 * somethingLikeTheRadiusButNotQuite),
             y: centerBall.y - (this.balls[1].radius)/2,
         }, {
             x: centerBall.x,
             y: centerBall.y - (2 * this.balls[1].radius)/2
         }, {
-            x: centerBall.x + (2 * this.balls[1].radius),
+            x: centerBall.x + (2 * somethingLikeTheRadiusButNotQuite),
             y: centerBall.y - (this.balls[1].radius)/2,
         }, {
-            x: centerBall.x + (2 * this.balls[1].radius),
+            x: centerBall.x + (2 * somethingLikeTheRadiusButNotQuite),
             y: centerBall.y - (3 * this.balls[1].radius)/2,
         }, {
-            x: centerBall.x + (4 * this.balls[1].radius),
+            x: centerBall.x + (4 * somethingLikeTheRadiusButNotQuite),
             y: centerBall.y - (2 * this.balls[1].radius)/2,
         }, {
-            x: centerBall.x + (4 * this.balls[1].radius),
+            x: centerBall.x + (4 * somethingLikeTheRadiusButNotQuite),
             y: centerBall.y - (2 * this.balls[1].radius)/2,
         });
 

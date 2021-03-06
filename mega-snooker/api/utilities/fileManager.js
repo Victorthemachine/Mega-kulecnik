@@ -10,22 +10,17 @@ module.exports = new class FileManager {
      * @param {JSON} data 
      */
     writeGames(data) {
-        fs.readFile(gameJSONPath, { encoding: 'utf-8' }, (error, pastData) => {
-            if (error) console.error(error);
-            let pastDataObj = JSON.parse(pastData);
-            pastDataObj.push(data)
-            console.log(pastDataObj);
-            fs.writeFile(gameJSONPath, JSON.stringify(pastDataObj), err => console.error(err));
-        });
+        const pastData = fs.readFileSync(gameJSONPath, { encoding: 'utf-8' });
+        let pastDataObj = JSON.parse(pastData);
+        pastDataObj.push(data)
+        console.log(pastDataObj);
+        fs.writeFileSync(gameJSONPath, JSON.stringify(pastDataObj));
     }
 
     readGames() {
         return new Promise(resolve => {
-            fs.readFile(gameJSONPath, { encoding: 'utf-8' }, (error, data) => {
-                if (error) console.error;
-                resolve(JSON.parse(data));
-            })
-        })
+            resolve(JSON.parse(fs.readFileSync(gameJSONPath, { encoding: 'utf-8' })));
+        });
     }
 
     updateGames(id, child, data) {
@@ -40,7 +35,7 @@ module.exports = new class FileManager {
                         }
                     });
                     console.log(writeThis);
-                    fs.writeFile(gameJSONPath, JSON.stringify(writeThis), err => console.error(err));
+                    fs.writeFileSync(gameJSONPath, JSON.stringify(writeThis));
                 });
                 break;
             case 'balls':
@@ -53,7 +48,7 @@ module.exports = new class FileManager {
                         }
                     });
                     console.log(writeThis);
-                    fs.writeFile(gameJSONPath, JSON.stringify(writeThis), err => console.error(err));
+                    fs.writeFileSync(gameJSONPath, JSON.stringify(writeThis));
                 });
             default:
                 return 'Something went wrong, there is no such child!';
