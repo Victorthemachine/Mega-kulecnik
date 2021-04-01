@@ -1,4 +1,5 @@
 const Ball = require('../objects/Ball.js');
+const Hole = require('../objects/Hole.js');
 const Table = require('../objects/Table.js');
 const Vector = require('../objects/Vector.js');
 const FileManager = require('./../utilities/fileManager');
@@ -7,6 +8,7 @@ const parameters = require('./parameters.json');
 
 const table = new Table();
 const balls = [];
+const pockets = [];
 
 //TODO Add check for holes!
 /**
@@ -23,6 +25,10 @@ module.exports = class Game {
         this.balls = balls;
         if (this.balls.length === 0) {
             this.initBalls();
+        }
+        this.pockets = pockets;
+        if (this.pockets.length === 0) {
+            this.initPockets();
         }
     }
 
@@ -95,10 +101,11 @@ module.exports = class Game {
     }
 
     /**
-     * For now just a dummy method later make sure to adjust x,y
+     * For now just a dummy method later make sure to adjust x,y <= doesn't matter
+     * We already adjust sizes and x/y in updateSizes()
      */
     initBalls() {
-        console.log('Hi!')
+        console.log('Initilizing balls...')
         for (let i = 0; i < 16; i++) {
             balls.push(new Ball(i, {
                 x: i,
@@ -109,6 +116,40 @@ module.exports = class Game {
                 owner: balls[i].id
             })
         }
+    }
+
+    initPockets() {
+        console.log('Initilizing pockets...');
+        this.pockets.push(new Hole(i, {
+            x: table.x - 11.25 / 2,
+            y: table.y - 11.25 / 2,
+            radius: 11.25 / 2
+        }));
+        this.pockets.push(new Hole(i, {
+            x: table.x + table.width / 2,
+            y: table.y - 12.5 / 2,
+            radius: 12.5 / 2
+        }));
+        this.pockets.push(new Hole(i, {
+            x: (table.x + table.width) + 11.25 / 2,
+            y: table.y + 11.25 / 2,
+            radius: 11.25 / 2
+        }));
+        this.pockets.push(new Hole(i, {
+            x: table.x - 11.25 / 2,
+            y: (table.y + table.height) + 11.25 / 2,
+            radius: 11.25 / 2
+        }));
+        this.pockets.push(new Hole(i, {
+            x: table.x + table.width / 2,
+            y: (table.y + table.height) + 12.5 / 2,
+            radius: 12.5 / 2
+        }));
+        this.pockets.push(new Hole(i, {
+            x: table.x + table.width + 11.25 / 2,
+            y: table.y + table.height + 11.25 / 2,
+            radius: 11.25 / 2
+        }));
     }
 
     /**
@@ -224,10 +265,8 @@ module.exports = class Game {
      * @param {JSON} data 
      */
     updateSizes(id, data) {
-        //FIX THIS TO COUNT WITH INNER DIMENSIONS NOT OUTER!
-//        const tableWidth = ((this.table.width * (262/224)) * ((data.height) / (this.table.height* (150/112)))) * (224/262);
-        this.table.width = (data.height* (224/150)) * (224/262);
-        this.table.height = data.height * 112/150;
+        this.table.width = (data.height * (224 / 150)) * (224 / 262);
+        this.table.height = data.height * 112 / 150;
 
         const offsetWidth = (data.windowWidth - this.table.width) / 2;
         this.table.x = offsetWidth;
@@ -235,21 +274,25 @@ module.exports = class Game {
         this.table.y = offsetHeight;
 
         this.balls.forEach((el, index) => {
+            el.x += offsetWidth;
+            el.y += offsetHeight;
             if (index === 0) {
-                el.x += offsetWidth;
-                el.y += offsetHeight;
                 el.radius = data.radiusWhite;
             } else {
-                el.x = el.x + offsetWidth;
-                el.y += offsetHeight;
                 el.radius = data.radius;
             }
+        });
+
+        this.pockets.forEach(el => {
+            el.x += offsetWidth;
+            el.y += offsetHeight;
+            el.radius = el.radius * (this.table.width / 224);
         });
 
         FileManager.updateGames(id, 'game', {
             table: this.table,
             balls: this.balls
-        })
+        });
     }
 
     computeInitialPositions(id) {
@@ -272,47 +315,47 @@ module.exports = class Game {
         });
         strictPosArray.push(centerBall, {
             x: centerBall.x + (4 * somethingLikeTheRadiusButNotQuite),
-            y: centerBall.y + (4 * this.balls[1].radius)/2
+            y: centerBall.y + (4 * this.balls[1].radius) / 2
         }, {
             x: centerBall.x + (4 * somethingLikeTheRadiusButNotQuite),
-            y: centerBall.y - (4 * this.balls[1].radius)/2
+            y: centerBall.y - (4 * this.balls[1].radius) / 2
         });
         randomizePosArray.push({
             x: centerBall.x - (2 * somethingLikeTheRadiusButNotQuite),
-            y: centerBall.y + (this.balls[1].radius)/2,
+            y: centerBall.y + (this.balls[1].radius) / 2,
         }, {
             x: centerBall.x,
-            y: centerBall.y + (2 * this.balls[1].radius)/2
+            y: centerBall.y + (2 * this.balls[1].radius) / 2
         }, {
             x: centerBall.x + (2 * somethingLikeTheRadiusButNotQuite),
-            y: centerBall.y + (this.balls[1].radius)/2,
+            y: centerBall.y + (this.balls[1].radius) / 2,
         }, {
             x: centerBall.x + (2 * somethingLikeTheRadiusButNotQuite),
-            y: centerBall.y + (3 * this.balls[1].radius)/2,
+            y: centerBall.y + (3 * this.balls[1].radius) / 2,
         }, {
             x: centerBall.x + (4 * somethingLikeTheRadiusButNotQuite),
             y: centerBall.y
         }, {
             x: centerBall.x + (4 * somethingLikeTheRadiusButNotQuite),
-            y: centerBall.y + (2 * this.balls[1].radius)/2,
+            y: centerBall.y + (2 * this.balls[1].radius) / 2,
         }, { //opposite vv
             x: centerBall.x - (2 * somethingLikeTheRadiusButNotQuite),
-            y: centerBall.y - (this.balls[1].radius)/2,
+            y: centerBall.y - (this.balls[1].radius) / 2,
         }, {
             x: centerBall.x,
-            y: centerBall.y - (2 * this.balls[1].radius)/2
+            y: centerBall.y - (2 * this.balls[1].radius) / 2
         }, {
             x: centerBall.x + (2 * somethingLikeTheRadiusButNotQuite),
-            y: centerBall.y - (this.balls[1].radius)/2,
+            y: centerBall.y - (this.balls[1].radius) / 2,
         }, {
             x: centerBall.x + (2 * somethingLikeTheRadiusButNotQuite),
-            y: centerBall.y - (3 * this.balls[1].radius)/2,
+            y: centerBall.y - (3 * this.balls[1].radius) / 2,
         }, {
             x: centerBall.x + (4 * somethingLikeTheRadiusButNotQuite),
-            y: centerBall.y - (2 * this.balls[1].radius)/2,
+            y: centerBall.y - (2 * this.balls[1].radius) / 2,
         }, {
             x: centerBall.x + (4 * somethingLikeTheRadiusButNotQuite),
-            y: centerBall.y - (2 * this.balls[1].radius)/2,
+            y: centerBall.y - (2 * this.balls[1].radius) / 2,
         });
 
         //Adjust fixed positions
@@ -365,7 +408,7 @@ module.exports = class Game {
         let response = {};
         this.balls.forEach((el, index) => {
             response[index] = {
-                x: el.x < (this.table.width / 2 + table.x) ? -el.x - el.radius : el.x / 2 - 4*el.radius,
+                x: el.x < (this.table.width / 2 + table.x) ? -el.x - el.radius : el.x / 2 - 4 * el.radius,
                 y: -el.y
             }
         });
