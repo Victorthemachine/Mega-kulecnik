@@ -9,6 +9,10 @@ const parameters = require('./parameters.json');
 const table = new Table();
 const balls = [];
 const pockets = [];
+const ballsMoving = {
+    moving: [],
+    collision: []
+}
 
 //TODO Add check for holes!
 /**
@@ -30,6 +34,8 @@ module.exports = class Game {
         if (this.pockets.length === 0) {
             this.initPockets();
         }
+        this.ballsMoving = this.ballsMoving;
+
     }
 
     /**
@@ -249,6 +255,21 @@ module.exports = class Game {
 
     }
 
+    computeColisions() {
+        if (ballsMoving.collision.lenght === 0) return;
+        ballsMoving.collision.forEach(el => {
+            let temp = [];
+            for (let i in el) {
+                temp.push(i);
+            }
+            temp.length === 1 ? computeBtTCollision(temp[0]) : computeBtBCollision(temp[0], temp[1]);
+        });
+        ballsMoving.collision.splice(0);
+    }
+    computeBtBCollision(ball1, ball2) {
+        console.log("BtB");
+    }
+
     /**
      * Computes collision of two balls
      * 
@@ -414,5 +435,46 @@ module.exports = class Game {
         });
         console.log(response);
         return response;
+    }
+    areBallsStill() {
+        areStill = true;
+        balls.forEach((el, index) => {
+            if (!el.vector.force === 0) {
+                this.ballsMoving.moving.push(index)
+                areStill = false
+            }
+
+        });
+        return areStill;
+    }
+    gameWizard(Vector) {
+        this.balls[0].vector = Vector;
+        let timestemp = 0;
+        while (!this.areBallsStill) {
+            timestemp++;
+            this.computeColisions();
+            for (let i = 0; i < this.ballsMoving.moving.length; i++) {
+                let temp = this.balls[this.ballsMoving.moving[i]];
+                temp.x += temp.vector.x;
+                temp.y += temp.vector.y;
+                temp.vector.force *= parameters.tableConstantDeceleration;
+                if (this.checkCollisionBtT(temp)) {
+                    ballsMoving.collision.push({ temp });
+                }
+                this.balls.forEach((el) => {
+                    if (this.checkCollisionBtB(temp, el)) {
+                        if (!this.ballsMoving.collision.find(elem => {
+                                return Object.is(elem, { el, temp });
+                            })) {
+                            this.ballsMoving.collision.push({ temp, el });
+                        }
+                    }
+                });
+
+            }
+            console.log("*===================================*")
+            console.log(timestemp);
+            console.log(this.ballsMoving);
+        }
     }
 }
