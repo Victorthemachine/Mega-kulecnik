@@ -138,32 +138,32 @@ module.exports = class Game {
 
     initPockets() {
         console.log('Initilizing pockets...');
-        this.pockets.push(new Hole(i, {
+        this.pockets.push(new Hole(0, {
             x: table.x - 11.25 / 2,
             y: table.y - 11.25 / 2,
             radius: 11.25 / 2
         }));
-        this.pockets.push(new Hole(i, {
+        this.pockets.push(new Hole(1, {
             x: table.x + table.width / 2,
             y: table.y - 12.5 / 2,
             radius: 12.5 / 2
         }));
-        this.pockets.push(new Hole(i, {
+        this.pockets.push(new Hole(2, {
             x: (table.x + table.width) + 11.25 / 2,
             y: table.y + 11.25 / 2,
             radius: 11.25 / 2
         }));
-        this.pockets.push(new Hole(i, {
+        this.pockets.push(new Hole(3, {
             x: table.x - 11.25 / 2,
             y: (table.y + table.height) + 11.25 / 2,
             radius: 11.25 / 2
         }));
-        this.pockets.push(new Hole(i, {
+        this.pockets.push(new Hole(4, {
             x: table.x + table.width / 2,
             y: (table.y + table.height) + 12.5 / 2,
             radius: 12.5 / 2
         }));
-        this.pockets.push(new Hole(i, {
+        this.pockets.push(new Hole(5, {
             x: table.x + table.width + 11.25 / 2,
             y: table.y + table.height + 11.25 / 2,
             radius: 11.25 / 2
