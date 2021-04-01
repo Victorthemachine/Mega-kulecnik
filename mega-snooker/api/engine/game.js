@@ -470,7 +470,7 @@ module.exports = class Game {
         return areStill;
     }
     blackHandler() {
-        if (this.balls[7].hidden) {
+        if (this.balls[8].hidden) {
             if (this.player1) {
                 if (this.canPlayBlack[0]) {
                     winner[0] = true;
