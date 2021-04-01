@@ -18,7 +18,7 @@ module.exports = class ConnectionWizard {
     }
 
     calculateInitialPositions() {
-        console.log('Reached the function!');        
+        console.log('Reached the function!');
         return Object.assign(new Game(), this.game).computeInitialPositions(this.gameInfo.id);
     }
 

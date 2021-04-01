@@ -13,9 +13,6 @@ const ballsMoving = {
     moving: [],
     collision: []
 }
-const foul;
-const player;
-const moves;
 const canPlayBlack = [];
 const winner = []
 const lastHole = [];
@@ -41,10 +38,8 @@ module.exports = class Game {
             this.initPockets();
         }
         this.ballsMoving = ballsMoving;
-        this.player = player;
         this.player = 1;
-        this.foul = foul;
-        this.moves = moves;
+        this.foul = undefined;
         this.moves = 1;
         this.canPlayBlack = canPlayBlack;
         this.canPlayBlack = [false, false];
@@ -502,19 +497,23 @@ module.exports = class Game {
             }
         }
     }
-    gameWizard(Vector) {
-        let firstColision = true;
-        this.foul = undefined;
-        this.balls[0].vector = Vector;
-        let timestemp = 0;
-        while (!this.areBallsStill) {
-            timestemp++;
-            this.computeColisions();
-            if (this.ballsMoving.moving.length > 1) {
-                if (firstColision) {
-                    firstColision = false;
-                    if (!this.playingFull[0] && !this.playingFull[1]) {
+    foulHandler(firstColision) {
+        if (this.ballsMoving.moving.length > 1) {
+            if (firstColision) {
+                firstColision = false;
+                if (!this.playingFull[0] && !this.playingFull[1]) {
 
+                } else {
+                    if (this.canPlayBlack[this.player - 1]) {
+                        if (this.playingFull[this.player - 1]) {
+                            if (this.ballsMoving.moving[1] > 8) {
+                                this.foul = true;
+                            }
+                        } else {
+                            if (this.ballsMoving.moving[1] < 8) {
+                                this.foul = true;
+                            }
+                        }
                     } else {
                         if (this.playingFull[this.player - 1]) {
                             if (this.ballsMoving.moving[1] > 7) {
@@ -526,12 +525,23 @@ module.exports = class Game {
                             }
                         }
                     }
-                } else {
-                    if (this.foul === undefined) {
-                        this.foul = false;
-                    }
+                }
+            } else {
+                if (this.foul === undefined) {
+                    this.foul = false;
                 }
             }
+        }
+    }
+    gameWizard(Vector) {
+        let firstColision = true;
+        this.foul = undefined;
+        this.balls[0].vector = Vector;
+        let timestemp = 0;
+        while (!this.areBallsStill) {
+            timestemp++;
+            this.computeColisions();
+            this.foulHandler(firstColision);
             for (let i = 0; i < this.ballsMoving.moving.length; i++) {
                 let temp = this.balls[this.ballsMoving.moving[i]];
                 temp.x += temp.vector.x;
@@ -550,7 +560,6 @@ module.exports = class Game {
                     }
                 });
                 this.checkAndComputeCollisionBtPs();
-
             }
             console.log("*===================================*")
             console.log(timestemp);
