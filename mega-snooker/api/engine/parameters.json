@@ -1,4 +1,4 @@
 {
     "tableBounceModifier": 1,
-    "tableConstantDeceleration": 1
+    "tableConstantDeceleration": 0.9
 }

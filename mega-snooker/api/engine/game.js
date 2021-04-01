@@ -13,12 +13,16 @@ const ballsMoving = {
     moving: [],
     collision: []
 }
-
-//TODO Add check for holes!
-/**
- * Game manager... controls all elements for a game
- * 
- */
+const faul;
+const player1;
+const moves;
+const canPlayBlack = [];
+const winner = []
+    //TODO Add check for holes!
+    /**
+     * Game manager... controls all elements for a game
+     * 
+     */
 module.exports = class Game {
 
     /**
@@ -34,8 +38,16 @@ module.exports = class Game {
         if (this.pockets.length === 0) {
             this.initPockets();
         }
-        this.ballsMoving = this.ballsMoving;
-
+        this.ballsMoving = ballsMoving;
+        this.player1 = player1;
+        this.player1 = true;
+        this.faul = faul;
+        this.moves = moves;
+        this.moves = 1;
+        this.canPlayBlack = canPlayBlack;
+        this.canPlayBlack = [false, false];
+        this.winner = winner;
+        this.winner = [false, false];
     }
 
     /**
@@ -157,16 +169,26 @@ module.exports = class Game {
             radius: 11.25 / 2
         }));
     }
-
-    /**
-     * Checks if two supplied balls are colliding or not.
-     * 
-     * @param {Ball} ball_1 
-     * @param {Ball} ball_2 
-     * 
-     * @returns {Boolean} true  - collision
-     *                    false - no collision
-     */
+    checkCollisionBtPs(ball) {
+        this.pockets.forEach((el) => {
+            if (Math.sqrt(Math.pow(el.x - ball.x, 2) + Math.pow(el.y - ball.y, 2)) <= el.radius) {
+                return true;
+            }
+        });
+        return false;
+    }
+    computeCollisionBtPs(ball) {
+            ball.hidden();
+        }
+        /**
+         * Checks if two supplied balls are colliding or not.
+         * 
+         * @param {Ball} ball_1 
+         * @param {Ball} ball_2 
+         * 
+         * @returns {Boolean} true  - collision
+         *                    false - no collision
+         */
     checkCollisionBtB(ball_1, ball_2) {
         console.log(`Hidden? ${ball_1.hidden || ball_2.hidden}`);
         if (ball_1.hidden || ball_2.hidden) return false;
@@ -278,7 +300,7 @@ module.exports = class Game {
      */
     /*computeBtBCollision(ball_1, ball_2) {
     
-    }*/
+        }*/
 
     /**
      * Updates sizes based on supplied parameters
@@ -447,12 +469,46 @@ module.exports = class Game {
         });
         return areStill;
     }
+    blackHandler() {
+        if (this.balls[7].hidden) {
+            if (this.player1) {
+                if (this.canPlayBlack[0]) {
+                    winner[0] = true;
+                } else {
+                    winner[1] = true;
+                }
+            } else {
+                if (this.canPlayBlack[1]) {
+                    winner[1] = true;
+                } else {
+                    winner[0] = true;
+                }
+            }
+        }
+    }
+    moveCalculater() {
+        if (this.faul) {
+            this.player1 = !this.player1;
+            this.moves = 2;
+        } else {
+            this.moves--;
+            if (this.moves < 1) {
+                this.player1 = !this.player1;
+            }
+        }
+    }
     gameWizard(Vector) {
+
+        this.faul = true;
+
         this.balls[0].vector = Vector;
         let timestemp = 0;
         while (!this.areBallsStill) {
             timestemp++;
             this.computeColisions();
+            if (this.ballsMoving.moving.length > 1) {
+                this.faul = false;
+            }
             for (let i = 0; i < this.ballsMoving.moving.length; i++) {
                 let temp = this.balls[this.ballsMoving.moving[i]];
                 temp.x += temp.vector.x;
@@ -476,5 +532,8 @@ module.exports = class Game {
             console.log(timestemp);
             console.log(this.ballsMoving);
         }
+        this.blackHandler();
+        this.moveCalculater();
+
     }
 }
