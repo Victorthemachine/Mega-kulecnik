@@ -13,16 +13,17 @@ const ballsMoving = {
     moving: [],
     collision: []
 }
-const faul;
-const player1;
+const foul;
+const player;
 const moves;
 const canPlayBlack = [];
 const winner = []
-    //TODO Add check for holes!
-    /**
-     * Game manager... controls all elements for a game
-     * 
-     */
+const lastHole = [];
+//TODO Add check for holes!
+/**
+ * Game manager... controls all elements for a game
+ * 
+ */
 module.exports = class Game {
 
     /**
@@ -39,15 +40,16 @@ module.exports = class Game {
             this.initPockets();
         }
         this.ballsMoving = ballsMoving;
-        this.player1 = player1;
-        this.player1 = true;
-        this.faul = faul;
+        this.player = player;
+        this.player = 1;
+        this.foul = foul;
         this.moves = moves;
         this.moves = 1;
         this.canPlayBlack = canPlayBlack;
         this.canPlayBlack = [false, false];
         this.winner = winner;
         this.winner = [false, false];
+        this.lastHole = lastHole;
     }
 
     /**
@@ -169,16 +171,16 @@ module.exports = class Game {
             radius: 11.25 / 2
         }));
     }
-    checkCollisionBtPs(ball) {
-        this.pockets.forEach((el) => {
-            if (Math.sqrt(Math.pow(el.x - ball.x, 2) + Math.pow(el.y - ball.y, 2)) <= el.radius) {
-                return true;
-            }
-        });
-        return false;
-    }
-    computeCollisionBtPs(ball) {
-            ball.hidden();
+    checkAndComputeCollisionBtPs(ball) {
+            this.pockets.forEach((el, index) => {
+                if (Math.sqrt(Math.pow(el.x - ball.x, 2) + Math.pow(el.y - ball.y, 2)) <= el.radius) {
+                    this.lastHole[this.player] = index;
+                    ball.hidden = true;
+                    ball.vector.force = 0;
+                    return true;
+                }
+            });
+            return false;
         }
         /**
          * Checks if two supplied balls are colliding or not.
@@ -299,7 +301,7 @@ module.exports = class Game {
      * @param {Ball} ball_2
      */
     /*computeBtBCollision(ball_1, ball_2) {
-    
+        
         }*/
 
     /**
@@ -342,7 +344,7 @@ module.exports = class Game {
         const strictPosArray = [];
         const randomizePosArray = [];
 
-        this.balls[0].x = (this.table.width / 4) + table.x;
+        this.balls[0].x = (this.table.width / 4) + this.table.x;
         this.balls[0].y = (this.table.height / 2) + this.table.y;
 
         const somethingLikeTheRadiusButNotQuite = this.balls[1].radius * 0.88;
@@ -471,7 +473,7 @@ module.exports = class Game {
     }
     blackHandler() {
         if (this.balls[8].hidden) {
-            if (this.player1) {
+            if (this.player) {
                 if (this.canPlayBlack[0]) {
                     winner[0] = true;
                 } else {
@@ -486,20 +488,27 @@ module.exports = class Game {
             }
         }
     }
+    whiteHandler() {
+        if (this.balls[0].hidden) {
+            this.foul = true;
+            this.balls[0].x = (this.table.width / 4) + this.table.x;
+            this.balls[0].y = (this.table.height / 2) + this.table.y;
+        }
+    }
     moveCalculater() {
-        if (this.faul) {
-            this.player1 = !this.player1;
+        if (this.foul) {
+            this.player = this.player == 1 ? 2 : 1;
             this.moves = 2;
         } else {
             this.moves--;
             if (this.moves < 1) {
-                this.player1 = !this.player1;
+                this.player = this.player == 1 ? 2 : 1;
             }
         }
     }
     gameWizard(Vector) {
 
-        this.faul = true;
+        this.foul = true;
 
         this.balls[0].vector = Vector;
         let timestemp = 0;
@@ -507,7 +516,7 @@ module.exports = class Game {
             timestemp++;
             this.computeColisions();
             if (this.ballsMoving.moving.length > 1) {
-                this.faul = false;
+                this.foul = false;
             }
             for (let i = 0; i < this.ballsMoving.moving.length; i++) {
                 let temp = this.balls[this.ballsMoving.moving[i]];
@@ -533,7 +542,7 @@ module.exports = class Game {
             console.log(this.ballsMoving);
         }
         this.blackHandler();
+        this.whiteHandler();
         this.moveCalculater();
-
     }
 }
