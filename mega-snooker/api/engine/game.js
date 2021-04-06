@@ -17,6 +17,7 @@ const canPlayBlack = [];
 const winner = []
 const lastHole = [];
 const playingFull = [];
+const ballsRemaining = [];
 //TODO Add check for holes!
 /**
  * Game manager... controls all elements for a game
@@ -48,32 +49,35 @@ module.exports = class Game {
         this.lastHole = lastHole;
         this.playingFull = playingFull;
         this.playingFull = [false, false];
+        this.ballsRemaining = ballsRemaining;
+        this.ballsRemaining = [7, 7];
+        this.blackHole = undefined;
     }
 
-	run(id, cueCords) {
+    run(id, cueCords) {
 
-	}
-    /**
-     * Checks whether the ball collides with the table.
-     * This is accomplished by finding a point on the table. 
-     * Using 2 vertical lines to the table connecting two possible points and center of the ball.
-     * 
-     * Diagram:
-     * 
-     *                  |
-     *                  |
-     * -----------------X-------|
-     *                  |       |
-     *                  |       |
-     * -----------------X-------X-------
-     *                  |       |
-     *                  |       |
-     * 
-     * @param {Ball} ball 
-     * 
-     * @returns {Boolean} true  - collision
-     *                    false - no collision
-     */
+        }
+        /**
+         * Checks whether the ball collides with the table.
+         * This is accomplished by finding a point on the table. 
+         * Using 2 vertical lines to the table connecting two possible points and center of the ball.
+         * 
+         * Diagram:
+         * 
+         *                  |
+         *                  |
+         * -----------------X-------|
+         *                  |       |
+         *                  |       |
+         * -----------------X-------X-------
+         *                  |       |
+         *                  |       |
+         * 
+         * @param {Ball} ball 
+         * 
+         * @returns {Boolean} true  - collision
+         *                    false - no collision
+         */
     checkCollisionBtT(ball) {
         if (ball.hidden) return false;
         let pointOnTable = { first: { x: 0, y: 0 }, second: { x: 0, y: 0 } };
@@ -178,6 +182,40 @@ module.exports = class Game {
                     this.lastHole[this.player] = index;
                     ball.hidden = true;
                     ball.vector.force = 0;
+                    if (ball.id != 0 && ball.id != 8) {
+                        if (!this.playingFull[0] && !this.playingFull[1]) {
+                            if (ball.id < 8) {
+                                this.playingFull[this.player - 1] = true;
+
+                            } else {
+                                try {
+                                    this.playingFull[this.player - 2] = true;
+                                } catch (ex) {
+                                    this.playingFull[this.player] = true;
+                                }
+                            }
+                            this.ballsRemaining[this.player - 1]--;
+
+                        } else {
+                            if (ball.id < 8) {
+                                if (this.playingFull[0]) {
+                                    this.ballsRemaining[0]--;
+                                } else {
+                                    this.ballsRemaining[1]--;
+                                }
+                            } else {
+                                if (this.playingFull[0]) {
+                                    this.ballsRemaining[1]--;
+                                } else {
+                                    this.ballsRemaining[0]--;
+                                }
+                            }
+                        }
+                    } else {
+                        if (ball.id === 8) {
+                            this.blackHole = index;
+                        }
+                    }
                     return true;
                 }
             });
@@ -472,9 +510,31 @@ module.exports = class Game {
         });
         return areStill;
     }
+    opositPocket(index) {
+        switch (index) {
+            case 0:
+                return 5;
+                break;
+            case 1:
+                return 4;
+                break;
+            case 2:
+                return 3;
+                break;
+            case 3:
+                return 2;
+                break;
+            case 4:
+                return 1;
+                break;
+            case 5:
+                return 0;
+                break;
+        }
+    }
     blackHandler() {
         if (this.balls[8].hidden) {
-            if (this.canPlayBlack[this.player - 1]) {
+            if (this.canPlayBlack[this.player - 1] && this.opositPocket(this.lastHole[this.player - 1]) === this.blackHole) {
                 winner[this.player - 1] = true;
             } else {
                 winner[this.player - 1] = true;
@@ -536,6 +596,17 @@ module.exports = class Game {
             }
         }
     }
+    canPlayBlackHandler() {
+        if (this.ballsRemaining[0] === 0) {
+            this.canPlayBlack[0] = true;
+        }
+        if (this.ballsRemaining[1] === 0) {
+            this.canPlayBlack[1] = true;
+        }
+    }
+    sendingProtocol() {
+
+    }
     gameWizard(Vector) {
         let firstColision = true;
         this.foul = undefined;
@@ -564,13 +635,12 @@ module.exports = class Game {
                 });
                 this.checkAndComputeCollisionBtPs();
             }
-            console.log("*===================================*")
-            console.log(timestemp);
-            console.log(this.ballsMoving);
+            this.sendingProtocol();
         }
         if (this.foul === undefined) {
             this.foul = true;
         }
+        this.canPlayBlackHandler();
         this.blackHandler();
         this.whiteHandler();
         this.moveCalculater();
