@@ -24,7 +24,7 @@ module.exports = class Table {
      */
     getBallPositionQuadrant(ball) {
         let answer = '';
-        if (ball.x < ((this.width / 2) + x)) {
+        if (ball.x < ((this.width / 2) + this.x)) {
             answer += 'LEFT';
         } else {
             answer += 'RIGHT';

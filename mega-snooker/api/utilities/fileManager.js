@@ -13,7 +13,6 @@ module.exports = new class FileManager {
         const pastData = fs.readFileSync(gameJSONPath, { encoding: 'utf-8' });
         let pastDataObj = JSON.parse(pastData);
         pastDataObj.push(data)
-        console.log(pastDataObj);
         fs.writeFileSync(gameJSONPath, JSON.stringify(pastDataObj));
     }
 
@@ -27,27 +26,23 @@ module.exports = new class FileManager {
         switch (child) {
             case 'game':
                 this.readGames().then(pastData => {
-                    console.log(data);
                     let writeThis = pastData;
                     pastData.forEach((el, index) => {
                         if (el.connectionWizard.gameInfo.id === id) {
                             writeThis[index].connectionWizard.game = data;
                         }
                     });
-                    console.log(writeThis);
                     fs.writeFileSync(gameJSONPath, JSON.stringify(writeThis));
                 });
                 break;
             case 'balls':
                 this.readGames().then(pastData => {
-                    console.log(data);
                     let writeThis = pastData;
                     pastData.forEach((el, index) => {
                         if (el.connectionWizard.gameInfo.id === id) {
                             writeThis[index].connectionWizard.game.balls = data;
                         }
                     });
-                    console.log(writeThis);
                     fs.writeFileSync(gameJSONPath, JSON.stringify(writeThis));
                 });
             default:

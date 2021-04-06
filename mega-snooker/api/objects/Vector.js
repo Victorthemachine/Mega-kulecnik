@@ -1,3 +1,5 @@
+
+
 module.exports = class Vector {
 
     /**
@@ -108,13 +110,14 @@ module.exports = class Vector {
      * @param {Number} force 
      */
     setVector(angle, force) {
-            this.angle = angle;
-            this.setForce(force);
-        }
-        /**
-         * 
-         * @param {Vector} vector 
-         */
+        this.angle = angle;
+        this.setForce(force);
+    }
+
+    /**
+     * 
+     * @param {Vector} vector 
+     */
     vectorAddition(vector) {
         this.x += vector.x;
         this.y += vector.y;
