@@ -18,8 +18,12 @@ module.exports = class ConnectionWizard {
     }
 
     calculateInitialPositions() {
-        console.log('Reached the function!');
+        console.log('Reached the function!');        
         return Object.assign(new Game(), this.game).computeInitialPositions(this.gameInfo.id);
+    }
+
+    calculatePlay(data) {
+        return Object.assign(new Game(), this.game).run(this.gameInfo.id, data);
     }
 
     /**
@@ -30,9 +34,9 @@ module.exports = class ConnectionWizard {
     generateGameInfo() {
         this.gameInfo.id = Hasher.generateGameID();
         this.gameInfo.pass = Hasher.generateLobbyPassphrase();
-        console.log('================================================================')
+        /*console.log('================================================================')
         console.log(this);
-        console.log('================================================================')
+        console.log('================================================================')*/
         let dataToWrite = {
             status: "STARTING",
             connectionWizard: {

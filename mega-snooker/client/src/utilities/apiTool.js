@@ -102,7 +102,7 @@ module.exports = class apiTool {
                 resolve(res.data);
             }).catch(error => {
                 console.error(error);
-            })                
+            })
         });
     }
 
@@ -118,7 +118,7 @@ module.exports = class apiTool {
                 resolve(res.data);
             }).catch(error => {
                 console.error(error);
-            })                
+            })
         });
     }
 
@@ -134,7 +134,47 @@ module.exports = class apiTool {
                 resolve(res.data);
             }).catch(error => {
                 console.error(error);
-            })                
+            })
+        });
+    }
+
+    /**
+     * Check whether cordinates should be updated or not.
+     * Mostly in place to synchronize all users later on.
+     * 
+     * @param {*} GAME_ID 
+     * @param {*} option 
+     * @returns 
+     */
+    gameCheckForUpdatedPositions(GAME_ID, option) {
+        return new Promise(resolve => {
+            axios.post(address + config.gameManagerPath + '/checkstate', option, {
+                headers: {
+                    Token: config.token,
+                    ID: GAME_ID
+                }
+            }).then(res => {
+                console.log(res.data);
+                resolve(res.data);
+            }).catch(error => {
+                console.error(error);
+            })
+        });
+    }
+
+    gameGetNewPositions(GAME_ID, cueCords, options) {
+        return new Promise(resolve => {
+            axios.post(address + config.gameManagerPath + '/updatestate', cueCords, {
+                headers: {
+                    Token: config.token,
+                    ID: GAME_ID
+                }
+            }).then(res => {
+                console.log(res.data);
+                resolve(res.data);
+            }).catch(error => {
+                console.error(error);
+            })
         });
     }
 

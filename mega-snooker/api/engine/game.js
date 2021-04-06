@@ -50,6 +50,9 @@ module.exports = class Game {
         this.playingFull = [false, false];
     }
 
+	run(id, cueCords) {
+
+	}
     /**
      * Checks whether the ball collides with the table.
      * This is accomplished by finding a point on the table. 

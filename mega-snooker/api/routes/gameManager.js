@@ -8,6 +8,9 @@ const ConnectionWizard = require('./../engine/ConnectionWizard');
 router.post('/:option', function (req, res, next) {
     let response = '';
     req.get('Token') === private.client ? response = true : response = false;
+    console.log('=====Incoming game request=====')
+    console.log(`Route: /gameManager/${req.params.option}\nToken: ${req.get('Token')}\nPassed: ${response}`)
+    console.log('===============================')
     if (response) {
         FileManager.readGames().then(activeGames => {
             console.log(req.get('ID'));
@@ -16,13 +19,21 @@ router.post('/:option', function (req, res, next) {
             });
             if (wizardChild === undefined) return res.send('Error, invalid game')
             const wizard = Object.assign(new ConnectionWizard, wizardChild.connectionWizard);
-            console.log(wizard);
             switch (req.params.option) {
                 case 'startpos':
                     res.send(wizard.calculateInitialPositions());
                     break;
                 case 'updatesize':
                     res.send(wizard.initilizeSizes(req.body));
+                    break;
+                case 'updatestate':
+                    res.send(wizard.calculatePlay(req.body));
+                    break;
+                case 'checkstate':
+                    //TODO: make handshake type communication
+                    //=> each player confirms state with API. Next check sends doUpdate
+                    //=> all players accept the command, do it, then handshake again... and so on.
+                    res.send({ status: 'doUpdate' });
                     break;
                 default:
                     res.send('Error, invalid path');
