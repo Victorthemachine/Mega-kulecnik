@@ -370,8 +370,8 @@ module.exports = class Game {
         let koeficent = Math.sin(temp2.vector.getAngle(temp2.vector))
         temp2.vector.force *= koeficent;
         temp1.vector.force *= (1 - koeficent);
-        ball1.vector.add(temp1.vector);
-        ball2.vector.add(temp2.vector);
+        ball1.vector.vectorAddition(temp1.vector);
+        ball2.vector.vectorAddition(temp2.vector);
     }
 
     /**
