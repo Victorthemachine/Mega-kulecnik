@@ -330,7 +330,48 @@ module.exports = class Game {
         ballsMoving.collision.splice(0);
     }
     computeBtBCollision(ball1, ball2) {
-        console.log("BtB");
+        let temp1 = ball1;
+        let temp2 = ball2;
+        ball2.vector = new Vector(ball1.x, ball1.y, ball2.x, ball.y);
+        /*let angleAdjasment = (ball2.vector.getangle(ball1.vector) / 2);
+        if (Math.abs(ball2.vector.angle - ball1.vector.angle) <= 90) {
+            angleAdjasment += ball2.vector.angle < ball1.vector.angle ? ball2.vector.angle : ball1.vector.angle;
+        } else {
+            angleAdjasment += ball2.vector.angle > ball1.vector.angle ? ball2.vector.angle : ball1.vector.angle;
+            angleAdjasment -= angleAdjasment >= 360 ? 360 : 0;
+
+        }*/
+        let a = new Vector(ball2.vector.x, ball2.vector.y);
+        if (Math.abs(a.angle - ball1.vector.angle) > 180) {
+            if (a.angle < ball1.vector.angle) {
+                a.angle += 360
+            } else {
+                ball1.vector.angle += 360;
+            }
+        }
+        a.angle += a.angle - ball1.vector.angle;
+        ball1.vector.setVector(a.angle, 10);
+        ball1.vector = new Vector(-ball1.vector.x, -ball1.vector.y);
+        let koeficent = Math.sin(ball1.vector.getAngle(ball2.vector))
+        ball1.vector.force *= koeficent;
+        ball2.vector.force *= (1 - koeficent);
+        temp1.vector = new Vector(temp2.x, temp2.y, temp1.x, temp1.y);
+        a = new Vector(temp1.vector.x, temp1.vector.y);
+        if (Math.abs(a.angle - temp2.vector.angle) > 180) {
+            if (a.angle < temp2.vector.angle) {
+                a.angle += 360
+            } else {
+                temp2.vector.angle += 360;
+            }
+        }
+        a.angle += a.angle - temp2.vector.angle;
+        temp2.vector.setVector(a.angle, 10);
+        temp2.vector = new Vector(-temp2.vector.x, -temp2.vector.y);
+        let koeficent = Math.sin(temp2.vector.getAngle(temp2.vector))
+        temp2.vector.force *= koeficent;
+        temp1.vector.force *= (1 - koeficent);
+        ball1.vector.add(temp1.vector);
+        ball2.vector.add(temp2.vector);
     }
 
     /**
