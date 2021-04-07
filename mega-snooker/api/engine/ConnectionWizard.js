@@ -21,13 +21,13 @@ module.exports = class ConnectionWizard {
     }
 
     calculateInitialPositions() {
-        console.log('Reached the function!');        
+        console.log('Reached the function!');
         return currGame.computeInitialPositions(this.gameInfo.id);
     }
 
     calculatePlay(data) {
         console.log(`Lenght: ${Object.assign(new Game(), this.game).balls.length}`);
-        return currGame.gameWizard(this.gameInfo.id, new Vector(0, 0, 5, 0));
+        return currGame.gameWizard(this.gameInfo.id, new Vector(30, 0, 0, 0));
     }
 
     /**

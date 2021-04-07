@@ -12,8 +12,8 @@ module.exports = class Ball {
      */
     constructor(id, options = {}) {
         this.id = id;
-        this.y = options.y;
         this.x = options.x;
+        this.y = options.y;
         this.hidden = options.hidden || false;
         this.vector = options.vector;
         this.radius = id === 0 ? 30.15 : radius;
@@ -48,7 +48,7 @@ module.exports = class Ball {
                 return "MAROON_FULL";
             case 8:
                 return "BLACK_FULL";
-            
+
             case 9:
                 return "YELLOW_STRIPE";
             case 10:
@@ -73,28 +73,27 @@ module.exports = class Ball {
      * @returns {JSON} { withBalls: { collision: true/false, affectedBalls: [ball_1, ball_2...] }, withTable: true/false }
      */
     collisionCheck() {
-        let answer = { withBalls: { collision: false, affectedBalls: [] }, withTable: false };
-        console.log(this.id);
-        const tempArr = this.game.getBalls().filter(el => {
-            console.log(`${el.id} ${el.id !== this.id}`);
-            return el.id !== this.id;
-        });
-        console.log(tempArr);
-        tempArr.forEach(el => {
-            if (this.game.checkCollisionBtB(this, el)) {
-                answer.withBalls.collision = true;
-                answer.withBalls.affectedBalls.push(el);
-            }
-        });
-        if (this.game.checkCollisionBtT(this)) answer.withTable = true;
-        return answer;
-    }
-
-    /**
-     * Moves the ball by the supplied vector.
-     * 
-     * @param {Vector} vector 
-     */
+            let answer = { withBalls: { collision: false, affectedBalls: [] }, withTable: false };
+            console.log(this.id);
+            const tempArr = this.game.getBalls().filter(el => {
+                console.log(`${el.id} ${el.id !== this.id}`);
+                return el.id !== this.id;
+            });
+            console.log(tempArr);
+            tempArr.forEach(el => {
+                if (this.game.checkCollisionBtB(this, el)) {
+                    answer.withBalls.collision = true;
+                    answer.withBalls.affectedBalls.push(el);
+                }
+            });
+            if (this.game.checkCollisionBtT(this)) answer.withTable = true;
+            return answer;
+        }
+        /**
+         * Moves the ball by the supplied vector.
+         * 
+         * @param {Vector} vector 
+         */
     moveByVector(vector) {
         this.x += vector.x;
         this.y += vector.y;

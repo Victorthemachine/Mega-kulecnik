@@ -18,6 +18,7 @@ const winner = []
 const lastHole = [];
 const playingFull = [];
 const ballsRemaining = [];
+let moveX;
 //TODO Add check for holes!
 /**
  * Game manager... controls all elements for a game
@@ -30,7 +31,6 @@ module.exports = class Game {
      */
     constructor() {
         this.table = table;
-        console.log(`Lenght of my inner balls and depression stemming from it: ${balls.length}`);
         this.balls = balls;
         if (this.balls.length === 0) {
             this.initBalls();
@@ -57,50 +57,40 @@ module.exports = class Game {
 
     run(id, cueCords) {
 
-    }
-    /**
-     * Checks whether the ball collides with the table.
-     * This is accomplished by finding a point on the table. 
-     * Using 2 vertical lines to the table connecting two possible points and center of the ball.
-     * 
-     * Diagram:
-     * 
-     *                  |
-     *                  |
-     * -----------------X-------|
-     *                  |       |
-     *                  |       |
-     * -----------------X-------X-------
-     *                  |       |
-     *                  |       |
-     * 
-     * @param {Ball} ball 
-     * 
-     * @returns {Boolean} true  - collision
-     *                    false - no collision
-     */
+        }
+        /**
+         * Checks whether the ball collides with the table.
+         * This is accomplished by finding a point on the table. 
+         * Using 2 vertical lines to the table connecting two possible points and center of the ball.
+         * 
+         * Diagram:
+         * 
+         *                  |
+         *                  |
+         * -----------------X-------|
+         *                  |       |
+         *                  |       |
+         * -----------------X-------X-------
+         *                  |       |
+         *                  |       |
+         * 
+         * @param {Ball} ball 
+         * 
+         * @returns {Boolean} true  - collision
+         *                    false - no collision
+         */
     checkCollisionBtT(ball) {
         if (ball.hidden) return false;
-        let pointOnTable = { first: { x: 0, y: 0 }, second: { x: 0, y: 0 } };
-        switch (table.getBallPositionQuadrant(ball)) {
-            case 'LEFT BOTTOM':
-                pointOnTable.first = { x: ball.x, y: table.y };
-                pointOnTable.second = { x: table.x, y: ball.y };
-                break;
-            case 'RIGHT BOTTOM':
-                pointOnTable.first = { x: ball.x, y: table.y };
-                pointOnTable.second = { x: table.width + table.x, y: ball.y };
-                break;
-            case 'LEFT TOP':
-                pointOnTable.first = { x: ball.x, y: table.height };
-                pointOnTable.second = { x: table.x, y: ball.y };
-                break;
-            case 'RIGHT TOP':
-                pointOnTable.first = { x: ball.x, y: table.height };
-                pointOnTable.second = { x: table.width + table.x, y: ball.y };
-                break;
+        if ((ball.x - (ball.radius)) <= this.table.x && ball.vector.angle > (Math.PI / 2) && ball.vector.angle < (3 * Math.PI / 2)) {
+            return true;
         }
-        if (Math.sqrt(Math.pow(ball.x - pointOnTable.first.x, 2) + Math.pow(ball.y - pointOnTable.first.y, 2)) <= ball.radius || Math.sqrt(Math.pow(ball.x - pointOnTable.second.x, 2) + Math.pow(ball.y - pointOnTable.second.y, 2)) <= ball.radius) {
+        if ((ball.x - (ball.radius)) >= (this.table.width + this.table.x) && ((ball.vector.angle > 0 && ball.vector.angle < (Math.PI / 2)) || (ball.vector.angle < 2 * Math.PI && ball.vector.angle > (3 * Math.PI / 2)))) {
+            return true;
+        }
+        if ((ball.y - (ball.radius)) <= this.table.y && ball.vector.angle > Math.PI && ball.vector.angle < 2 * Math.PI) {
+            return true;
+        }
+        if ((ball.y - (ball.radius)) >= (this.table.height + this.table.y) && ball.vector.angle > 0 && ball.vector.angle < Math.PI) {
             return true;
         }
         return false;
@@ -134,11 +124,11 @@ module.exports = class Game {
         console.log('Initilizing balls...')
         for (let i = 0; i < 16; i++) {
             balls.push(new Ball(i, {
-                x: i,
-                y: i,
+                x: 0,
+                y: 0,
                 hidden: false,
             }))
-            balls[i].vector = new Vector(i + 2, i, undefined, undefined, {
+            balls[i].vector = new Vector(0, 0, 0, 0, {
                 owner: balls[i].id
             })
         }
@@ -147,8 +137,8 @@ module.exports = class Game {
     initPockets() {
         console.log('Initilizing pockets...');
         this.pockets.push(new Hole(0, {
-            x: table.x - 11.25 / 2,
-            y: table.y - 11.25 / 2,
+            x: table.x,
+            y: table.y,
             radius: 11.25 / 2
         }));
         this.pockets.push(new Hole(1, {
@@ -157,18 +147,18 @@ module.exports = class Game {
             radius: 12.5 / 2
         }));
         this.pockets.push(new Hole(2, {
-            x: (table.x + table.width) + 11.25 / 2,
+            x: (table.x + table.width),
             y: table.y + 11.25 / 2,
             radius: 11.25 / 2
         }));
         this.pockets.push(new Hole(3, {
             x: table.x - 11.25 / 2,
-            y: (table.y + table.height) + 11.25 / 2,
+            y: (table.y + table.height),
             radius: 11.25 / 2
         }));
         this.pockets.push(new Hole(4, {
-            x: table.x + table.width / 2,
-            y: (table.y + table.height) + 12.5 / 2,
+            x: table.x + (table.width / 2),
+            y: (table.y + table.height),
             radius: 12.5 / 2
         }));
         this.pockets.push(new Hole(5, {
@@ -178,59 +168,62 @@ module.exports = class Game {
         }));
     }
     checkAndComputeCollisionBtPs(ball) {
-        this.pockets.forEach((el, index) => {
-            if (Math.sqrt(Math.pow(el.x - ball.x, 2) + Math.pow(el.y - ball.y, 2)) <= el.radius) {
-                this.lastHole[this.player] = index;
-                ball.hidden = true;
-                ball.vector.force = 0;
-                if (ball.id != 0 && ball.id != 8) {
-                    if (!this.playingFull[0] && !this.playingFull[1]) {
-                        if (ball.id < 8) {
-                            this.playingFull[this.player - 1] = true;
+            this.pockets.forEach((el, index) => {
+                if (Math.sqrt(Math.pow(el.x - ball.x, 2) + Math.pow(el.y - ball.y, 2)) <= el.radius) {
+                    console.log("WOW");
+                    console.log(ball);
+                    console.log(index);
+                    this.lastHole[this.player] = index;
+                    ball.hidden = true;
+                    ball.vector.force = 0;
+                    if (ball.id != 0 && ball.id != 8) {
+                        if (!this.playingFull[0] && !this.playingFull[1]) {
+                            if (ball.id < 8) {
+                                this.playingFull[this.player - 1] = true;
+
+                            } else {
+                                try {
+                                    this.playingFull[this.player - 2] = true;
+                                } catch (ex) {
+                                    this.playingFull[this.player] = true;
+                                }
+                            }
+                            this.ballsRemaining[this.player - 1]--;
 
                         } else {
-                            try {
-                                this.playingFull[this.player - 2] = true;
-                            } catch (ex) {
-                                this.playingFull[this.player] = true;
+                            if (ball.id < 8) {
+                                if (this.playingFull[0]) {
+                                    this.ballsRemaining[0]--;
+                                } else {
+                                    this.ballsRemaining[1]--;
+                                }
+                            } else {
+                                if (this.playingFull[0]) {
+                                    this.ballsRemaining[1]--;
+                                } else {
+                                    this.ballsRemaining[0]--;
+                                }
                             }
                         }
-                        this.ballsRemaining[this.player - 1]--;
-
                     } else {
-                        if (ball.id < 8) {
-                            if (this.playingFull[0]) {
-                                this.ballsRemaining[0]--;
-                            } else {
-                                this.ballsRemaining[1]--;
-                            }
-                        } else {
-                            if (this.playingFull[0]) {
-                                this.ballsRemaining[1]--;
-                            } else {
-                                this.ballsRemaining[0]--;
-                            }
+                        if (ball.id === 8) {
+                            this.blackHole = index;
                         }
                     }
-                } else {
-                    if (ball.id === 8) {
-                        this.blackHole = index;
-                    }
+                    return true;
                 }
-                return true;
-            }
-        });
-        return false;
-    }
-    /**
-     * Checks if two supplied balls are colliding or not.
-     * 
-     * @param {Ball} ball_1 
-     * @param {Ball} ball_2 
-     * 
-     * @returns {Boolean} true  - collision
-     *                    false - no collision
-     */
+            });
+            return false;
+        }
+        /**
+         * Checks if two supplied balls are colliding or not.
+         * 
+         * @param {Ball} ball_1 
+         * @param {Ball} ball_2 
+         * 
+         * @returns {Boolean} true  - collision
+         *                    false - no collision
+         */
     checkCollisionBtB(ball_1, ball_2) {
         if (ball_1.hidden || ball_2.hidden) return false;
         if (Math.sqrt(Math.pow(ball_2.x - ball_1.x, 2) + Math.pow(ball_2.y - ball_1.y, 2)) <= (ball_1.radius + ball_2.radius)) {
@@ -238,6 +231,83 @@ module.exports = class Game {
         }
         return false;
     }
+    computeAngle(vector) {
+            if (vector.y >= 0) {
+                return Math.acos((vector.x * 1 + vector.y * 0) / (this.getSize(vector) * Math.sqrt(Math.pow(1, 2) + Math.pow(0, 2))));
+            }
+            return Math.PI + Math.acos((vector.x * 1 + vector.y * 0) / (this.getSize(vector) * Math.sqrt(Math.pow(1, 2) + Math.pow(0, 2))));
+        }
+        /**
+         * Sets the force and adjusts other parameters accordingly
+         * 
+         * @param {Number} force
+         */
+    setForce(vector, force) {
+            if (force < 0) throw new Error('FORCE CANNOT BE NEGATIVE');
+            vector.force = force;
+            if (force === 0) {
+                vector.x = 0;
+                vector.y = 0;
+                return;
+            }
+            let adjustParams = this.convertForce(vector);
+            vector.x = adjustParams.x;
+            vector.y = adjustParams.y;
+        }
+        /**
+         * 
+         * @param {Number} angle 
+         * @param {Number} force 
+         */
+    setVector(vector, angle, force) {
+            vector.angle = angle;
+            this.setForce(vector, force);
+        }
+        /**
+         * Private function
+         * 
+         * Convert force to X and Y cordinates
+         * 
+         * @returns {JSON} X,Y returns { x: something, y: something }
+         */
+    convertForce(vector) {
+        let answer = {};
+        answer.x = vector.force * Math.cos(vector.angle);
+        answer.y = vector.force * Math.sin(vector.angle);
+        return answer;
+    }
+
+    /**
+     * Computes the size of the vector
+     * 
+     * @returns {Number} size
+     */
+    getSize(vector) {
+        return Math.sqrt(Math.pow(vector.x, 2) + Math.pow(vector.y, 2));
+    }
+
+    /**
+     * Gets angle between the two vectors
+     * 
+     * @param {Vector} vector
+     * 
+     * @returns {Number} degrees
+     */
+    getAngle(vector1, vector2) {
+        return Math.acos((vector1.x * vector2.x + vector1.y * vector2.y) / (this.getSize(vector1) * this.getSize(vector2)));
+    }
+
+    /**
+     * 
+     * @param {Vector} vector 
+     */
+    vectorAddition(vector1, vector2) {
+        vector1.x += vector2.x;
+        vector1.y += vector2.y;
+        vector1.angle = this.computeAngle(vector1);
+        vector1.force = this.getSize(vector1) / 2;
+    }
+
 
     /**
      * Computes the vector after the collision.
@@ -247,76 +317,27 @@ module.exports = class Game {
      * @returns {Vector} vector after the collision
      */
     computeBtTCollision(ball) {
-        console.log(ball);
         if (ball.hidden) return false;
-        let pointOnTable = { first: { x: 0, y: 0 }, second: { x: 0, y: 0 } };
-        let quadrant = table.getBallPositionQuadrant(ball);
-        switch (quadrant) {
-            case 'LEFT BOTTOM':
-                pointOnTable.first = { x: ball.x, y: table.y };
-                pointOnTable.second = { x: table.x, y: ball.y };
-                break;
-            case 'RIGHT BOTTOM':
-                pointOnTable.first = { x: ball.x, y: table.y };
-                pointOnTable.second = { x: table.width + table.x, y: ball.y };
-                break;
-            case 'LEFT TOP':
-                pointOnTable.first = { x: ball.x, y: table.height };
-                pointOnTable.second = { x: table.x, y: ball.y };
-                break;
-            case 'RIGHT TOP':
-                pointOnTable.first = { x: ball.x, y: table.height };
-                pointOnTable.second = { x: table.width + table.x, y: ball.y };
-                break;
+        let useTheForce = ball.vector.force;
+        if ((ball.x - (ball.radius)) <= this.table.x) {
+            ball.vector.x = -ball.vector.x;
+            ball.vector.y = ball.vector.y;
         }
-        let point;
-
-        if (Math.sqrt(Math.pow(ball.x - pointOnTable.first.x, 2) + Math.pow(ball.y - pointOnTable.first.y, 2)) <= ball.radius) {
-            point = pointOnTable.first;
-            quadrant = quadrant.split(' ')[1];
-        } else if (Math.sqrt(Math.pow(ball.x - pointOnTable.second.x, 2) + Math.pow(ball.y - pointOnTable.second.y, 2)) <= ball.radius) {
-            point = pointOnTable.second;
-            quadrant = quadrant.split(' ')[0];
+        if ((ball.x + (ball.radius)) >= (this.table.x + this.table.width)) {
+            ball.vector.x = -ball.vector.x;
+            ball.vector.y = ball.vector.y;
         }
-        console.log(point);
-        console.log(quadrant);
-        if (point === undefined) throw new Error('TRIED TO COMPUTE COLLISION BALL TO TABLE BUT POINT IS UNDEFINED');
-
-        let bounceAngle;
-
-        switch (quadrant) {
-            case 'LEFT':
-                if (90 <= ball.vector.angle <= 180) { //i.e. it's in the second quadrant vector wise
-                    bounceAngle = (90 - (ball.vector.angle - 90));
-                } else { //i.e. it's in the third quadrant vector wise
-                    bounceAngle = 360 - (ball.vector.angle - 180);
-                }
-                break;
-            case 'RIGHT':
-                if (0 <= ball.vector.angle <= 90) { //i.e. it's in the first quadrant vector wise
-                    bounceAngle = 180 - (90 - (90 - ball.vector.angle));
-                } else { //i.e. it's in the fourth quadrant vector wise
-                    bounceAngle = 180 + (90 - (90 - (360 - ball.vector.angle)));
-                }
-                break;
-            case 'BOTTOM':
-                if (180 <= ball.vector.angle <= 270) { //i.e. it's in the third quadrant vector wise
-                    bounceAngle = 2 * (270 - ball.vector.angle) + (90 - (270 - ball.vector.angle));
-                } else { //i.e. it's in the fourth quadrant vector wise
-                    bounceAngle = 90 - (90 - (360 - ball.vector.angle));
-                }
-                break;
-            case 'TOP':
-                if (0 <= ball.vector.angle <= 90) { //i.e. it's in the first quadrant vector wise
-                    bounceAngle = 360 - (90 - (90 - ball.vector.angle));
-                } else { //i.e. it's in the second quadrant vector wise
-                    bounceAngle = 180 + (90 - (ball.vector.angle - 90));
-                }
-                break;
+        if ((ball.y - (ball.radius)) <= this.table.y) {
+            ball.vector.x = ball.vector.x;
+            ball.vector.y = -ball.vector.y;
         }
-        console.log(typeof ball.vector);
-        ball.vector.setVector(bounceAngle, ball.vector.force);
-
+        if ((ball.y + (ball.radius)) >= (this.table.y + this.table.height)) {
+            ball.vector.x = ball.vector.x;
+            ball.vector.y = -ball.vector.y;
+        }
+        ball.vector.force = useTheForce;
+        this.forceControl(ball);
+        ball.vector.angle = this.computeAngle(ball.vector);
     }
 
     computeColisions() {
@@ -330,56 +351,55 @@ module.exports = class Game {
         });
         this.ballsMoving.collision.splice(0);
     }
-    /**
-     * 
-     * @param {Ball} ball1 
-     * @param {Ball} ball2 
-     */
+    partBtB(ball1, ball2) {
+            ball2.vector = new Vector(ball1.x, ball1.y, ball2.x, ball2.y);
+            let a = ball2.vector;
+            if (Math.abs(a.angle - ball1.vector.angle) > 180) {
+                if (a.angle < ball1.vector.angle) {
+                    a.angle += 360
+                } else {
+                    ball1.vector.angle += 360;
+                }
+            }
+            a.angle += a.angle - ball1.vector.angle;
+            this.setVector(ball1.vector, a.angle, 10);
+            ball1.vector.x = -ball1.vector.x;
+            ball1.vector.y = -ball1.vector.y;
+            ball1.vector.angle = this.computeAngle(ball1.vector);
+            let coeficient = Math.sin(this.getAngle(ball1.vector, ball2.vector))
+            ball1.vector.force *= coeficient;
+            this.forceControl(ball1);
+            ball2.vector.force *= (1 - coeficient);
+            this.forceControl(ball2);
+        }
+        /**
+         * 
+         * @param {Ball} ball1 
+         * @param {Ball} ball2 
+         */
     computeBtBCollision(ball1, ball2) {
+        let one = false;
+        let two = false;
         let temp1 = ball1;
         let temp2 = ball2;
-        ball2.vector = new Vector(ball1.x, ball1.y, ball2.x, ball2.y);
-        /*let angleAdjasment = (ball2.vector.getangle(ball1.vector) / 2);
-        if (Math.abs(ball2.vector.angle - ball1.vector.angle) <= 90) {
-            angleAdjasment += ball2.vector.angle < ball1.vector.angle ? ball2.vector.angle : ball1.vector.angle;
-        } else {
-            angleAdjasment += ball2.vector.angle > ball1.vector.angle ? ball2.vector.angle : ball1.vector.angle;
-            angleAdjasment -= angleAdjasment >= 360 ? 360 : 0;
-
-        }*/
-        let a = new Vector(ball2.vector.x, ball2.vector.y);
-        if (Math.abs(a.angle - ball1.vector.angle) > 180) {
-            if (a.angle < ball1.vector.angle) {
-                a.angle += 360
-            } else {
-                ball1.vector.angle += 360;
-            }
+        if (ball1.vector.force > 0) {
+            this.partBtB(ball1, ball2);
+            one = true;
         }
-        a.angle += a.angle - ball1.vector.angle;
-        console.log(ball1);
-        console.log(typeof ball1.vector);
-        ball1.vector.setVector(a.angle, 10);
-        ball1.vector = new Vector(-ball1.vector.x, -ball1.vector.y);
-        let coeficient = Math.sin(ball1.vector.getAngle(ball2.vector))
-        ball1.vector.force *= coeficient;
-        ball2.vector.force *= (1 - coeficient);
-        temp1.vector = new Vector(temp2.x, temp2.y, temp1.x, temp1.y);
-        a = new Vector(temp1.vector.x, temp1.vector.y);
-        if (Math.abs(a.angle - temp2.vector.angle) > 180) {
-            if (a.angle < temp2.vector.angle) {
-                a.angle += 360
-            } else {
-                temp2.vector.angle += 360;
+        if (temp2.vector.force > 0) {
+            this.partBtB(temp1, temp2);
+            if (!one) {
+                ball1 = temp1;
+                ball2 = temp2;
             }
+            two = true;
         }
-        a.angle += a.angle - temp2.vector.angle;
-        temp2.vector.setVector(a.angle, 10);
-        temp2.vector = new Vector(-temp2.vector.x, -temp2.vector.y);
-        coeficient = Math.sin(temp2.vector.getAngle(temp2.vector))
-        temp2.vector.force *= coeficient;
-        temp1.vector.force *= (1 - coeficient);
-        ball1.vector.vectorAddition(temp1.vector);
-        ball2.vector.vectorAddition(temp2.vector);
+        if (one && two) {
+            this.vectorAddition(ball1.vector, temp1.vector);
+            this.forceControl(ball1);
+            this.vectorAddition(ball2.vector, temp2.vector);
+            this.forceControl(ball2);
+        }
     }
 
     /**
@@ -398,17 +418,15 @@ module.exports = class Game {
      * @param {JSON} data 
      */
     updateSizes(id, data) {
-        this.table.height = data.height * (112 / 150);
-        this.table.width = data.height * (224 / 150);
+        this.table.height = data.height * (122 / 150);
+        this.table.width = data.height * (254 / 150);
 
         const offsetWidth = (data.windowWidth - this.table.width) / 2;
         this.table.x = offsetWidth;
         const offsetHeight = (data.height - this.table.height) / 2;
         this.table.y = offsetHeight;
-
+        moveX = data.windowWidth / 2;
         this.balls.forEach((el, index) => {
-            el.x += offsetWidth;
-            el.y += offsetHeight;
             if (index === 0) {
                 el.radius = data.radiusWhite;
             } else {
@@ -417,8 +435,6 @@ module.exports = class Game {
         });
 
         this.pockets.forEach(el => {
-            el.x += offsetWidth;
-            el.y += offsetHeight;
             el.radius = el.radius * (this.table.width / 224);
         });
 
@@ -429,16 +445,15 @@ module.exports = class Game {
         const strictPosArray = [];
         const randomizePosArray = [];
 
-        this.balls[0].x = ((this.table.width + this.table.x) / 4);
-        this.balls[0].y = (this.table.height) / 2 + this.table.y;
+        this.balls[0].x = (this.table.width / 4) + this.table.x;
+        this.balls[0].y = (this.table.height / 2) + this.table.y;
 
         const somethingLikeTheRadiusButNotQuite = this.balls[1].radius * 0.88;
 
         const centerBall = {
-            x: (((this.table.width + this.table.x) / 4) * 3),
+            x: (((this.table.width) / 4) * 3) + this.table.x,
             y: (this.table.height / 2) + this.table.y
         };
-        console.log((this.table.height / 2) + this.table.y)
         randomizePosArray.push({
             x: centerBall.x - (2 * somethingLikeTheRadiusButNotQuite),
             y: centerBall.y
@@ -538,8 +553,8 @@ module.exports = class Game {
         let response = {};
         this.balls.forEach((el, index) => {
             response[index] = {
-                x: el.x - (((this.table.x + this.table.width + el.radius) / 2)),
-                y: -el.y
+                x: el.x - moveX - el.radius / 2,
+                y: -el.y,
             }
         });
         console.log(response);
@@ -553,6 +568,7 @@ module.exports = class Game {
                 this.ballsMoving.moving.push(index);
                 areStill = false;
             }
+            this.forceControl(el);
 
         });
         return areStill;
@@ -645,6 +661,11 @@ module.exports = class Game {
             this.canPlayBlack[1] = true;
         }
     }
+    forceControl(temp) {
+        temp.vector.force === NaN ? temp.vector.force = 0 : temp.vector.force = temp.vector.force;
+        temp.vector.force <= parameters.ballsMinSpeed ? temp.vector.force = 0 : temp.vector.force = temp.vector.force;
+        temp.vector.force > parameters.ballsMaxSpeed ? this.setForce(temp.vector, parameters.ballsMaxSpeed) : this.setForce(temp.vector, temp.vector.force);
+    }
 
     gameWizard(id, vector) {
         console.log('================================');
@@ -663,26 +684,25 @@ module.exports = class Game {
             timestamp++;
             this.computeColisions();
             this.foulHandler(firstColision);
-            console.log(timestamp);
             for (let i = 0; i < this.ballsMoving.moving.length; i++) {
                 let temp = JSON.parse(JSON.stringify(this.balls[this.ballsMoving.moving[i]]));
-                temp.x += temp.vector.x;
-                temp.y += temp.vector.y;
-                temp.vector.force *= parameters.tableConstantDeceleration;
-                console.log(`Are you okay? ${temp.vector.force}`);
-                console.log(typeof temp.vector.force);
-                temp.vector.force === NaN ? temp.vector.force = 0 : console.log('Not a NaN');
-                temp.vector.force <= 0.2 ? temp.vector.force = 0 : temp.vector.force = temp.vector.force;
-
+                temp.x += (temp.vector.x / parameters.timestampCoeficant);
+                temp.y += (temp.vector.y / parameters.timestampCoeficant);
+                if (timestamp % parameters.timestampCoeficant === 0) {
+                    temp.vector.force *= parameters.tableConstantDeceleration;
+                    this.forceControl(temp);
+                }
                 if (this.checkCollisionBtT(temp)) {
                     ballsMoving.collision.push({ temp });
                 }
                 this.balls.forEach((el) => {
-                    if (this.checkCollisionBtB(temp, el)) {
-                        if (!this.ballsMoving.collision.find(elem => {
-                            return Object.is(elem, { el, temp });
-                        })) {
-                            this.ballsMoving.collision.push({ temp, el });
+                    if (el.id !== temp.id) {
+                        if (this.checkCollisionBtB(temp, el)) {
+                            if (!this.ballsMoving.collision.find(elem => {
+                                    return Object.is(elem, { el, temp });
+                                })) {
+                                this.ballsMoving.collision.push({ temp, el });
+                            }
                         }
                     }
                 });
@@ -693,10 +713,10 @@ module.exports = class Game {
             ballsMoving.moving.forEach(el => {
                 temp.push({
                     [el]: {
-                        x: balls[el].x,
-                        y: balls[el].y,
-                        doHide: balls[el].hidden,
-                        angle: balls[el].vector.angle
+                        x: (this.balls[el].x - moveX - this.balls[el].radius / 2),
+                        y: -this.balls[el].y,
+                        doHide: this.balls[el].hidden,
+                        angle: this.balls[el].vector.angle
                     }
                 });
             });
@@ -717,7 +737,7 @@ module.exports = class Game {
         response.win = this.winner;
 
         FileManager.updateGames(id, 'game', JSON.parse(JSON.stringify(this)));
-
+        console.log("finished");
         return response;
     }
 }

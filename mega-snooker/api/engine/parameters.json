@@ -1,4 +1,8 @@
 {
     "tableBounceModifier": 1,
-    "tableConstantDeceleration": 0.1
+    "tableConstantDeceleration": 0.98,
+    "ballsMaxSpeed": 30,
+    "ballsMinSpeed": 0.01,
+    "timestampCoeficant": 10
+
 }
