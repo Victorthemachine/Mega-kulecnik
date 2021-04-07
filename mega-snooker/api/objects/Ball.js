@@ -12,8 +12,8 @@ module.exports = class Ball {
      */
     constructor(id, options = {}) {
         this.id = id;
-        this.y = options.y;
         this.x = options.x;
+        this.y = options.y;
         this.hidden = options.hidden || false;
         this.vector = options.vector;
         this.radius = id === 0 ? 30.15 : radius;
