@@ -1,5 +1,3 @@
-
-
 module.exports = class Vector {
 
     /**
@@ -16,8 +14,13 @@ module.exports = class Vector {
             this.x = this.computeX(options.owner.x, x_1);
             this.y = this.computeY(options.owner.y, y_1);
         } else {
-            this.x = this.computeX(x_1, x_2);
-            this.y = this.computeY(y_1, y_2);
+            if (x_2 && y_2 === undefined) {
+                this.x = x_1;
+                this.y = y_1;
+            } else {
+                this.x = this.computeX(x_1, x_2);
+                this.y = this.computeY(y_1, y_2);
+            }
         }
         this.force = options.force || this.getSize();
         this.angle = options.angle || this.computeAngle();
@@ -63,20 +66,28 @@ module.exports = class Vector {
      * @param {Number} force
      */
     setForce(force) {
-        if (force < 0) throw new Error('FORCE CANNOT BE NEGATIVE');
-        this.force = force;
-        let adjustParams = this.convertForce();
-        this.x = adjustParams.x;
-        this.y = adjustParams.y;
-    }
-
-    /**
-     * Private function
-     * 
-     * Convert force to X and Y cordinates
-     * 
-     * @returns {JSON} X,Y returns { x: something, y: something }
-     */
+            if (force < 0) throw new Error('FORCE CANNOT BE NEGATIVE');
+            this.force = force;
+            let adjustParams = this.convertForce();
+            this.x = adjustParams.x;
+            this.y = adjustParams.y;
+        }
+        /**
+         * 
+         * @param {Number} angle 
+         * @param {Number} force 
+         */
+    setVector(angle, force) {
+            this.angle = angle;
+            this.setForce(force);
+        }
+        /**
+         * Private function
+         * 
+         * Convert force to X and Y cordinates
+         * 
+         * @returns {JSON} X,Y returns { x: something, y: something }
+         */
     convertForce() {
         let answer = {};
         answer.x = this.force * Math.cos(this.angle);
@@ -102,16 +113,6 @@ module.exports = class Vector {
      */
     getAngle(vector) {
         return Math.acos((this.x * vector.x + this.y * vector.y) / (this.getSize() * vector.getSize()));
-    }
-
-    /**
-     * 
-     * @param {Number} angle 
-     * @param {Number} force 
-     */
-    setVector(angle, force) {
-        this.angle = angle;
-        this.setForce(force);
     }
 
     /**
