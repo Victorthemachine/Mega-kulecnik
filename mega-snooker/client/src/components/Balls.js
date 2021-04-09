@@ -16,7 +16,6 @@ import BALL_13 from './../assets/balls/13/13-1.svg';
 import BALL_14 from './../assets/balls/14/14-1.svg';
 import BALL_15 from './../assets/balls/15/15-1.svg';
 
-
 const apiTool = require('./../utilities/apiTool');
 const API = new apiTool();
 
@@ -37,25 +36,25 @@ class Balls extends Component {
         super(props);
         this.state = {
             points: [
-                { x: 0, y: 0 },
-                { x: 0, y: 0 },
-                { x: 0, y: 0 },
-                { x: 0, y: 0 },
-                { x: 0, y: 0 },
-                { x: 0, y: 0 },
-                { x: 0, y: 0 },
-                { x: 0, y: 0 },
-                { x: 0, y: 0 },
-                { x: 0, y: 0 },
-                { x: 0, y: 0 },
-                { x: 0, y: 0 },
-                { x: 0, y: 0 },
-                { x: 0, y: 0 },
-                { x: 0, y: 0 },
-                { x: 0, y: 0 },
-                { x: 0, y: 0 },
-                { x: 0, y: 0 },
-                { x: 0, y: 0 }
+                { x: 0, y: 0, hidden: 'visible' },
+                { x: 0, y: 0, hidden: 'visible' },
+                { x: 0, y: 0, hidden: 'visible' },
+                { x: 0, y: 0, hidden: 'visible' },
+                { x: 0, y: 0, hidden: 'visible' },
+                { x: 0, y: 0, hidden: 'visible' },
+                { x: 0, y: 0, hidden: 'visible' },
+                { x: 0, y: 0, hidden: 'visible' },
+                { x: 0, y: 0, hidden: 'visible' },
+                { x: 0, y: 0, hidden: 'visible' },
+                { x: 0, y: 0, hidden: 'visible' },
+                { x: 0, y: 0, hidden: 'visible' },
+                { x: 0, y: 0, hidden: 'visible' },
+                { x: 0, y: 0, hidden: 'visible' },
+                { x: 0, y: 0, hidden: 'visible' },
+                { x: 0, y: 0, hidden: 'visible' },
+                { x: 0, y: 0, hidden: 'visible' },
+                { x: 0, y: 0, hidden: 'visible' },
+                { x: 0, y: 0, hidden: 'visible' }
             ]
         };
     }
@@ -98,48 +97,49 @@ class Balls extends Component {
             });
             console.log(confirm);
         }
-        setTimeout(function () {
+        setTimeout(function() {
             API.gameCheckForUpdatedPositions(secret.id).then(res => {
                 if (res.status === 'doUpdate') {
                     API.gameGetNewPositions(secret.id, undefined).then(result => {
+                        console.log('=========================================================');
+                        console.log(result);
+                        console.log('=========================================================');
                         //for now just a trial method
-                        const test = {
-                            "balls": [
-                                {
-                                    "1": [
-                                        {
-                                            "0": {
-                                                "x": "0",
-                                                "y": "0",
-                                                "doHide": false,
-                                                "angle": 97
-                                            }
-                                        },
-                                        {
-                                            "7": {
-                                                "x": "578",
-                                                "y": "-801",
-                                                "doHide": true,
-                                                "angle": 157
-                                            }
+                        let test = {
+                            "balls": [{
+                                "1": [{
+                                        "0": {
+                                            "x": "0",
+                                            "y": "0",
+                                            "doHide": false,
+                                            "angle": 97
                                         }
-                                    ],
-                                    "2": [
-                                        {
-                                            "2": {
-                                                "x": "100",
-                                                "y": "-100",
-                                                "doHide": true,
-                                                "angle": 157
-                                            }
+                                    },
+                                    {
+                                        "7": {
+                                            "x": "578",
+                                            "y": "-801",
+                                            "doHide": true,
+                                            "angle": 157
                                         }
-                                    ]
-                                }
-                            ],
+                                    }
+                                ],
+                                "2": [{
+                                    "2": {
+                                        "x": "100",
+                                        "y": "-100",
+                                        "doHide": true,
+                                        "angle": 157
+                                    }
+                                }]
+                            }],
                             "player": 1,
-                            "win": false
+                            "win": [
+                                false,
+                                false
+                            ]
                         }
-
+                        test = result;
                         let counter = 1;
                         let temp = this.state.points;
                         const updates = [];
@@ -155,6 +155,7 @@ class Balls extends Component {
                                         console.log(elem);
                                         temp[parseInt(Object.keys(elem)[0])].x = elem[Object.keys(elem)[0]].x;
                                         temp[parseInt(Object.keys(elem)[0])].y = elem[Object.keys(elem)[0]].y;
+                                        temp[parseInt(Object.keys(elem)[0])].hidden = elem[Object.keys(elem)[0]].doHide ? 'hidden' : 'visible';
                                     });
                                     updates.push(JSON.parse(JSON.stringify(temp)));
                                     console.log(updates[updates.length - 1])
@@ -166,7 +167,8 @@ class Balls extends Component {
                         });
                         counter = 0;
                         console.log(updates);
-                        let scheduleUpdates = setInterval(function () {
+                        //const prevState = JSON.parse(JSON.stringify(this.state));
+                        let scheduleUpdates = setInterval(function() {
                             console.log(`Interval initiated;\nCounter: ${counter}`);
                             this.setState({ points: updates[counter] })
                             if (updates.length - 1 === counter) {
@@ -174,7 +176,7 @@ class Balls extends Component {
                                 return;
                             }
                             counter++;
-                        }.bind(this), 2000)
+                        }.bind(this), 20)
                     })
                 }
             })
@@ -211,30 +213,30 @@ class Balls extends Component {
         API.gameCheckForUpdatedPositions(secret.id).then(res => {
             if (res.status === 'doUpdate') {
                 API.gameGetNewPositions(secret.id, undefined).then(result => {
+                    console.log('=========================================================');
+                    console.log(result);
+                    console.log('=========================================================');
                     //for now just a trial method
                     const test = {
-                        "balls": [
-                            {
-                                "1": [
-                                    {
-                                        "0": {
-                                            "x": "5",
-                                            "y": "80",
-                                            "doHide": false,
-                                            "angle": 97
-                                        }
-                                    },
-                                    {
-                                        "7": {
-                                            "x": "578",
-                                            "y": "-801",
-                                            "doHide": true,
-                                            "angle": 157
-                                        }
+                        "balls": [{
+                            "1": [{
+                                    "0": {
+                                        "x": "5",
+                                        "y": "80",
+                                        "doHide": false,
+                                        "angle": 97
                                     }
-                                ]
-                            }
-                        ],
+                                },
+                                {
+                                    "7": {
+                                        "x": "578",
+                                        "y": "-801",
+                                        "doHide": true,
+                                        "angle": 157
+                                    }
+                                }
+                            ]
+                        }],
                         "player": 1,
                         "win": false
                     }
@@ -252,7 +254,7 @@ class Balls extends Component {
                             } else {
                                 throw Error('Incorrect JSON received from API when attempting to update positions');
                             }
-                            setTimeout(function () {
+                            setTimeout(function() {
                                 this.setState({ points: temp })
                             }, 500);
                         }
@@ -261,35 +263,172 @@ class Balls extends Component {
             }
         })
     }
-    adjustAngle() {
-        document.getElementById("5").style.transform = "rotate(120deg)";
-    }
 
     render() {
-        const rot = {
-            transform: `rotate(150deg)`
-          };
-        return (
-            
-            <>  
-                
-                <BALL_0 id={0} x={this.state.points[0].x} y={this.state.points[0].y} width={whiteRad} viewBox={viewBox} key={1} />,
-                <BALL_1 id={1} x={this.state.points[1].x} y={this.state.points[1].y} width={ballRad} viewBox={viewBox} key={2} />,
-                <BALL_2 id={2} x={this.state.points[2].x} y={this.state.points[2].y} width={ballRad} viewBox={viewBox} key={3} />,
-                <BALL_3 id={3} x={this.state.points[3].x} y={this.state.points[3].y} width={ballRad} viewBox={viewBox} style={{rot}} key={4} />,
-                <BALL_4 id={4} x={this.state.points[4].x} y={this.state.points[4].y} width={ballRad} viewBox={viewBox} key={5} />,
-                <BALL_5 id={5} x={this.state.points[5].x} y={this.state.points[5].y} width={ballRad} viewBox={viewBox} key={6} />,
-                <BALL_6 id={6} x={this.state.points[6].x} y={this.state.points[6].y} width={ballRad} viewBox={viewBox} key={7} />,
-                <BALL_7 id={7} x={this.state.points[7].x} y={this.state.points[7].y} width={ballRad} viewBox={viewBox} key={8} />,
-                <BALL_8 id={8} x={this.state.points[8].x} y={this.state.points[8].y} width={ballRad} viewBox={viewBox} key={9} />,
-                <BALL_9 id={9} x={this.state.points[9].x} y={this.state.points[9].y} width={ballRad} viewBox={viewBox} key={10} />,
-                <BALL_10 id={10} x={this.state.points[10].x} y={this.state.points[10].y} width={ballRad} viewBox={viewBox} key={11} />,
-                <BALL_11 id={11} x={this.state.points[11].x} y={this.state.points[11].y} width={ballRad} viewBox={viewBox} key={12} />,
-                <BALL_12 id={12} x={this.state.points[12].x} y={this.state.points[12].y} width={ballRad} viewBox={viewBox} key={13} />,
-                <BALL_13 id={13} x={this.state.points[13].x} y={this.state.points[13].y} width={ballRad} viewBox={viewBox} key={14} />,
-                <BALL_14 id={14} x={this.state.points[14].x} y={this.state.points[14].y} width={ballRad} viewBox={viewBox} key={15} />,
-                <BALL_15 id={15} x={this.state.points[15].x} y={this.state.points[15].y} width={ballRad} viewBox={viewBox} key={16} />,
-            </>
+        return ( <
+            >
+            <
+            BALL_0 id = { 0 }
+            x = { this.state.points[0].x }
+            y = { this.state.points[0].y }
+            style = {
+                { visibility: `${this.state.points[0].hidden}` }
+            }
+            width = { whiteRad }
+            viewBox = { viewBox }
+            key = { 1 }
+            />, <
+            BALL_1 id = { 1 }
+            x = { this.state.points[1].x }
+            y = { this.state.points[1].y }
+            style = {
+                { visibility: `${this.state.points[1].hidden}` }
+            }
+            width = { ballRad }
+            viewBox = { viewBox }
+            key = { 2 }
+            />, <
+            BALL_2 id = { 2 }
+            x = { this.state.points[2].x }
+            y = { this.state.points[2].y }
+            style = {
+                { visibility: `${this.state.points[2].hidden}` }
+            }
+            width = { ballRad }
+            viewBox = { viewBox }
+            key = { 3 }
+            />, <
+            BALL_3 id = { 3 }
+            x = { this.state.points[3].x }
+            y = { this.state.points[3].y }
+            style = {
+                { visibility: `${this.state.points[3].hidden}` }
+            }
+            width = { ballRad }
+            viewBox = { viewBox }
+            key = { 4 }
+            />, <
+            BALL_4 id = { 4 }
+            x = { this.state.points[4].x }
+            y = { this.state.points[4].y }
+            style = {
+                { visibility: `${this.state.points[4].hidden}` }
+            }
+            width = { ballRad }
+            viewBox = { viewBox }
+            key = { 5 }
+            />, <
+            BALL_5 id = { 5 }
+            x = { this.state.points[5].x }
+            y = { this.state.points[5].y }
+            style = {
+                { visibility: `${this.state.points[5].hidden}` }
+            }
+            width = { ballRad }
+            viewBox = { viewBox }
+            key = { 6 }
+            />, <
+            BALL_6 id = { 6 }
+            x = { this.state.points[6].x }
+            y = { this.state.points[6].y }
+            style = {
+                { visibility: `${this.state.points[6].hidden}` }
+            }
+            width = { ballRad }
+            viewBox = { viewBox }
+            key = { 7 }
+            />, <
+            BALL_7 id = { 7 }
+            x = { this.state.points[7].x }
+            y = { this.state.points[7].y }
+            style = {
+                { visibility: `${this.state.points[7].hidden}` }
+            }
+            width = { ballRad }
+            viewBox = { viewBox }
+            key = { 8 }
+            />, <
+            BALL_8 id = { 8 }
+            x = { this.state.points[8].x }
+            y = { this.state.points[8].y }
+            style = {
+                { visibility: `${this.state.points[8].hidden}` }
+            }
+            width = { ballRad }
+            viewBox = { viewBox }
+            key = { 9 }
+            />, <
+            BALL_9 id = { 9 }
+            x = { this.state.points[9].x }
+            y = { this.state.points[9].y }
+            style = {
+                { visibility: `${this.state.points[9].hidden}` }
+            }
+            width = { ballRad }
+            viewBox = { viewBox }
+            key = { 10 }
+            />, <
+            BALL_10 id = { 10 }
+            x = { this.state.points[10].x }
+            y = { this.state.points[10].y }
+            style = {
+                { visibility: `${this.state.points[10].hidden}` }
+            }
+            width = { ballRad }
+            viewBox = { viewBox }
+            key = { 11 }
+            />, <
+            BALL_11 id = { 11 }
+            x = { this.state.points[11].x }
+            y = { this.state.points[11].y }
+            style = {
+                { visibility: `${this.state.points[11].hidden}` }
+            }
+            width = { ballRad }
+            viewBox = { viewBox }
+            key = { 12 }
+            />, <
+            BALL_12 id = { 12 }
+            x = { this.state.points[12].x }
+            y = { this.state.points[12].y }
+            style = {
+                { visibility: `${this.state.points[12].hidden}` }
+            }
+            width = { ballRad }
+            viewBox = { viewBox }
+            key = { 13 }
+            />, <
+            BALL_13 id = { 13 }
+            x = { this.state.points[13].x }
+            y = { this.state.points[13].y }
+            style = {
+                { visibility: `${this.state.points[13].hidden}` }
+            }
+            width = { ballRad }
+            viewBox = { viewBox }
+            key = { 14 }
+            />, <
+            BALL_14 id = { 14 }
+            x = { this.state.points[14].x }
+            y = { this.state.points[14].y }
+            style = {
+                { visibility: `${this.state.points[14].hidden}` }
+            }
+            width = { ballRad }
+            viewBox = { viewBox }
+            key = { 15 }
+            />, <
+            BALL_15 id = { 15 }
+            x = { this.state.points[15].x }
+            y = { this.state.points[15].y }
+            style = {
+                { visibility: `${this.state.points[15].hidden}` }
+            }
+            width = { ballRad }
+            viewBox = { viewBox }
+            key = { 16 }
+            />, < /
+            >
         );
     }
 }
