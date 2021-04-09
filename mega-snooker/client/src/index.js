@@ -15,6 +15,8 @@ import ErrorBoundary from './containers/ErrorBoundary';
 import Menu from './pages/Menu';
 import App from './pages/App';
 import Lobby from './pages/Lobby';
+import CreateRoom from './pages/CreateRoom';
+import JoinRoom from './pages/JoinRoom';
 import Snooker from './containers/Snooker';
 
 const store = createStore(
@@ -44,6 +46,16 @@ ReactDOM.render(
         <Route path="/lobby">
           <ErrorBoundary>
             <Lobby />
+          </ErrorBoundary>
+        </Route>
+        <Route path="/createroom">
+          <ErrorBoundary>
+            <CreateRoom />
+          </ErrorBoundary>
+        </Route>
+        <Route path="/joinroom">
+          <ErrorBoundary>
+            <JoinRoom />
           </ErrorBoundary>
         </Route>
         <Route path="/game">
