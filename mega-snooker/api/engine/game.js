@@ -59,20 +59,6 @@ module.exports = class Game {
 
         }
         /**
-         * Checks whether the ball collides with the table.
-         * This is accomplished by finding a point on the table. 
-         * Using 2 vertical lines to the table connecting two possible points and center of the ball.
-         * 
-         * Diagram:
-         * 
-         *                  |
-         *                  |
-         * -----------------X-------|
-         *                  |       |
-         *                  |       |
-         * -----------------X-------X-------
-         *                  |       |
-         *                  |       |
          * 
          * @param {Ball} ball 
          * 
@@ -84,7 +70,8 @@ module.exports = class Game {
         if ((ball.x - (ball.radius)) <= this.table.x && ball.vector.angle > (Math.PI / 2) && ball.vector.angle < (3 * Math.PI / 2)) {
             return true;
         }
-        if ((ball.x - (ball.radius)) >= (this.table.width + this.table.x) && ((ball.vector.angle > 0 && ball.vector.angle < (Math.PI / 2)) || (ball.vector.angle < 2 * Math.PI && ball.vector.angle > (3 * Math.PI / 2)))) {
+        if ((ball.x - (ball.radius)) >= (this.table.width + this.table.x) && ((ball.vector.angle >= 0 && ball.vector.angle < (Math.PI / 2)) || (ball.vector.angle <= 2 * Math.PI && ball.vector.angle > (3 * Math.PI / 2)))) {
+            console.log("asfa");
             return true;
         }
         if ((ball.y - (ball.radius)) <= this.table.y && ball.vector.angle > Math.PI && ball.vector.angle < 2 * Math.PI) {
@@ -135,7 +122,7 @@ module.exports = class Game {
     }
 
     initPockets() {
-        console.log('Initilizing pockets...');
+        /*console.log('Initilizing pockets...');
         this.pockets.push(new Hole(0, {
             x: table.x,
             y: table.y,
@@ -148,11 +135,11 @@ module.exports = class Game {
         }));
         this.pockets.push(new Hole(2, {
             x: (table.x + table.width),
-            y: table.y + 11.25 / 2,
+            y: table.y,
             radius: 11.25 / 2
         }));
         this.pockets.push(new Hole(3, {
-            x: table.x - 11.25 / 2,
+            x: table.x,
             y: (table.y + table.height),
             radius: 11.25 / 2
         }));
@@ -162,10 +149,10 @@ module.exports = class Game {
             radius: 12.5 / 2
         }));
         this.pockets.push(new Hole(5, {
-            x: table.x + table.width + 11.25 / 2,
-            y: table.y + table.height + 11.25 / 2,
+            x: table.x + table.width,
+            y: table.y + table.height,
             radius: 11.25 / 2
-        }));
+        }));*/
     }
     checkAndComputeCollisionBtPs(ball) {
             this.pockets.forEach((el, index) => {
@@ -226,10 +213,16 @@ module.exports = class Game {
          */
     checkCollisionBtB(ball_1, ball_2) {
         if (ball_1.hidden || ball_2.hidden) return false;
-        if (Math.sqrt(Math.pow(ball_2.x - ball_1.x, 2) + Math.pow(ball_2.y - ball_1.y, 2)) <= (ball_1.radius + ball_2.radius)) {
-            return true;
-        }
+        let help1 = new Vector(ball_1.x, ball_1.y, ball_2.x, ball_2.y);
+        let help2 = new Vector(ball_2.x, ball_2.y, ball_1.x, ball_1.y);
+        if (Math.abs(ball_1.vector.angle - help1.angle) > (Math.PI / 2))
+            if (Math.abs(ball_1.vector.angle - help1.angle) < (Math.PI / 2) && Math.abs(ball_2.vector.angle - help2.angle) < (Math.PI / 2)) {
+                if (Math.pow(ball_2.x - ball_1.x, 2) + Math.pow(ball_2.y - ball_1.y, 2) <= (Math.pow(((ball_1.radius + ball_2.radius) / 2), 2))) {
+                    return true;
+                }
+            }
         return false;
+
     }
     computeAngle(vector) {
             if (vector.y >= 0) {
@@ -320,6 +313,7 @@ module.exports = class Game {
         if (ball.hidden) return false;
         let useTheForce = ball.vector.force;
         if ((ball.x - (ball.radius)) <= this.table.x) {
+            console.log("a");
             ball.vector.x = -ball.vector.x;
             ball.vector.y = ball.vector.y;
         }
@@ -336,8 +330,8 @@ module.exports = class Game {
             ball.vector.y = -ball.vector.y;
         }
         ball.vector.force = useTheForce;
-        this.forceControl(ball);
         ball.vector.angle = this.computeAngle(ball.vector);
+        this.forceControl(ball);
     }
 
     computeColisions() {
@@ -448,7 +442,7 @@ module.exports = class Game {
         this.balls[0].x = (this.table.width / 4) + this.table.x;
         this.balls[0].y = (this.table.height / 2) + this.table.y;
 
-        const somethingLikeTheRadiusButNotQuite = this.balls[1].radius * 0.88;
+        const somethingLikeTheRadiusButNotQuite = this.balls[0].radius * 0.88;
 
         const centerBall = {
             x: (((this.table.width) / 4) * 3) + this.table.x,
