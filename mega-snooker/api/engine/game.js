@@ -67,17 +67,18 @@ module.exports = class Game {
          */
     checkCollisionBtT(ball) {
         if (ball.hidden) return false;
-        if ((ball.x - (ball.radius)) <= this.table.x && ball.vector.angle > (Math.PI / 2) && ball.vector.angle < (3 * Math.PI / 2)) {
+        if ((ball.x - (ball.radius / 2)) <= this.table.x && ball.vector.angle > (Math.PI / 2) && ball.vector.angle < (3 * Math.PI / 2)) {
             return true;
         }
-        if ((ball.x - (ball.radius)) >= (this.table.width + this.table.x) && ((ball.vector.angle >= 0 && ball.vector.angle < (Math.PI / 2)) || (ball.vector.angle <= 2 * Math.PI && ball.vector.angle > (3 * Math.PI / 2)))) {
-            console.log("asfa");
+        if ((ball.x + (ball.radius / 2)) >= (this.table.width + this.table.x)) {
+            if (((ball.vector.angle < (Math.PI / 2)) || (ball.vector.angle > (3 * Math.PI / 2)))) {
+                return true;
+            }
+        }
+        if ((ball.y - (ball.radius / 2)) <= this.table.y && ball.vector.angle > Math.PI && ball.vector.angle < 2 * Math.PI) {
             return true;
         }
-        if ((ball.y - (ball.radius)) <= this.table.y && ball.vector.angle > Math.PI && ball.vector.angle < 2 * Math.PI) {
-            return true;
-        }
-        if ((ball.y - (ball.radius)) >= (this.table.height + this.table.y) && ball.vector.angle > 0 && ball.vector.angle < Math.PI) {
+        if ((ball.y + (ball.radius / 2)) >= (this.table.height + this.table.y) && ball.vector.angle > 0 && ball.vector.angle < Math.PI) {
             return true;
         }
         return false;
@@ -213,14 +214,23 @@ module.exports = class Game {
          */
     checkCollisionBtB(ball_1, ball_2) {
         if (ball_1.hidden || ball_2.hidden) return false;
-        let help1 = new Vector(ball_1.x, ball_1.y, ball_2.x, ball_2.y);
-        let help2 = new Vector(ball_2.x, ball_2.y, ball_1.x, ball_1.y);
-        if (Math.abs(ball_1.vector.angle - help1.angle) > (Math.PI / 2))
-            if (Math.abs(ball_1.vector.angle - help1.angle) < (Math.PI / 2) && Math.abs(ball_2.vector.angle - help2.angle) < (Math.PI / 2)) {
-                if (Math.pow(ball_2.x - ball_1.x, 2) + Math.pow(ball_2.y - ball_1.y, 2) <= (Math.pow(((ball_1.radius + ball_2.radius) / 2), 2))) {
-                    return true;
-                }
+        if (Math.pow(ball_2.x - ball_1.x, 2) + Math.pow(ball_2.y - ball_1.y, 2) <= (Math.pow(((ball_1.radius + ball_2.radius) / 2), 2))) {
+            let help1 = new Vector(ball_1.x, ball_1.y, ball_2.x, ball_2.y);
+            let help2 = new Vector(ball_2.x, ball_2.y, ball_1.x, ball_1.y);
+            if (Math.abs(ball_1.vector.angle - help1.angle) > (Math.PI)) {
+                ball_1.vector.angle < help1.angle ? ball_1.vector.angle += 2 * Math.PI : help1.angle += 2 * Math.PI;
             }
+            if (Math.abs(ball_2.vector.angle - help2.angle) > (Math.PI)) {
+                ball_2.vector.angle < help2.angle ? ball_2.vector.angle += 2 * Math.PI : help2.angle += 2 * Math.PI;
+            }
+            if (Math.abs(ball_1.vector.angle - help1.angle) < (Math.PI / 2) || Math.abs(ball_2.vector.angle - help2.angle) < (Math.PI / 2)) {
+                if (ball_1.vector.angle > 2 * Math.PI) ball_1.vector.angle -= 2 * Math.PI;
+                if (ball_2.vector.angle > 2 * Math.PI) ball_2.vector.angle -= 2 * Math.PI;
+                return true;
+            }
+        }
+        if (ball_1.vector.angle > 2 * Math.PI) ball_1.vector.angle -= 2 * Math.PI;
+        if (ball_2.vector.angle > 2 * Math.PI) ball_2.vector.angle -= 2 * Math.PI;
         return false;
 
     }
@@ -298,7 +308,7 @@ module.exports = class Game {
         vector1.x += vector2.x;
         vector1.y += vector2.y;
         vector1.angle = this.computeAngle(vector1);
-        vector1.force = this.getSize(vector1) / 2;
+        vector1.force += vector2.force;
     }
 
 
@@ -311,27 +321,30 @@ module.exports = class Game {
      */
     computeBtTCollision(ball) {
         if (ball.hidden) return false;
+        console.log("btt");
         let useTheForce = ball.vector.force;
-        if ((ball.x - (ball.radius)) <= this.table.x) {
-            console.log("a");
+        if ((ball.x - (ball.radius / 2)) <= this.table.x && ball.vector.angle > (Math.PI / 2) && ball.vector.angle < (3 * Math.PI / 2)) {
             ball.vector.x = -ball.vector.x;
             ball.vector.y = ball.vector.y;
+            ball.vector.angle > Math.PI ? ball.vector.angle = 2 * Math.PI - (ball.vector.angle - Math.PI) : ball.vector.angle = (Math.PI - ball.vector.angle);
         }
-        if ((ball.x + (ball.radius)) >= (this.table.x + this.table.width)) {
+        if ((ball.x + (ball.radius / 2)) >= (this.table.x + this.table.width) && ((ball.vector.angle < (Math.PI / 2)) || (ball.vector.angle > (3 * Math.PI / 2)))) {
             ball.vector.x = -ball.vector.x;
             ball.vector.y = ball.vector.y;
+            ball.vector.angle > Math.PI ? ball.vector.angle = Math.PI + (-ball.vector.angle + 2 * Math.PI) : ball.vector.angle = Math.PI - ball.vector.angle;
         }
-        if ((ball.y - (ball.radius)) <= this.table.y) {
+        if ((ball.y - (ball.radius / 2)) <= this.table.y && ball.vector.angle > Math.PI && ball.vector.angle < 2 * Math.PI) {
             ball.vector.x = ball.vector.x;
             ball.vector.y = -ball.vector.y;
+            ball.vector.angle > Math.PI ? ball.vector.angle = Math.PI - (ball.vector.angle - Math.PI) : ball.vector.angle = (2 * Math.PI - ball.vector.angle);
         }
-        if ((ball.y + (ball.radius)) >= (this.table.y + this.table.height)) {
+        if ((ball.y + (ball.radius / 2)) >= (this.table.y + this.table.height) && ball.vector.angle > 0 && ball.vector.angle < Math.PI) {
             ball.vector.x = ball.vector.x;
             ball.vector.y = -ball.vector.y;
+            ball.vector.angle > Math.PI ? ball.vector.angle = Math.PI - (ball.vector.angle - Math.PI) : ball.vector.angle = (2 * Math.PI - ball.vector.angle);
         }
         ball.vector.force = useTheForce;
-        ball.vector.angle = this.computeAngle(ball.vector);
-        this.forceControl(ball);
+        this.forceControl(ball.vector);
     }
 
     computeColisions() {
@@ -348,23 +361,17 @@ module.exports = class Game {
     partBtB(ball1, ball2) {
             ball2.vector = new Vector(ball1.x, ball1.y, ball2.x, ball2.y);
             let a = ball2.vector;
-            if (Math.abs(a.angle - ball1.vector.angle) > 180) {
-                if (a.angle < ball1.vector.angle) {
-                    a.angle += 360
-                } else {
-                    ball1.vector.angle += 360;
-                }
-            }
             a.angle += a.angle - ball1.vector.angle;
-            this.setVector(ball1.vector, a.angle, 10);
+            this.setVector(ball1.vector, a.angle, ball1.vector.force);
             ball1.vector.x = -ball1.vector.x;
             ball1.vector.y = -ball1.vector.y;
             ball1.vector.angle = this.computeAngle(ball1.vector);
-            let coeficient = Math.sin(this.getAngle(ball1.vector, ball2.vector))
-            ball1.vector.force *= coeficient;
-            this.forceControl(ball1);
-            ball2.vector.force *= (1 - coeficient);
-            this.forceControl(ball2);
+            let coeficient = Math.abs(Math.cos(this.getAngle(ball1.vector, ball2.vector)));
+            let help = ball1.vector.force;
+            ball1.vector.force *= 1 - coeficient;
+            ball2.vector.force = help * (coeficient);
+            this.forceControl(ball2.vector);
+            this.forceControl(ball1.vector);
         }
         /**
          * 
@@ -374,14 +381,15 @@ module.exports = class Game {
     computeBtBCollision(ball1, ball2) {
         let one = false;
         let two = false;
-        let temp1 = ball1;
-        let temp2 = ball2;
+        let temp1 = JSON.parse(JSON.stringify(ball1));
+        let temp2 = JSON.parse(JSON.stringify(ball2));
         if (ball1.vector.force > 0) {
             this.partBtB(ball1, ball2);
             one = true;
         }
+
         if (temp2.vector.force > 0) {
-            this.partBtB(temp1, temp2);
+            this.partBtB(temp2, temp1);
             if (!one) {
                 ball1 = temp1;
                 ball2 = temp2;
@@ -390,10 +398,23 @@ module.exports = class Game {
         }
         if (one && two) {
             this.vectorAddition(ball1.vector, temp1.vector);
-            this.forceControl(ball1);
+            this.forceControl(ball1.vector);
             this.vectorAddition(ball2.vector, temp2.vector);
-            this.forceControl(ball2);
+            this.forceControl(ball2.vector);
         }
+        /*if (!one && !two) {
+            let help1 = new Vector(ball1.x, ball1.y, ball2.x, ball2.y);
+            let help2 = new Vector(ball2.x, ball2.y, ball1.x, ball1.y);
+            let distance = (ball1.radius + ball2.radius) - this.getSize(help1);
+            help1.force = distance / 2;
+            help2.force = distance / 2;
+            this.forceControl(help2);
+            this.forceControl(help1);
+            ball2.x += help2.x;
+            ball2.y += help2.y;
+            ball1.x += help1.x;
+            ball1.y += help1.y;
+        }*/
     }
 
     /**
@@ -418,7 +439,7 @@ module.exports = class Game {
         const offsetWidth = (data.windowWidth - this.table.width) / 2;
         this.table.x = offsetWidth;
         const offsetHeight = (data.height - this.table.height) / 2;
-        this.table.y = offsetHeight;
+        this.table.y = offsetHeight + this.balls[0].radius;
         moveX = data.windowWidth / 2;
         this.balls.forEach((el, index) => {
             if (index === 0) {
@@ -562,7 +583,7 @@ module.exports = class Game {
                 this.ballsMoving.moving.push(index);
                 areStill = false;
             }
-            this.forceControl(el);
+            this.forceControl(el.vector);
 
         });
         return areStill;
@@ -655,10 +676,35 @@ module.exports = class Game {
             this.canPlayBlack[1] = true;
         }
     }
-    forceControl(temp) {
-        temp.vector.force === NaN ? temp.vector.force = 0 : temp.vector.force = temp.vector.force;
-        temp.vector.force <= parameters.ballsMinSpeed ? temp.vector.force = 0 : temp.vector.force = temp.vector.force;
-        temp.vector.force > parameters.ballsMaxSpeed ? this.setForce(temp.vector, parameters.ballsMaxSpeed) : this.setForce(temp.vector, temp.vector.force);
+    forceControl(vector) {
+        isNaN(vector.force) ? vector.force = 0 : vector.force = vector.force;
+        vector.force <= parameters.ballsMinSpeed ? this.setForce(vector, 0) : vector.force = vector.force;
+        vector.force > parameters.ballsMaxSpeed ? this.setForce(vector, parameters.ballsMaxSpeed) : this.setForce(vector, vector.force);
+    }
+    positionCorrection(ball1, ball2) {
+        if (Math.pow(ball2.x - ball1.x, 2) + Math.pow(ball2.y - ball1.y, 2) <= (Math.pow(((ball1.radius + ball2.radius) / 2), 2))) {
+            let help1 = new Vector(ball1.x, ball1.y, ball2.x, ball2.y);
+            let help2 = new Vector(ball2.x, ball2.y, ball1.x, ball1.y);
+            let distance = ((ball1.radius + ball2.radius) / 2) - this.getSize(help1);
+            help1.force = distance / 2;
+            help2.force = distance / 2;
+            this.forceControl(help2);
+            this.forceControl(help1);
+            if (ball1.vector.force === 0 && ball2.vector.force === 0) {
+                ball2.x += help1.x;
+                ball2.y += help1.y;
+                ball1.x += help2.x;
+                ball1.y += help2.y;
+            } else {
+                this.setVector(help1, ball1.vector.angle, distance / 2);
+                this.setVector(help2, ball2.vector.angle, distance / 2);
+                ball1.x += help1.x;
+                ball1.y += help1.y;
+                ball2.x += help2.x;
+                ball2.y += help2.y;
+            }
+
+        }
     }
 
     gameWizard(id, vector) {
@@ -676,7 +722,48 @@ module.exports = class Game {
         let timestamp = 0;
         while (!this.areBallsStill()) {
             timestamp++;
-            this.computeColisions();
+            this.foulHandler(firstColision);
+            for (let i = 0; i < 16; i++) {
+                let temp = JSON.parse(JSON.stringify(this.balls[i]));
+                temp.x += (temp.vector.x / parameters.timestampCoeficant);
+                temp.y += (temp.vector.y / parameters.timestampCoeficant);
+                if (timestamp % parameters.timestampCoeficant === 0) {
+                    temp.vector.force *= parameters.tableConstantDeceleration;
+                    this.forceControl(temp.vector);
+                }
+                if (this.checkCollisionBtT(temp)) {
+                    this.computeBtTCollision(temp);
+                }
+                this.balls.forEach((el) => {
+                    if (el.id !== temp.id) {
+                        if (this.checkCollisionBtB(temp, el)) {
+                            this.computeBtBCollision(temp, el);
+                        }
+                    }
+                });
+                this.checkAndComputeCollisionBtPs(temp);
+                this.balls[i] = temp;
+            }
+            for (let i = 0; i < 16; i++) {
+                for (let l = i + 1; l < 16; l++) {
+                    this.positionCorrection(this.balls[i], this.balls[l]);
+                }
+            }
+            let temp = [];
+            this.balls.forEach(el => {
+                temp.push({
+                    [el.id]: {
+                        x: (el.x - moveX - el.radius / 2),
+                        y: -el.y,
+                        doHide: el.hidden,
+                        angle: el.vector.angle
+                    }
+                });
+            });
+            response.balls.push({
+                [timestamp]: temp
+            });
+            /*this.computeColisions();
             this.foulHandler(firstColision);
             for (let i = 0; i < this.ballsMoving.moving.length; i++) {
                 let temp = JSON.parse(JSON.stringify(this.balls[this.ballsMoving.moving[i]]));
@@ -684,7 +771,7 @@ module.exports = class Game {
                 temp.y += (temp.vector.y / parameters.timestampCoeficant);
                 if (timestamp % parameters.timestampCoeficant === 0) {
                     temp.vector.force *= parameters.tableConstantDeceleration;
-                    this.forceControl(temp);
+                    this.forceControl(temp.vector);
                 }
                 if (this.checkCollisionBtT(temp)) {
                     ballsMoving.collision.push({ temp });
@@ -703,20 +790,25 @@ module.exports = class Game {
                 this.checkAndComputeCollisionBtPs(temp);
                 this.balls[this.ballsMoving.moving[i]] = temp;
             }
+            for (let i = 0; i < 16; i++) {
+                for (let l = i + 1; l < 16; l++) {
+                    this.positionCorrection(this.balls[i], this.balls[l]);
+                }
+            }
             let temp = [];
-            ballsMoving.moving.forEach(el => {
+            this.balls.forEach(el => {
                 temp.push({
-                    [el]: {
-                        x: (this.balls[el].x - moveX - this.balls[el].radius / 2),
-                        y: -this.balls[el].y,
-                        doHide: this.balls[el].hidden,
-                        angle: this.balls[el].vector.angle
+                    [el.id]: {
+                        x: (el.x - moveX - el.radius / 2),
+                        y: -el.y,
+                        doHide: el.hidden,
+                        angle: el.vector.angle
                     }
                 });
             });
             response.balls.push({
                 [timestamp]: temp
-            });
+            });*/
 
         }
         if (this.foul === undefined) {
@@ -729,7 +821,7 @@ module.exports = class Game {
 
         response.player = this.player;
         response.win = this.winner;
-
+        console.log(timestamp);
         FileManager.updateGames(id, 'game', JSON.parse(JSON.stringify(this)));
         console.log("finished");
         return response;

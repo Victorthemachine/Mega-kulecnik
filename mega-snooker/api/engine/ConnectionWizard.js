@@ -27,7 +27,7 @@ module.exports = class ConnectionWizard {
 
     calculatePlay(data) {
         console.log(`Lenght: ${Object.assign(new Game(), this.game).balls.length}`);
-        return currGame.gameWizard(this.gameInfo.id, new Vector(30, 0, 0, 0));
+        return currGame.gameWizard(this.gameInfo.id, new Vector(0, 0, 100, 0));
     }
 
     /**

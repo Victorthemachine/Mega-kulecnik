@@ -140,33 +140,30 @@ class Balls extends Component {
                             ]
                         }
                         test = result;
+                        console.log('==========================================================');
+                        console.time('Parsing operation');
                         let counter = 1;
                         let temp = this.state.points;
                         const updates = [];
                         test.balls.forEach(el => {
                             for (let i in el) {
-                                console.log(temp);
                                 if (parseInt(i) === counter) {
-                                    console.log(el);
-                                    console.log(i);
-                                    console.log(el[i]);
                                     el[i].forEach(elem => {
-                                        console.log(`Why are you not working: ${Object.keys(elem)[0]}`);
-                                        console.log(elem);
                                         temp[parseInt(Object.keys(elem)[0])].x = elem[Object.keys(elem)[0]].x;
                                         temp[parseInt(Object.keys(elem)[0])].y = elem[Object.keys(elem)[0]].y;
                                         temp[parseInt(Object.keys(elem)[0])].hidden = elem[Object.keys(elem)[0]].doHide ? 'hidden' : 'visible';
                                     });
                                     updates.push(JSON.parse(JSON.stringify(temp)));
-                                    console.log(updates[updates.length - 1])
                                     counter++;
                                 } else {
                                     throw Error('Incorrect JSON received from API when attempting to update positions');
                                 }
                             }
                         });
+                        console.log(`Timestamp amount: ${counter}`);
+                        console.timeEnd('Parsing operation');
+                        console.log('==========================================================');
                         counter = 0;
-                        console.log(updates);
                         //const prevState = JSON.parse(JSON.stringify(this.state));
                         let scheduleUpdates = setInterval(function() {
                             console.log(`Interval initiated;\nCounter: ${counter}`);
@@ -427,8 +424,7 @@ class Balls extends Component {
             width = { ballRad }
             viewBox = { viewBox }
             key = { 16 }
-            />, < /
-            >
+            />, < / >
         );
     }
 }
