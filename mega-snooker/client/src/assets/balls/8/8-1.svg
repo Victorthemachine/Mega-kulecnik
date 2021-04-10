@@ -26,7 +26,7 @@
        fx="54.447247"
        fy="49.531189"
        r="32.127975"
-       gradientTransform="matrix(0.77813809,0,0,0.77813812,-3.3823607,4.4117543)"
+       gradientTransform="matrix(0.77813809,0,0,0.77813812,-3.3823584,4.411756)"
        gradientUnits="userSpaceOnUse" />
     <linearGradient
        inkscape:collect="always"
@@ -49,7 +49,7 @@
        fx="26.274075"
        fy="14.800471"
        r="32.127975"
-       gradientTransform="matrix(0.77813809,0,0,0.77813812,-3.382362,4.4117527)"
+       gradientTransform="matrix(0.77813809,0,0,0.77813812,-3.38236,4.411756)"
        gradientUnits="userSpaceOnUse" />
   </defs>
   <sodipodi:namedview
@@ -79,7 +79,7 @@
         <dc:format>image/svg+xml</dc:format>
         <dc:type
            rdf:resource="http://purl.org/dc/dcmitype/StillImage" />
-        <dc:title />
+        <dc:title></dc:title>
       </cc:Work>
     </rdf:RDF>
   </metadata>
@@ -99,26 +99,28 @@
        cx="25.000002"
        cy="23.186996"
        r="9.8315496" />
-    <g
-       aria-label="8"
-       id="text1149"
-       style="font-style:normal;font-variant:normal;font-weight:normal;font-stretch:normal;font-size:20.8139px;line-height:1.25;font-family:'Berlin Sans FB Demi';-inkscape-font-specification:'Berlin Sans FB Demi';display:inline;stroke-width:0.264583">
-      <path
-         d="m 30.04429,25.509717 q 0,1.859836 -1.463478,2.896466 -1.300868,0.914673 -3.242008,0.914673 -2.246032,0 -3.557063,-0.965488 -1.50413,-1.087445 -1.50413,-3.242009 0,-0.711413 0.396359,-1.37201 0.274402,-0.457337 0.731738,-0.894347 0.386196,-0.36587 0.386196,-0.36587 0,-0.111793 -0.315055,-0.447173 -0.406521,-0.406522 -0.599619,-0.762228 -0.325217,-0.589456 -0.325217,-1.341521 0,-1.829347 1.514293,-2.784672 1.270379,-0.792717 3.211519,-0.792717 1.636249,0 2.998096,0.874021 1.565108,1.006141 1.565108,2.561085 0,0.823207 -0.355706,1.50413 -0.223587,0.447174 -0.640272,0.874021 -0.345543,0.355706 -0.345543,0.416685 0,0.02033 0.396359,0.426847 0.477662,0.477663 0.752064,0.965489 0.396359,0.721575 0.396359,1.534618 z m -2.947281,-5.72179 q 0,-0.518314 -0.4675,-0.853695 -0.426847,-0.294728 -0.965488,-0.294728 -1.422825,0 -1.422825,1.199239 0,0.792717 1.819183,1.290705 0.121957,0.03049 0.182935,0.03049 0.33538,0 0.609782,-0.528478 0.243913,-0.4675 0.243913,-0.843533 z m -0.985815,5.833584 q 0,-0.985815 -1.646412,-1.483804 -0.538641,-0.172771 -0.579293,-0.172771 -0.355706,0 -0.691086,0.56913 -0.315054,0.528478 -0.315054,0.914673 0,0.680924 0.518314,1.107771 0.477663,0.406522 1.16875,0.406522 1.544781,0 1.544781,-1.341521 z"
-         style="font-style:normal;font-variant:normal;font-weight:normal;font-stretch:normal;font-size:20.8139px;font-family:'Berlin Sans FB Demi';-inkscape-font-specification:'Berlin Sans FB Demi';stroke-width:0.264583"
-         id="path841" />
-    </g>
+    <text
+       xml:space="preserve"
+       style="font-style:normal;font-variant:normal;font-weight:normal;font-stretch:normal;font-size:20.8139px;line-height:1.25;font-family:'Berlin Sans FB Demi';-inkscape-font-specification:'Berlin Sans FB Demi';display:inline;stroke-width:0.264583"
+       x="20.07435"
+       y="29.005802"
+       id="text1149"><tspan
+         sodipodi:role="line"
+         id="tspan1147"
+         x="20.07435"
+         y="29.005802"
+         style="font-style:normal;font-variant:normal;font-weight:normal;font-stretch:normal;font-size:20.8139px;font-family:'Berlin Sans FB Demi';-inkscape-font-specification:'Berlin Sans FB Demi';stroke-width:0.264583">8</tspan></text>
     <circle
        style="display:inline;opacity:0.88141;mix-blend-mode:normal;fill:url(#radialGradient1561-9);fill-opacity:1;stroke:none;stroke-width:0.212909;stroke-opacity:1;paint-order:markers fill stroke"
        id="path1129-9"
-       cx="25"
-       cy="25"
+       cx="25.000002"
+       cy="25.000002"
        r="25" />
     <circle
        style="display:inline;opacity:0.88141;mix-blend-mode:normal;fill:url(#radialGradient1561);fill-opacity:1;stroke:none;stroke-width:0.212909;stroke-opacity:1;paint-order:markers fill stroke"
        id="path1129"
-       cx="25"
-       cy="25"
+       cx="25.000002"
+       cy="25.000002"
        r="25" />
   </g>
 </svg>

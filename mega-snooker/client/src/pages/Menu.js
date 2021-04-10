@@ -1,5 +1,4 @@
 import React from 'react';
-import Background from './../assets/other/Background.svg';
 import { useHistory } from 'react-router-dom';
 
 import './../styles/Menu.css';
@@ -12,24 +11,23 @@ export default function Menu() {
     };
 
     return (
-      <>
-      <Background className="back"/>
       <div className='container'>
-        <div className='head'>
+      <div className='box'>
+      </div>
+      <div className='head'>
         <h1> Mega kulečník </h1>
-      </div>      
+      </div>
         <div className='col'>
-            <button onClick={redirect}>Hrát</button>
-            <button >Nastavení</button>
+            <button onClick={console.log('Login button was clicked!')}>Login/Register</button>
+            <button onClick={redirect}>Play</button>
+            <button>Statistics</button>
+            <button>Settings</button>
         </div>
-        <div className='text'>
+        <div className='pravidla'>
           <p1> Co je to kulečník?
           <br /></p1>
-          <p2> Kulečník je hra pro dva hráče, ve které je cílem strkat koule tágem do dir.
-Hráč smí udeřit tágem pouze do bílé koule a každý hráč má svouv vlastní barvu koulí, každou z nich musí postupně nastrkat do dir.
-Vyhrává ten, který nastrká všechny koule svojí barvy do díry a černou kouly jako poslední.</p2>
-        </div>        
+          <p2> Balh bluh blah blah bluuu UwU asd blu m abla </p2>
+        </div>
       </div>
-      </>
     );
 }

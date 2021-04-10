@@ -15,11 +15,10 @@ const API = new apiTool();
  * Therefore, feel free to look at it and familirize yourself with "basic" React.js and Node.js relation.
  */
 
-
 class App extends Component {
   constructor(props) {
     super(props);
-    this.state = { apiResponse: "", assets: "",};
+    this.state = { apiResponse: "", assets: "" };
   }
 
   componentDidMount() {
@@ -33,7 +32,6 @@ class App extends Component {
       this.setState({ assets: res });
     });
   }
-
 
   render() {
     /*  return (
@@ -60,7 +58,6 @@ class App extends Component {
       );*/
     return (
       <div>
-        <meta http-equiv="refresh" content="0; url=http://localhost:3000/menu"></meta>
         <Table />
         <header className="App-header">{this.state.apiResponse || 'API not working! Check if your server is running'}</header>
         <h1>^^^ Check api status to see if it works ^^^
