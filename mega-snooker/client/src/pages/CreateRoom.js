@@ -6,8 +6,8 @@ import './../styles/Menu.css';
 
 export default function Menu() {
     let history = useHistory();
-
-    const redirect = () => {
+    const superid = "bigPP123";
+    const back = () => {
         history.push('/lobby');
     };
 
@@ -16,18 +16,16 @@ export default function Menu() {
       <Background className="back"/>
       <div className='container'>
         <div className='head'>
-        <h1> Mega kulečník </h1>
+        <h1>Vaše místnost</h1>
       </div>      
         <div className='col'>
-            <button onClick={redirect}>Hrát</button>
-            <button >Nastavení</button>
+            <p className="gameid"><b>ID vaší místnosti: {superid}</b></p>
+            <button onClick={back}>Zpět</button>         
         </div>
         <div className='text'>
-          <p1> Co je to kulečník?
+          <p1> Kdy začne hra?
           <br /></p1>
-          <p2> Kulečník je hra pro dva hráče, ve které je cílem strkat koule tágem do dir.
-Hráč smí udeřit tágem pouze do bílé koule a každý hráč má svouv vlastní barvu koulí, každou z nich musí postupně nastrkat do dir.
-Vyhrává ten, který nastrká všechny koule svojí barvy do díry a černou kouly jako poslední.</p2>
+          <p2> Hra začne jakmile tvůj kamarád zadá kód, který jsi mu nasdílel. Neopouštěj tutu stránku, pokud nechceš, aby se tato mistnost zrušila.</p2>
         </div>        
       </div>
       </>
