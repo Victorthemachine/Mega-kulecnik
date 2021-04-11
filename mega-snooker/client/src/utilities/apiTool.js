@@ -1,7 +1,6 @@
 const axios = require('axios');
+
 const config = require('./apiConfig.json');
-const xml2js = require('xml2js');
-//const fs = require('fs');
 const address = config.serverAddress + config.port;
 
 /**
@@ -12,12 +11,13 @@ module.exports = class apiTool {
 
     constructor() {
         this.axios = axios;
-        const XMLParser = new DOMParser();
-        this.parser = XMLParser;
-        const parser = new xml2js.Parser();
-        this.toJSParser = parser;
-        const serializer = new XMLSerializer();
-        this.serializer = serializer;
+        this.activeGame = {
+            id: "",
+            pass: "",
+            username: "",
+            serverToken: ""
+        };
+        this.ws = null;
     }
 
     /**
@@ -92,26 +92,42 @@ module.exports = class apiTool {
     }
 
     createGame(options) {
+        //https://stackoverflow.com/a/1349426
+        let result = [];
+        const characters = 'ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789';
+        for (let i = 0; i < 60; i++) {
+            result.push(characters.charAt(Math.floor(Math.random() * characters.length)));
+        }
+        const makeid = result.join('');
+        console.log(makeid);
+        //I am not going to write this thank you very much ^
+        this.activeGame.username = makeid;
         return new Promise(resolve => {
             axios.post(address + config.initPath, options, {
                 headers: {
-                    Token: config.token
+                    Token: config.token,
+                    username: this.activeGame.username
                 }
             }).then(res => {
                 console.log(res.data);
+                const { token, id, pass } = res.data;
+                this.activeGame.serverToken = token;
+                this.activeGame.id = id;
+                this.activeGame.pass = pass;
                 resolve(res.data);
+                this.connectSocket();
             }).catch(error => {
                 console.error(error);
             })
         });
     }
 
-    gameIntialPlacement(GAME_ID, options) {
+    gameIntialPlacement(options) {
         return new Promise(resolve => {
             axios.post(address + config.gameManagerPath + '/startpos', options, {
                 headers: {
                     Token: config.token,
-                    ID: GAME_ID
+                    ID: this.activeGame.id
                 }
             }).then(res => {
                 console.log(res.data);
@@ -122,12 +138,12 @@ module.exports = class apiTool {
         });
     }
 
-    gameUpdatePositions(GAME_ID, ballMap, options) {
+    gameUpdatePositions(ballMap, options) {
         return new Promise(resolve => {
             axios.post(address + config.gameManagerPath + '/updatesize', ballMap, {
                 headers: {
                     Token: config.token,
-                    ID: GAME_ID
+                    ID: this.activeGame.id
                 }
             }).then(res => {
                 console.log(res.data);
@@ -146,12 +162,12 @@ module.exports = class apiTool {
      * @param {*} option 
      * @returns 
      */
-    gameCheckForUpdatedPositions(GAME_ID, option) {
+    gameCheckForUpdatedPositions(option) {
         return new Promise(resolve => {
             axios.post(address + config.gameManagerPath + '/checkstate', option, {
                 headers: {
                     Token: config.token,
-                    ID: GAME_ID
+                    ID: this.activeGame.id
                 }
             }).then(res => {
                 console.log(res.data);
@@ -162,12 +178,12 @@ module.exports = class apiTool {
         });
     }
 
-    gameGetNewPositions(GAME_ID, cueCords, options) {
+    gameGetNewPositions(cueCords, options) {
         return new Promise(resolve => {
             axios.post(address + config.gameManagerPath + '/updatestate', cueCords, {
                 headers: {
                     Token: config.token,
-                    ID: GAME_ID
+                    ID: this.activeGame.id
                 }
             }).then(res => {
                 console.log(res.data);
@@ -178,4 +194,15 @@ module.exports = class apiTool {
         });
     }
 
+    //WebSockets ahead
+    connectSocket() {
+        const ws = new WebSocket('wss://localhost:9000');
+        ws.onmessage = function(event) {
+            console.log(event.data);
+        }
+        this.ws = ws;
+        ws.onopen = function (event) {
+            ws.send(`${this.activeGame.serverToken}|${this.activeGame.id}|Hello server!`);
+        }.bind(this);
+    }
 }

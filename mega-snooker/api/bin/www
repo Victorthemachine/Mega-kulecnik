@@ -6,12 +6,12 @@
 
 const app = require('../app');
 const debug = require('debug')('api:server');
-const http = require('http');
-/*const https = require('https');
+//const http = require('http');
+const https = require('https');
 const fs = require('fs');
 
-const KEY = fs.readFileSync(__dirname + './../selfsigned.key');
-const CERT = fs.readFileSync(__dirname + './../selfsigned.crt');*/
+const KEY = fs.readFileSync(__dirname + '/security/cert.key');
+const CERT = fs.readFileSync(__dirname + '/security/cert.pem');
 /**
  * Get port from environment and store in Express.
  */
@@ -23,11 +23,11 @@ app.set('port', port);
  * Create HTTP server.
  */
 
-/*const server = https.createServer({
+const server = https.createServer({
   key: KEY,
   cert: CERT
-}, app);*/
-const server = http.createServer(app);
+}, app);
+//const server = http.createServer(app);
 
 /**
  * Listen on provided port, on all network interfaces.
@@ -95,4 +95,64 @@ function onListening() {
     ? 'pipe ' + addr
     : 'port ' + addr.port;
   debug('Listening on ' + bind);
+  console.log(`Listening at https://localhost:${bind}`);
 }
+
+
+/**
+ * WebSocket server init
+ */
+const jwt = require('./../utilities/jwt');
+const FileManager = require('./../utilities/fileManager');
+const WebSocket = require('ws');
+const wss = new WebSocket.Server({
+  server: server,
+});
+
+wss.on('listening', () => {
+  console.log('WSS online');
+})
+
+wss.on('connection', (ws, req) => {
+  let token = '';
+  let lobby = [];
+  let player = 0;
+  let username = '';
+
+  ws.on('message', (msg) => {
+    parsedMessage = msg.split('|');
+    let token = parsedMessage[0];
+    if (!token) {
+      ws.send('Unauthorized');
+    } else {
+      const verification = jwt.verifyToken(token);
+      if (verification !== '') {
+        username = token;
+        ws.send('SERVER: Testing connection...');
+      } else {
+        ws.send('Unauthorized');
+      }
+    }
+
+    FileManager.readGames().then((data, error) => {
+      if (error) console.error(error);
+      let gameID = parsedMessage[1];
+      let game = '';
+      data.forEach(el => {
+        if (el.connectionWizard.gameInfo.id === gameID) {
+          game = el;
+        }
+      });
+      //Lobby vvv
+      console.log(game);
+      const { connectionWizard: { gameInfo: { players } } } = game;
+      lobby = players;
+      player = lobby.findIndex(el => el === username);
+      console.log(`ClIENT (${lobby[player]}): ${parsedMessage[2]}`);
+    })
+  });
+});
+
+wss.on('close', (cli, req) => {
+  //TODO close out the game, remove player etc.
+})

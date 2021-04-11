@@ -3,7 +3,7 @@
   "version": "0.0.0",
   "private": true,
   "scripts": {
-    "start": "node ./bin/www"
+    "start": "nodemon ./bin/www"
   },
   "dependencies": {
     "constantinople": "3.1.1",
@@ -14,13 +14,16 @@
     "http": "^0.0.1-security",
     "http-errors": "~1.8.0",
     "https": "^1.0.0",
+    "jsonwebtoken": "^8.5.1",
     "jstransformer": "^1.0.0",
     "morgan": "~1.10.0",
+    "nodemon": "^2.0.7",
     "npm-check-updates": "^11.1.4",
     "pug": "^3.0.0",
     "simple-svg-tools": "^1.1.12",
     "svg-to-jsx": "^1.0.2",
-    "uuid": "^8.3.2"
+    "uuid": "^8.3.2",
+    "ws": "^7.4.4"
   },
   "devDependencies": {
     "@babel/core": "^7.12.16",
