@@ -1,11 +1,15 @@
-import React from 'react';
+import React, { Component } from 'react';
 import Background from './../assets/other/Background.svg';
 import { useHistory } from 'react-router-dom';
 
 import './../styles/Menu.css';
 
-
-export default function Menu() {
+class JoinRoom extends Component {
+  constructor(props) {
+    super(props);
+    this.state = { };
+  }
+  Render() {
     let history = useHistory();
     const back = () => {
         history.push('/lobby');
@@ -30,4 +34,6 @@ export default function Menu() {
       </div>
       </>
     );
+  }
 }
+export default JoinRoom;

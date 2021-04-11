@@ -1,12 +1,16 @@
-import React from 'react';
+import React, { Component } from 'react';
 import Background from './../assets/other/Background.svg';
 import { useHistory } from 'react-router-dom';
 
 import './../styles/Menu.css';
 
-export default function Menu() {
+class CreateRoom extends Component {
+  constructor(props) {
+    super(props);
+    this.state = { superid: "B1GPP" };
+  }
+ Render() {
     let history = useHistory();
-    const superid = "bigPP123";
     const back = () => {
         history.push('/lobby');
     };
@@ -19,7 +23,7 @@ export default function Menu() {
         <h1>Vaše místnost</h1>
       </div>      
         <div className='col'>
-            <p className="gameid"><b>ID vaší místnosti: {superid}</b></p>
+            <p className="gameid"><b>ID vaší místnosti: {this.state.superid}</b></p>
             <button onClick={back}>Zpět</button>         
         </div>
         <div className='text'>
@@ -30,4 +34,7 @@ export default function Menu() {
       </div>
       </>
     );
+  }
 }
+
+export default CreateRoom;

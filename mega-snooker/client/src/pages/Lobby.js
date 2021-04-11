@@ -1,10 +1,12 @@
-import React from 'react';
+import React, { Component } from 'react';
 import Background from './../assets/other/Background.svg';
 import { useHistory } from 'react-router-dom';
 
 import './../styles/Menu.css';
 
-export default function Menu() {
+class Lobby extends Component{
+
+Render() {
         let history = useHistory();
 
         const back = () => {
@@ -42,4 +44,7 @@ export default function Menu() {
             </div>
     </>
     );
-}
+    }   
+}   
+
+export default Lobby;
