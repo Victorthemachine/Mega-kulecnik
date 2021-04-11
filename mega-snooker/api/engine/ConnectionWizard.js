@@ -2,6 +2,7 @@ const Vector = require('../objects/Vector');
 const FileManager = require('./../utilities/fileManager');
 const Hasher = require('./../utilities/hasher');
 const Game = require('./Game');
+const jwt = require('./../utilities/jwt');
 
 const currGame = new Game();
 //Good lil wizard *pat pat* UwU
@@ -11,7 +12,10 @@ module.exports = class ConnectionWizard {
         this.game = currGame;
         this.gameInfo = {
             id: "",
-            pass: ""
+            pass: "",
+            players: [
+
+            ]
         };
     }
 
@@ -30,17 +34,26 @@ module.exports = class ConnectionWizard {
         return currGame.gameWizard(this.gameInfo.id, new Vector(30, 0, 0, 0));
     }
 
+    joinGame(username) {
+        const userToken = jwt.generateToken(username);
+        obj.token = userToken;
+        (this.gameInfo.players).push(token);
+        FileManager.updateGames(this.gameInfo.id, 'wizard', this.gameInfo);
+        let obj = this.gameInfo;
+        return obj;
+    }
+
     /**
      * Generates game information.
      * 
      * @returns {JSON} gameInfo
      */
-    generateGameInfo() {
+    generateGameInfo(username) {
+        console.log('Generating game info');
         this.gameInfo.id = Hasher.generateGameID();
         this.gameInfo.pass = Hasher.generateLobbyPassphrase();
-        /*console.log('================================================================')
-        console.log(this);
-        console.log('================================================================')*/
+        const userToken = jwt.generateToken(username);
+        (this.gameInfo.players).push(userToken);
         let dataToWrite = {
             status: "STARTING",
             connectionWizard: {
@@ -49,6 +62,8 @@ module.exports = class ConnectionWizard {
             }
         }
         FileManager.writeGames(dataToWrite);
-        return this.gameInfo;
+        let obj = this.gameInfo;
+        obj.token = userToken;
+        return obj;
     }
 };

@@ -26,7 +26,7 @@
        fx="54.447247"
        fy="49.531189"
        r="32.127975"
-       gradientTransform="matrix(0.77813809,0,0,0.77813812,-3.3823606,4.411758)"
+       gradientTransform="matrix(0.77813809,0,0,0.77813812,-3.3823611,4.4121291)"
        gradientUnits="userSpaceOnUse" />
     <linearGradient
        inkscape:collect="always"
@@ -49,7 +49,7 @@
        fx="26.274075"
        fy="14.800471"
        r="32.127975"
-       gradientTransform="matrix(0.77813809,0,0,0.77813812,-3.3823614,4.411758)"
+       gradientTransform="matrix(0.77813809,0,0,0.77813812,-3.3823611,4.4121291)"
        gradientUnits="userSpaceOnUse" />
   </defs>
   <sodipodi:namedview
@@ -79,7 +79,7 @@
         <dc:format>image/svg+xml</dc:format>
         <dc:type
            rdf:resource="http://purl.org/dc/dcmitype/StillImage" />
-        <dc:title />
+        <dc:title></dc:title>
       </cc:Work>
     </rdf:RDF>
   </metadata>
@@ -103,31 +103,29 @@
        id="path991"
        style="display:inline;fill:#ffffff;fill-opacity:1;stroke:#000000;stroke-width:0.27064;stroke-opacity:1;paint-order:markers fill stroke"
        d="M 24.98142,0.13531999 A 24.864681,24.864681 0 0 0 7.7390614,7.1033708 H 42.260983 a 24.864681,24.864681 0 0 0 -17.26096,-6.96805081 24.864681,24.864681 0 0 0 -0.0186,0 z" />
-    <g
-       aria-label="14"
-       transform="scale(0.86934871,1.1502864)"
+    <text
+       xml:space="preserve"
+       style="font-style:normal;font-variant:normal;font-weight:normal;font-stretch:normal;font-size:18.0465px;line-height:1.25;font-family:'Berlin Sans FB Demi';-inkscape-font-specification:'Berlin Sans FB Demi';display:inline;stroke-width:0.229406"
+       x="0.73914087"
+       y="27.117153"
        id="text1149-7"
-       style="font-style:normal;font-variant:normal;font-weight:normal;font-stretch:normal;font-size:18.0465px;line-height:1.25;font-family:'Berlin Sans FB Demi';-inkscape-font-specification:'Berlin Sans FB Demi';display:inline;stroke-width:0.229406">
-      <path
-         d="m 5.5239305,26.667753 q 0,0.167424 -0.1498001,0.308412 -0.1498,0.140988 -0.3260354,0.140988 -0.4229648,0 -1.2688944,0.0088 -0.8459297,0.0088 -1.2688945,0.0088 -0.3260354,0 -0.3172236,-0.281977 l 0.00881,-0.09693 Q 2.325259,23.389776 2.325259,22.676022 v -2.617094 q 0,-0.24673 -0.114553,-0.24673 -0.1762354,0 -0.5375178,0.105741 -0.3524707,0.105742 -0.5375178,0.105742 -0.27316479,0 -0.27316479,-0.326036 0,-0.2996 -0.008812,-0.8988 -0.008812,-0.5992 -0.008812,-0.907612 0,-0.176235 0.22029423,-0.264353 1.2953297,-0.537518 2.0355182,-1.44513 0.1498,-0.185047 0.2555412,-0.185047 0.017624,0 0.1057412,0.01762 0.3348472,0.0705 0.9957297,0.220295 0.3524707,0.04406 1.0309768,0.158611 0.1233647,0.03525 0.1233647,0.193859 0,0.05287 -0.017624,0.185047 -0.096929,0.775436 -0.096929,3.797872 0,1.013353 0.00881,3.048872 0.017624,2.035518 0.017624,3.048871 z"
-         style="font-style:normal;font-variant:normal;font-weight:normal;font-stretch:normal;font-size:18.0465px;font-family:'Berlin Sans FB Demi';-inkscape-font-specification:'Berlin Sans FB Demi';stroke-width:0.229406"
-         id="path843" />
-      <path
-         d="m 16.168545,25.134506 q 0,0.132176 -0.220294,0.176235 -0.158612,0.02643 -0.440588,0.0088 -0.39653,-0.02644 -0.334848,-0.02644 -0.343659,0 -0.343659,0.343659 0,0.211483 0.02644,0.643259 0.02644,0.422965 0.02644,0.634448 0,0.308411 -0.273165,0.308411 -3.040059,0 -3.198671,-0.07931 -0.158612,-0.07049 -0.158612,-0.185047 0,-0.132176 0.105741,-0.65207 0.114553,-0.519895 0.114553,-0.757812 0,-0.290789 -0.326035,-0.290789 -0.590389,0 -1.7711655,0.03525 -1.171965,0.03525 -1.7623534,0.03525 -0.7049414,0 -0.7049414,-0.555141 0,-0.281976 -0.00881,-0.837118 -0.00881,-0.563953 -0.00881,-0.845929 0,-0.264353 0.2731648,-0.555142 1.286518,-1.374635 1.8769064,-2.202942 0.2819765,-0.396529 1.9121536,-3.09293 0.211482,-0.405341 0.687318,-1.110283 0.123364,-0.1498 0.264353,-0.1498 0.211482,0 1.304141,0.317224 1.101471,0.317224 1.498001,0.317224 0.281976,0 0.281976,0.361282 0,0.343659 -0.07931,1.039789 -0.07931,0.687317 -0.07931,1.039788 v 3.709754 q 0.167424,0 0.581577,-0.05287 0.370094,-0.05287 0.572765,-0.05287 0.167424,0 0.167424,0.202671 0,0.185047 -0.02644,0.555141 -0.01762,0.370094 -0.01762,0.563953 0,0.193859 0.02643,0.581577 0.03525,0.378906 0.03525,0.572765 z m -4.353013,-5.569037 q 0,-0.05287 -0.06168,-0.05287 -0.07931,0 -0.158612,0.114553 -0.563953,0.907612 -1.127906,1.815224 -0.6785064,1.0486 -1.3217654,1.683048 0.4846472,0 2.4672944,-0.123365 0.01762,-0.352471 0.123365,-1.735918 0.07931,-1.092659 0.07931,-1.700671 z"
-         style="font-style:normal;font-variant:normal;font-weight:normal;font-stretch:normal;font-size:18.0465px;font-family:'Berlin Sans FB Demi';-inkscape-font-specification:'Berlin Sans FB Demi';stroke-width:0.229406"
-         id="path845" />
-    </g>
+       transform="scale(0.86934871,1.1502864)"><tspan
+         sodipodi:role="line"
+         id="tspan1147-8"
+         x="0.73914087"
+         y="27.117153"
+         style="font-style:normal;font-variant:normal;font-weight:normal;font-stretch:normal;font-size:18.0465px;font-family:'Berlin Sans FB Demi';-inkscape-font-specification:'Berlin Sans FB Demi';stroke-width:0.229406">14</tspan></text>
     <circle
        style="display:inline;opacity:0.88141;mix-blend-mode:normal;fill:url(#radialGradient1561-9-67);fill-opacity:1;stroke:none;stroke-width:0.212909;stroke-opacity:1;paint-order:markers fill stroke"
        id="path1129-9-5"
        cx="25"
-       cy="25"
+       cy="25.000372"
        r="25" />
     <circle
        style="display:inline;opacity:0.88141;mix-blend-mode:normal;fill:url(#radialGradient1561-637);fill-opacity:1;stroke:none;stroke-width:0.212909;stroke-opacity:1;paint-order:markers fill stroke"
        id="path1129-41"
        cx="25"
-       cy="25"
+       cy="25.000372"
        r="25" />
   </g>
 </svg>

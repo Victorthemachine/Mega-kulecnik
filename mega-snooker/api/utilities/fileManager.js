@@ -1,8 +1,28 @@
 const fs = require('fs');
 
 const gameJSONPath = __dirname + './../engine/activeGames.json';
+const privateJSONPath = __dirname + './../private.json';
 
 module.exports = new class FileManager {
+
+    createJWTSecret() {
+        console.log('Creating jwt secret');
+        const crypto = require('crypto');
+        let dataObj = JSON.parse(fs.readFileSync(privateJSONPath, { encoding: 'utf-8' }));
+        crypto.randomBytes(64, (err, buff) => {
+            if (err) console.error(err);
+            dataObj.secret = buff.toString('hex');
+            fs.writeFileSync(privateJSONPath, JSON.stringify(dataObj));
+        });
+    }
+
+    getJWTSecret() {
+        console.log('Reading jwt secret');
+        const { secret } = JSON.parse(fs.readFileSync(privateJSONPath, { encoding: 'utf-8' }));
+        console.log(secret);
+        if (secret === undefined) secret = this.createJWTSecret();
+        return secret;
+    }
 
     /**
      * Writes another game into activeGames.json file
@@ -45,6 +65,18 @@ module.exports = new class FileManager {
                     });
                     fs.writeFileSync(gameJSONPath, JSON.stringify(writeThis));
                 });
+                break;
+            case 'wizard':
+                this.readGames().then(pastData => {
+                    let writeThis = pastData;
+                    pastData.forEach((el, index) => {
+                        if (el.connectionWizard.gameInfo.id === id) {
+                            writeThis[index].connectionWizard.gameInfo = data;
+                        }
+                    });
+                    fs.writeFileSync(gameJSONPath, JSON.stringify(writeThis));
+                });
+                break;
             default:
                 return 'Something went wrong, there is no such child!';
         }

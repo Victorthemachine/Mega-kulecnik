@@ -29,7 +29,7 @@ class JoinRoom extends Component {
         <div className='text'>
           <p1> Jak se napojit?
           <br /></p1>
-          <p2>Zadejte ID, které vám poslal kamarád do volného pole a zmáčkněte připojit.</p2>
+          <p2>Zadejte passphrase, které vám poslal kamarád do volného pole a zmáčkněte připojit.</p2>
         </div>        
       </div>
       </>

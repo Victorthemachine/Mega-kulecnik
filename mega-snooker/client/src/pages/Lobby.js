@@ -37,7 +37,7 @@ Render() {
                 <h1>Hrát</h1>
                 </div>
                 <div className='col'>
-                    <button onClick={create}>Vtvořit místnost</button>
+                    <button onClick={create}>Vytvořit místnost</button>
                     <button onClick={join}>Připojit se do místnosti</button>
                     <button onClick={back}>Zpět</button>
                 </div>
