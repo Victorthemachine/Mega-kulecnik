@@ -6,7 +6,6 @@ const privateJSONPath = __dirname + './../private.json';
 module.exports = new class FileManager {
 
     createJWTSecret() {
-        console.log('Creating jwt secret');
         const crypto = require('crypto');
         let dataObj = JSON.parse(fs.readFileSync(privateJSONPath, { encoding: 'utf-8' }));
         crypto.randomBytes(64, (err, buff) => {
@@ -17,9 +16,7 @@ module.exports = new class FileManager {
     }
 
     getJWTSecret() {
-        console.log('Reading jwt secret');
         const { secret } = JSON.parse(fs.readFileSync(privateJSONPath, { encoding: 'utf-8' }));
-        console.log(secret);
         if (secret === undefined) secret = this.createJWTSecret();
         return secret;
     }
@@ -72,6 +69,17 @@ module.exports = new class FileManager {
                     pastData.forEach((el, index) => {
                         if (el.connectionWizard.gameInfo.id === id) {
                             writeThis[index].connectionWizard.gameInfo = data;
+                        }
+                    });
+                    fs.writeFileSync(gameJSONPath, JSON.stringify(writeThis));
+                });
+                break;
+            case 'status':
+                this.readGames().then(pastData => {
+                    let writeThis = pastData;
+                    pastData.forEach((el, index) => {
+                        if (el.connectionWizard.gameInfo.id === id) {
+                            writeThis[index].status = data;
                         }
                     });
                     fs.writeFileSync(gameJSONPath, JSON.stringify(writeThis));

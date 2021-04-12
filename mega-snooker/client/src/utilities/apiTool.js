@@ -1,8 +1,8 @@
+const currGame = require('./currentGame');
 const axios = require('axios');
 
 const config = require('./apiConfig.json');
 const address = config.serverAddress + config.port;
-
 /**
  * Request handler, or in other words our API interface.
  * Write your requests, adjust them so that you get the desired effect.
@@ -11,13 +11,32 @@ module.exports = class apiTool {
 
     constructor() {
         this.axios = axios;
+        console.log('======New instance of API======');
+        console.log(currGame);
+        console.log('===============================');
         this.activeGame = {
-            id: "",
-            pass: "",
-            username: "",
-            serverToken: ""
+            id: currGame.id || "",
+            pass: currGame.pass || "",
+            username: currGame.username || "",
+            serverToken: currGame.serverToken || "",
+            myIndex: 0
         };
         this.ws = null;
+    }
+
+    /**
+     * TODO: replace this with actuall user registration
+     * and use of their usernames
+     * @returns 
+     */
+    makeUsername() {
+        //https://stackoverflow.com/a/1349426
+        let result = [];
+        const characters = 'ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789';
+        for (let i = 0; i < 60; i++) {
+            result.push(characters.charAt(Math.floor(Math.random() * characters.length)));
+        }
+        return result.join('');
     }
 
     /**
@@ -92,16 +111,9 @@ module.exports = class apiTool {
     }
 
     createGame(options) {
-        //https://stackoverflow.com/a/1349426
-        let result = [];
-        const characters = 'ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789';
-        for (let i = 0; i < 60; i++) {
-            result.push(characters.charAt(Math.floor(Math.random() * characters.length)));
-        }
-        const makeid = result.join('');
-        console.log(makeid);
-        //I am not going to write this thank you very much ^
+        const makeid = this.makeUsername();
         this.activeGame.username = makeid;
+        currGame.username = makeid;
         return new Promise(resolve => {
             axios.post(address + config.initPath, options, {
                 headers: {
@@ -110,12 +122,49 @@ module.exports = class apiTool {
                 }
             }).then(res => {
                 console.log(res.data);
-                const { token, id, pass } = res.data;
+                const { token, id, pass, yourIndex } = res.data;
                 this.activeGame.serverToken = token;
                 this.activeGame.id = id;
                 this.activeGame.pass = pass;
+                this.activeGame.myIndex = yourIndex;
+                currGame.serverToken = token;
+                currGame.id = id;
+                currGame.pass = pass;
                 resolve(res.data);
                 this.connectSocket();
+            }).catch(error => {
+                console.error(error);
+            })
+        });
+    }
+
+    joinGame(passphrase, options) {
+        this.activeGame.pass = passphrase;
+        currGame.pass = passphrase;
+        const makeid = this.makeUsername();
+        this.activeGame.username = makeid;
+        currGame.username = makeid;
+        console.log({
+            Token: config.token,
+            username: this.activeGame.username,
+            PASS: this.activeGame.pass
+        })
+        return new Promise(resolve => {
+            axios.post(address + config.joinPath, options, {
+                headers: {
+                    Token: config.token,
+                    username: this.activeGame.username,
+                    PASS: this.activeGame.pass
+                }
+            }).then(res => {
+                console.log(res.data);
+                const { token, id, yourIndex } = res.data;
+                this.activeGame.serverToken = token;
+                this.activeGame.id = id;
+                this.activeGame.myIndex = yourIndex;
+                currGame.serverToken = token;
+                currGame.id = id;
+                resolve(res.data);
             }).catch(error => {
                 console.error(error);
             })
@@ -196,13 +245,31 @@ module.exports = class apiTool {
 
     //WebSockets ahead
     connectSocket() {
-        const ws = new WebSocket('wss://localhost:9000');
-        ws.onmessage = function(event) {
-            console.log(event.data);
+        return new Promise(resolve => {
+            const ws = new WebSocket('wss://localhost:9000');
+            this.ws = ws;
+            ws.onopen = function (event) {
+                ws.send(`${this.activeGame.serverToken}|${this.activeGame.id}|Hello server!`);
+                resolve(ws);
+            }.bind(this);    
+        })
+    }
+ /**
+  *     ws.onmessage = function (event) {
+        console.log(event.data);
+    }
+  * @param {WebSocket} socket 
+  */
+    
+    disconnectSocket(socket, reason, code) {
+        if (code === undefined) {
+            if (reason === undefined || typeof reason !== String) {
+                socket.close(1000, 'Successful closure');
+            } else {
+                socket.close(1000, reason);
+            }
+        } else {
+            socket.close(code, reason);
         }
-        this.ws = ws;
-        ws.onopen = function (event) {
-            ws.send(`${this.activeGame.serverToken}|${this.activeGame.id}|Hello server!`);
-        }.bind(this);
     }
 }

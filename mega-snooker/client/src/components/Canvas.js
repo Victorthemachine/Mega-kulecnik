@@ -1,5 +1,6 @@
 import React from 'react';
 import Ratio from 'react-ratio';
+import Balls from './../components/Balls';
 
 const style = {
     border: '1px solid black',
@@ -24,6 +25,7 @@ const Canvas = (props) => {
                 preserveAspectRatio="xMaxYMax"
             >
                 {props.images}
+                <Balls props={props.api}></Balls>
             </svg>
         </Ratio>
     );

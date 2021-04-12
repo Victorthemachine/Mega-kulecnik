@@ -49,7 +49,7 @@
        fx="26.274075"
        fy="14.800471"
        r="32.127975"
-       gradientTransform="matrix(0.77813809,0,0,0.77813812,-3.3823606,4.4117603)"
+       gradientTransform="matrix(0.77813809,0,0,0.77813812,-3.3823647,4.4117619)"
        gradientUnits="userSpaceOnUse" />
     <radialGradient
        inkscape:collect="always"
@@ -60,7 +60,7 @@
        fx="54.447247"
        fy="49.531189"
        r="32.127975"
-       gradientTransform="matrix(0.77813809,0,0,0.77813812,-3.3823588,4.4117603)"
+       gradientTransform="matrix(0.77813809,0,0,0.77813812,-3.3823598,4.4117594)"
        gradientUnits="userSpaceOnUse" />
   </defs>
   <sodipodi:namedview
@@ -90,7 +90,7 @@
         <dc:format>image/svg+xml</dc:format>
         <dc:type
            rdf:resource="http://purl.org/dc/dcmitype/StillImage" />
-        <dc:title></dc:title>
+        <dc:title />
       </cc:Work>
     </rdf:RDF>
   </metadata>
@@ -116,18 +116,20 @@
        cx="25"
        cy="23.887001"
        r="9.8315487" />
-    <text
-       xml:space="preserve"
-       style="font-style:normal;font-variant:normal;font-weight:normal;font-stretch:normal;font-size:17.8087px;line-height:1.25;font-family:'Berlin Sans FB Demi';-inkscape-font-specification:'Berlin Sans FB Demi';display:inline;stroke-width:0.226383"
-       x="20.577936"
-       y="26.255915"
+    <g
+       aria-label="10"
+       transform="scale(0.88095877,1.1351269)"
        id="text1149"
-       transform="scale(0.88095877,1.1351269)"><tspan
-         sodipodi:role="line"
-         id="tspan1147"
-         x="20.577936"
-         y="26.255915"
-         style="font-style:normal;font-variant:normal;font-weight:normal;font-stretch:normal;font-size:17.8087px;font-family:'Berlin Sans FB Demi';-inkscape-font-specification:'Berlin Sans FB Demi';stroke-width:0.226383">10</tspan></text>
+       style="font-style:normal;font-variant:normal;font-weight:normal;font-stretch:normal;font-size:17.8087px;line-height:1.25;font-family:'Berlin Sans FB Demi';-inkscape-font-specification:'Berlin Sans FB Demi';display:inline;stroke-width:0.226383">
+      <path
+         d="m 25.299677,25.812436 q 0,0.165218 -0.147827,0.304348 -0.147826,0.139131 -0.321739,0.139131 -0.417391,0 -1.252174,0.0087 -0.834783,0.0087 -1.252174,0.0087 -0.321739,0 -0.313044,-0.278261 l 0.0087,-0.09565 q 0.121739,-3.32174 0.121739,-4.026088 v -2.58261 q 0,-0.243478 -0.113044,-0.243478 -0.173913,0 -0.530434,0.104348 -0.347827,0.104348 -0.530435,0.104348 -0.269566,0 -0.269566,-0.321739 0,-0.295653 -0.0087,-0.886957 -0.0087,-0.591305 -0.0087,-0.895653 0,-0.173913 0.217391,-0.260869 1.278262,-0.530435 2.008697,-1.426088 0.147826,-0.182608 0.252174,-0.182608 0.01739,0 0.104347,0.01739 0.330435,0.06956 0.982609,0.217391 0.347827,0.04348 1.017392,0.156522 0.121739,0.03478 0.121739,0.191304 0,0.05217 -0.01739,0.182609 -0.09565,0.765218 -0.09565,3.747827 0,1.000001 0.0087,3.008697 0.01739,2.008696 0.01739,3.008696 z"
+         style="font-style:normal;font-variant:normal;font-weight:normal;font-stretch:normal;font-size:17.8087px;font-family:'Berlin Sans FB Demi';-inkscape-font-specification:'Berlin Sans FB Demi';stroke-width:0.226383"
+         id="path844" />
+      <path
+         d="m 37.09968,21.003739 q 0,2.243479 -1.452174,3.852175 -1.504349,1.669566 -3.730436,1.669566 -2.226088,0 -3.72174,-1.669566 -1.46087,-1.608696 -1.46087,-3.852175 0,-2.252174 1.46087,-3.843479 1.495652,-1.643479 3.72174,-1.643479 2.226087,0 3.72174,1.643479 1.46087,1.6 1.46087,3.843479 z m -3.226088,0 q 0,-0.895652 -0.521739,-1.556522 -0.556522,-0.704348 -1.434783,-0.704348 -0.895653,0 -1.443479,0.695653 -0.513044,0.643478 -0.513044,1.565217 0,0.904348 0.513044,1.573914 0.556522,0.721739 1.443479,0.721739 0.852174,0 1.426087,-0.739131 0.530435,-0.678261 0.530435,-1.556522 z"
+         style="font-style:normal;font-variant:normal;font-weight:normal;font-stretch:normal;font-size:17.8087px;font-family:'Berlin Sans FB Demi';-inkscape-font-specification:'Berlin Sans FB Demi';stroke-width:0.226383"
+         id="path846" />
+    </g>
     <circle
        style="display:inline;opacity:0.88141;mix-blend-mode:normal;fill:url(#radialGradient1561);fill-opacity:1;stroke:none;stroke-width:0.212909;stroke-opacity:1;paint-order:markers fill stroke"
        id="path1129"

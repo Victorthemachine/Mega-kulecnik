@@ -8,12 +8,12 @@ const ConnectionWizard = require('./../engine/ConnectionWizard');
 router.post('/:option', function (req, res, next) {
     let response = '';
     req.get('Token') === private.client ? response = true : response = false;
-    console.log('=====Incoming game request=====')
-    console.log(`Route: /gameManager/${req.params.option}\nToken: ${req.get('Token')}\nPassed: ${response}`)
-    console.log('===============================')
+    //ANUS('=====Incoming game request=====')
+    //ANUS(`Route: /gameManager/${req.params.option}\nToken: ${req.get('Token')}\nPassed: ${response}`)
+    //ANUS('===============================')
     if (response) {
         FileManager.readGames().then(activeGames => {
-            console.log(req.get('ID'));
+            //ANUS(req.get('ID'));
             const wizardChild = activeGames.find(({ connectionWizard }) => {
                 return connectionWizard.gameInfo.id === req.get('ID');
             });

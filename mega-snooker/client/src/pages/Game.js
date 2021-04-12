@@ -7,9 +7,22 @@ import Canvas from './../components/Canvas';
  * so that you can add other page elements if needed.
  */
 class Game extends Component {
+    
+    constructor(props) {
+        super(props);
+        console.log(props);
+        console.log(this.props);
+        this.state = {
+            children: '',
+            api: ''
+        }
+        this.state.children = this.props.children;
+        this.state.api = this.props.props.api;
+    }
+
     render() {
         return (
-            <Canvas images={this.props.children} />
+            <Canvas images={this.state.children} api={this.state.api} />
         );
     }
 }

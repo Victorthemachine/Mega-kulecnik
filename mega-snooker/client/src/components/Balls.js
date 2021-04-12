@@ -15,9 +15,7 @@ import BALL_12 from './../assets/balls/12/12-1.svg';
 import BALL_13 from './../assets/balls/13/13-1.svg';
 import BALL_14 from './../assets/balls/14/14-1.svg';
 import BALL_15 from './../assets/balls/15/15-1.svg';
-
-const apiTool = require('./../utilities/apiTool');
-const API = new apiTool();
+import { withRouter } from 'react-router';
 
 const viewBox = [0, 0, 100, 100];
 const ballRad = 57 * (window.innerHeight / 1120) * 2;
@@ -25,9 +23,8 @@ const whiteRad = 62 * (window.innerHeight / 1120) * 2;
 const points = [];
 //This is the game secret or otherwise referenced as game id
 let secret = '';
-
 /**
- * All balls are here. They are currently being rendered with positions from api so don't forget to turn it on.
+ * All balls are here. They are currently being rendered with positions from this.API so don't forget to turn it on.
  * Don't touch viewBox, only adjust X and Y cordinates, radius is calculated before based on window size and maintains aspect ratio
  * TLDR: only touch X and Y.
  */
@@ -57,147 +54,140 @@ class Balls extends Component {
                 { x: 0, y: 0, hidden: 'visible' }
             ]
         };
+        console.log(props);
+        this.API = props.props;
     }
 
     componentDidMount() {
-        console.log(secret);
-        if (secret === '') {
-            API.createGame().then(fin => {
-                secret = fin;
-                let confirm = API.gameUpdatePositions( {
-                    "height": -(100 - window.innerHeight),
-                    "windowWidth": window.innerWidth,
-                    "radius": ballRad / 2,
-                    "radiusWhite": whiteRad / 2
-                }).then(fin => {
-                    API.gameIntialPlacement().then(parsePoints => {
+        console.log(this.API.activeGame);
+        const { activeGame } = this.API;
+        this.API.connectSocket().then(socket => {
+            socket.onmessage = function (event) {
+                console.log(event.data);
+                let serverInstructions = event.data;
+                let payload = null;
+                if (serverInstructions.startsWith('Render')) {
+                    payload = JSON.parse(serverInstructions.slice(7));
+                    serverInstructions = 'Render';
+                }
+                if (serverInstructions.startsWith('Win')) {
+                    payload = JSON.parse(serverInstructions.slice(4));
+                    serverInstructions = 'Win';
+                }
+                if (serverInstructions.startsWith('Init')) {
+                    payload = JSON.parse(serverInstructions.slice(5));
+                    serverInstructions = 'Init';
+                }
+                switch (serverInstructions) {
+                    case 'Start game':
+                        this.startGame().then(success => {
+                            if (success) {
+                                socket.send(this.prepareMessage('Start'));
+                            }
+                        });
+                        break;
+                    case 'Init':
                         for (let i = 0; i < 16; i++) {
-                            points.push(parsePoints[i]);
+                            points.push(payload[i]);
                         }
                         console.log(points);
                         this.setState({ points: points })
-                    });
-                });
-                console.log(confirm);
-            });
-        } else {
-            let confirm = API.gameUpdatePositions( {
+                        socket.send(this.prepareMessage('Ready'));
+                        break;
+                    case `Play move:${activeGame.myIndex}`:
+                        this.playMove().then(obj => {
+                            socket.send(this.prepareMessage('Played:' + JSON.stringify(obj)));
+                        });
+                        break;
+                    case 'Render':
+                        this._renderMoves(payload).then(success => {
+                            if (success) {
+                                socket.send(this.prepareMessage('Ready'));
+                            }
+                        });
+                        break;
+                    case 'Win':
+                        socket.send(this.prepareMessage('Finished'));
+                        this.API.disconnectSocket(socket);
+                        this.props.history.push('/end');
+                        break;
+                    default:
+                        break;
+                }
+            }.bind(this);
+        });
+        console.log(secret);
+    }
+
+    prepareMessage(content) {
+        return `${this.API.activeGame.serverToken}|${this.API.activeGame.id}|${content}`;
+    }
+
+    startGame() {
+        return new Promise(resolve => {
+            this.API.gameUpdatePositions({
                 "height": -(100 - window.innerHeight),
                 "windowWidth": window.innerWidth,
                 "radius": ballRad / 2,
                 "radiusWhite": whiteRad / 2
             }).then(fin => {
-                API.gameIntialPlacement().then(parsePoints => {
-                    for (let i = 0; i < 16; i++) {
-                        points.push(parsePoints[i]);
-                    }
-                    console.log(points);
-                    this.setState({ points: points })
-                });
+                resolve(true);
+                /*                this.API.gameIntialPlacement().then(parsePoints => {
+                                    for (let i = 0; i < 16; i++) {
+                                        points.push(parsePoints[i]);
+                                    }
+                                    console.log(points);
+                                    this.setState({ points: points })
+                                });*/
             });
-            console.log(confirm);
-        }
-        setTimeout(function () {
-            API.gameCheckForUpdatedPositions().then(res => {
-                if (res.status === 'doUpdate') {
-                    API.gameGetNewPositions(undefined).then(result => {
-                        console.log('=========================================================');
-                        console.log(result);
-                        console.log('=========================================================');
-                        //for now just a trial method
-                        let test = {
-                            "balls": [{
-                                "1": [{
-                                    "0": {
-                                        "x": "0",
-                                        "y": "0",
-                                        "doHide": false,
-                                        "angle": 97
-                                    }
-                                },
-                                {
-                                    "7": {
-                                        "x": "578",
-                                        "y": "-801",
-                                        "doHide": true,
-                                        "angle": 157
-                                    }
-                                }
-                                ],
-                                "2": [{
-                                    "2": {
-                                        "x": "100",
-                                        "y": "-100",
-                                        "doHide": true,
-                                        "angle": 157
-                                    }
-                                }]
-                            }],
-                            "player": 1,
-                            "win": [
-                                false,
-                                false
-                            ]
-                        }
-                        test = result;
-                        console.log('==========================================================');
-                        console.time('Parsing operation');
-                        let counter = 1;
-                        let temp = this.state.points;
-                        const updates = [];
-                        test.balls.forEach(el => {
-                            for (let i in el) {
-                                if (parseInt(i) === counter) {
-                                    el[i].forEach(elem => {
-                                        temp[parseInt(Object.keys(elem)[0])].x = elem[Object.keys(elem)[0]].x;
-                                        temp[parseInt(Object.keys(elem)[0])].y = elem[Object.keys(elem)[0]].y;
-                                        temp[parseInt(Object.keys(elem)[0])].hidden = elem[Object.keys(elem)[0]].doHide ? 'hidden' : 'visible';
-                                    });
-                                    updates.push(JSON.parse(JSON.stringify(temp)));
-                                    counter++;
-                                } else {
-                                    throw Error('Incorrect JSON received from API when attempting to update positions');
-                                }
-                            }
+        })
+    }
+
+    playMove() {
+        return new Promise(resolve => {
+            //BIND EVENT, wait till clicks, get location
+            resolve({ x: 5, y: 0 });
+        });
+    }
+    _renderMoves(payload) {
+        return new Promise(resolve => {
+            console.log('==========================================================');
+            console.time('Parsing operation');
+            let counter = 1;
+            let temp = this.state.points;
+            const updates = [];
+            payload.balls.forEach(el => {
+                for (let i in el) {
+                    if (parseInt(i) === counter) {
+                        el[i].forEach(elem => {
+                            temp[parseInt(Object.keys(elem)[0])].x = elem[Object.keys(elem)[0]].x;
+                            temp[parseInt(Object.keys(elem)[0])].y = elem[Object.keys(elem)[0]].y;
+                            temp[parseInt(Object.keys(elem)[0])].hidden = elem[Object.keys(elem)[0]].doHide ? 'hidden' : 'visible';
                         });
-                        console.log(`Timestamp amount: ${counter}`);
-                        console.timeEnd('Parsing operation');
-                        console.log('==========================================================');
-                        counter = 0;
-                        //const prevState = JSON.parse(JSON.stringify(this.state));
-                        let scheduleUpdates = setInterval(function () {
-                            this.setState({ points: updates[counter] })
-                            if (updates.length - 1 === counter) {
-                                clearInterval(scheduleUpdates);
-                                return;
-                            }
-                            counter++;
-                        }.bind(this), 20)
-                    })
+                        updates.push(JSON.parse(JSON.stringify(temp)));
+                        counter++;
+                    } else {
+                        throw Error('Incorrect JSON received from this.API when attempting to update positions');
+                    }
                 }
-            })
-        }.bind(this), 2000);
+            });
+            console.log(`Timestamp amount: ${counter}`);
+            console.timeEnd('Parsing operation');
+            console.log('==========================================================');
+            counter = 0;
+            let scheduleUpdates = setInterval(function () {
+                this.setState({ points: updates[counter] })
+                if (updates.length - 1 === counter) {
+                    clearInterval(scheduleUpdates);
+                    resolve(true);
+                    return;
+                }
+                counter++;
+            }.bind(this), 20)
+        });
     }
 
     componentDidUpdate(prevProps, prevState) {
-        /*        console.log('Updating the component Balls!');
-                let changeThese = [];
-                console.log(prevState);
-                prevState.points.forEach((a, i) => {
-                    let condition = a.x !== this.state.points[i].x || a.y !== this.state.points[i].y;
-                    if (condition) {
-                        console.log(`Element with index: ${i} needs to be changed!`);
-                        changeThese.push(i);
-                    }
-                });
-                console.log(changeThese);
-                if (changeThese.length !== 0) {
-                    changeThese.forEach(el => {
-                        document.getElementById(`${el}`).style.transform =
-                            `translate(${Math.abs(prevState.points[el].x - this.state.points[el].x)}px, ${Math.abs(prevState.points[el].y - this.state.points[el].y)}px)`;
-                    })
-                    this.setState(this.state);
-                }*/
     }
 
     /**
@@ -205,14 +195,14 @@ class Balls extends Component {
      * Event should fire each time player interacts.
      */
     checkForUpdates() {
-        API.gameCheckForUpdatedPositions(secret.id).then(res => {
+        this.API.gameCheckForUpdatedPositions(secret.id).then(res => {
             if (res.status === 'doUpdate') {
-                API.gameGetNewPositions(undefined).then(result => {
+                this.API.gameGetNewPositions(undefined).then(result => {
                     console.log('=========================================================');
                     console.log(result);
                     console.log('=========================================================');
                     //for now just a trial method
-                    const test = {
+                    const res = {
                         "balls": [{
                             "1": [{
                                 "0": {
@@ -237,7 +227,7 @@ class Balls extends Component {
                     }
 
                     let counter = 1;
-                    test.balls.forEach(el => {
+                    res.balls.forEach(el => {
                         let temp = this.state.points;
                         for (let i in el) {
                             if (parseInt(i) === counter) {
@@ -247,7 +237,7 @@ class Balls extends Component {
                                     temp[parseInt(elem)].y = elem.y;
                                 });
                             } else {
-                                throw Error('Incorrect JSON received from API when attempting to update positions');
+                                throw Error('Incorrect JSON received from this.API when attempting to update positions');
                             }
                             setTimeout(function () {
                                 this.setState({ points: temp })
@@ -428,4 +418,4 @@ class Balls extends Component {
     }
 }
 
-export default Balls;
+export default withRouter(Balls);

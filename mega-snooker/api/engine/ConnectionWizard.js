@@ -36,10 +36,11 @@ module.exports = class ConnectionWizard {
 
     joinGame(username) {
         const userToken = jwt.generateToken(username);
-        obj.token = userToken;
-        (this.gameInfo.players).push(token);
+        (this.gameInfo.players).push(userToken);
+        let obj = JSON.parse(JSON.stringify(this.gameInfo));
         FileManager.updateGames(this.gameInfo.id, 'wizard', this.gameInfo);
-        let obj = this.gameInfo;
+        obj.token = userToken;
+        obj.yourIndex = this.gameInfo.players.length;
         return obj;
     }
 
@@ -62,8 +63,9 @@ module.exports = class ConnectionWizard {
             }
         }
         FileManager.writeGames(dataToWrite);
-        let obj = this.gameInfo;
+        let obj = JSON.parse(JSON.stringify(this.gameInfo));
         obj.token = userToken;
+        obj.yourIndex = 1;
         return obj;
     }
 };

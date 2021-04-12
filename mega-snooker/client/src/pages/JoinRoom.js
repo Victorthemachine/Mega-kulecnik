@@ -1,39 +1,62 @@
 import React, { Component } from 'react';
 import Background from './../assets/other/Background.svg';
-import { useHistory } from 'react-router-dom';
+import { withRouter } from 'react-router-dom'
 
 import './../styles/Menu.css';
 
-class JoinRoom extends Component {
+class Menu extends Component {
+
   constructor(props) {
     super(props);
-    this.state = { };
-  }
-  Render() {
-    let history = useHistory();
-    const back = () => {
-        history.push('/lobby');
+    this.state = {
+      redirect: false,
+      passphrase: ''
     };
+    this.connectToGame = this.connectToGame.bind(this);
+    this.validatePasshrase = this.validatePasshrase.bind(this);
+    this.API = props.props.api;
+  }
+
+  connectToGame() {
+    this.API.joinGame(this.state.passphrase).then(res => {
+      console.log(res);
+      if (res !== 'Error, invalid game') {
+        this.props.history.push('/game');
+      }
+    });
+  }
+
+  validatePasshrase({ target }) {
+    console.log(target);
+    this.setState({ passphrase: target.value });
+  }
+
+  render() {
     return (
       <>
-      <Background className="back"/>
-      <div className='container'>
-        <div className='head'>
-        <h1>Připojit se</h1>
-      </div>      
-        <div className='col'>           
-            <input id="id" type="text" placeholder="XXXXX" maxlength="5" className="superid"></input>
-            <button >Připojit</button> 
-            <button onClick={back}>Zpět</button>         
+        <Background className="back" />
+        <div className='container'>
+          <div className='head'>
+            <h1>Připojit se</h1>
+          </div>
+          <div className='col'>
+            <input id="id" type="text" placeholder="XXXXX" maxLength="5" className="superid" value={this.state.passphrase} onChange={this.validatePasshrase}></input>
+            <button onClick={this.connectToGame}>Připojit</button>
+            <button >Zpět</button>
+          </div>
+          <div className='text'>
+            <p>
+              Jak se napojit?
+                </p>
+            <br />
+            <p>
+              Zadejte passphrase, které vám poslal kamarád do volného pole a zmáčkněte připojit.
+                </p>
+          </div>
         </div>
-        <div className='text'>
-          <p1> Jak se napojit?
-          <br /></p1>
-          <p2>Zadejte passphrase, které vám poslal kamarád do volného pole a zmáčkněte připojit.</p2>
-        </div>        
-      </div>
       </>
     );
   }
 }
-export default JoinRoom;
+
+export default withRouter(Menu);

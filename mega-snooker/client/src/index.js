@@ -8,16 +8,20 @@ import reportWebVitals from './reportWebVitals';
 import {
   BrowserRouter as Router,
   Switch,
-  Route
+  Route,
+  Redirect
 } from "react-router-dom";
 
 import ErrorBoundary from './containers/ErrorBoundary';
 import Menu from './pages/Menu';
-import App from './pages/App';
+//import App from './pages/App';
 import Lobby from './pages/Lobby';
 import CreateRoom from './pages/CreateRoom';
 import JoinRoom from './pages/JoinRoom';
 import Snooker from './containers/Snooker';
+
+const apiTool = require('./utilities/apiTool');
+const API = new apiTool();
 
 const store = createStore(
   reducer, /* preloadedState, */
@@ -35,7 +39,8 @@ ReactDOM.render(
       <Switch>
         <Route exact path="/">
           <ErrorBoundary>
-            <App />
+            <Redirect to="/menu" />
+            {/*<App />*/}
           </ErrorBoundary>
         </Route>
         <Route path="/menu">
@@ -45,23 +50,23 @@ ReactDOM.render(
         </Route>
         <Route path="/lobby">
           <ErrorBoundary>
-            <Lobby />
+            <Lobby props={{ api: API }} />
           </ErrorBoundary>
         </Route>
         <Route path="/createroom">
           <ErrorBoundary>
-            <CreateRoom />
+            <CreateRoom props={{ api: API }} />
           </ErrorBoundary>
         </Route>
         <Route path="/joinroom">
           <ErrorBoundary>
-            <JoinRoom />
+            <JoinRoom props={{ api: API }} />
           </ErrorBoundary>
         </Route>
         <Route path="/game">
           <Provider store={store}>
             <ErrorBoundary>
-              <Snooker />
+              <Snooker props={{ api: API }} />
             </ErrorBoundary>
           </Provider>
         </Route>

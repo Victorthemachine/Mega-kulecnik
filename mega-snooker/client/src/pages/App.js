@@ -7,8 +7,7 @@ import Table from './../components/Table';
 //import balls from './../utilities/assetTool';
 //import Image from './../utilities/Image';
 
-const apiTool = require('./../utilities/apiTool');
-const API = new apiTool();
+let API = '';
 //console.log(balls);
 //console.log(balls.ball_5.i_3);
 /* This is a test class, I will be transfering the entire API mechanism into a separete Util class (to be able to reuse it).
@@ -19,6 +18,7 @@ class App extends Component {
   constructor(props) {
     super(props);
     this.state = { apiResponse: "", assets: "" };
+    API = props.props.api;
   }
 
   componentDidMount() {

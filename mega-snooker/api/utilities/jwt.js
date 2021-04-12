@@ -3,7 +3,6 @@ const FileManager = require('./fileManager');
 
 module.exports = new class JWT {
     generateToken(identifier) {
-        console.log('Generating token');
         return jwt.sign(identifier, FileManager.getJWTSecret());
     }
 
@@ -11,7 +10,6 @@ module.exports = new class JWT {
         let response = '';
         try {
             response = jwt.verify(token, FileManager.getJWTSecret(), { algorithms: 'HS256' });
-            console.log(response);
         } catch (err) {
             console.log('Unauthorized');
         }
