@@ -21,6 +21,10 @@ module.exports = class apiTool {
             serverToken: currGame.serverToken || "",
             myIndex: 0
         };
+        this.whiteBall = {
+            x: 0,
+            y: 0
+        };
         this.ws = null;
     }
 

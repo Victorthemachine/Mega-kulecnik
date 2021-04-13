@@ -95,8 +95,14 @@ class Balls extends Component {
                         socket.send(this.prepareMessage('Ready'));
                         break;
                     case `Play move:${activeGame.myIndex}`:
+                        this.API.activeGame.whiteBall = {
+                            x: this.state.points[0].x,
+                            y: this.state.points[0].y,
+                            cue: true
+                        };
                         this.playMove().then(obj => {
                             socket.send(this.prepareMessage('Played:' + JSON.stringify(obj)));
+                            this.API.activeGame.whiteBall = { cue: false };
                         });
                         break;
                     case 'Render':

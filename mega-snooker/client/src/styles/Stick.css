@@ -1,0 +1,15 @@
+.circle {
+position: absolute;
+background-color: black;
+width: 250px;
+height: 250px;
+transform-origin: center center;
+}
+.pointer {
+    position: absolute;
+    margin-left: 10%;
+    margin-top: 47%;
+    width:25%;
+    height: 6%;
+    background-color: white;
+}
