@@ -888,11 +888,25 @@ module.exports = class Game {
         if (this.foul === undefined) {
             this.foul = true;
         }
+        timestamp++;
         this.canPlayBlackHandler();
         this.blackHandler();
         this.whiteHandler();
         this.moveCalculater();
-
+        let temp = [];
+        this.balls.forEach(el => {
+            temp.push({
+                [el.id]: {
+                    x: (el.x - moveX - el.radius / 2),
+                    y: -el.y,
+                    doHide: el.hidden,
+                    angle: el.vector.angle
+                }
+            });
+        });
+        response.balls.push({
+            [timestamp]: temp
+        });
         response.player = this.player;
         response.win = this.winner;
         console.log(timestamp);
