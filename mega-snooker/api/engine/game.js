@@ -156,32 +156,32 @@ module.exports = class Game {
             }*/
             switch (pocketId) {
                 case 0:
-                    if (ball.x <= this.pockets[pocketId].x + 2 * this.pockets[pocketId].radius && ball.y <= this.pockets[pocketId].y + 2 * this.pockets[pocketId].radius) {
+                    if (ball.x <= this.pockets[pocketId].x + this.pockets[pocketId].radius && ball.y <= this.pockets[pocketId].y + this.pockets[pocketId].radius) {
                         return true;
                     }
                     break;
                 case 1:
-                    if (ball.x - 0 >= this.pockets[pocketId].x - 2 * this.pockets[pocketId].radius && ball.x + 0 <= this.pockets[pocketId].x + 2 * this.pockets[pocketId].radius) {
+                    if (ball.x - 0 >= this.pockets[pocketId].x - this.pockets[pocketId].radius && ball.x + 0 <= this.pockets[pocketId].x + this.pockets[pocketId].radius) {
                         return true;
                     }
                     break;
                 case 2:
-                    if (ball.x - 0 >= this.pockets[pocketId].x + 2 * this.pockets[pocketId].radius && ball.y - 0 <= this.pockets[pocketId].y + 2 * this.pockets[pocketId].radius) {
+                    if (ball.x - 0 >= this.pockets[pocketId].x + this.pockets[pocketId].radius && ball.y - 0 <= this.pockets[pocketId].y + this.pockets[pocketId].radius) {
                         return true;
                     }
                     break;
                 case 3:
-                    if (ball.x - 0 <= this.pockets[pocketId].x + 2 * this.pockets[pocketId].radius && ball.y + 0 >= this.pockets[pocketId].y - 2 * this.pockets[pocketId].radius) {
+                    if (ball.x - 0 <= this.pockets[pocketId].x + this.pockets[pocketId].radius && ball.y + 0 >= this.pockets[pocketId].y - this.pockets[pocketId].radius) {
                         return true;
                     }
                     break;
                 case 4:
-                    if (ball.x - 0 >= this.pockets[pocketId].x - 2 * this.pockets[pocketId].radius && ball.x + 0 <= this.pockets[pocketId].x + 2 * this.pockets[pocketId].radius) {
+                    if (ball.x - 0 >= this.pockets[pocketId].x - this.pockets[pocketId].radius && ball.x + 0 <= this.pockets[pocketId].x + this.pockets[pocketId].radius) {
                         return true;
                     }
                     break;
                 case 5:
-                    if (ball.x + 0 >= this.pockets[pocketId].x - 2 * this.pockets[pocketId].radius && ball.y + 0 >= this.pockets[pocketId].y - 2 * this.pockets[pocketId].radius) {
+                    if (ball.x + 0 >= this.pockets[pocketId].x - this.pockets[pocketId].radius && ball.y + 0 >= this.pockets[pocketId].y - this.pockets[pocketId].radius) {
                         return true;
                     }
                     break;
@@ -232,27 +232,27 @@ module.exports = class Game {
         this.pockets.push(new Hole(0, {
             x: this.table.x,
             y: this.table.y,
-            radius: 11.25 / 2
+            radius: 11.25 / 4
         }));
         this.pockets.push(new Hole(1, {
             x: this.table.x + this.table.width / 2,
             y: this.table.y,
-            radius: 12.5 / 2
+            radius: 12.5 / 4
         }));
         this.pockets.push(new Hole(2, {
             x: (this.table.x + this.table.width),
             y: this.table.y,
-            radius: 11.25 / 2
+            radius: 11.25 / 4
         }));
         this.pockets.push(new Hole(3, {
             x: this.table.x,
             y: (this.table.y + this.table.height),
-            radius: 11.25 / 2
+            radius: 11.25 / 4
         }));
         this.pockets.push(new Hole(4, {
             x: this.table.x + (this.table.width / 2),
             y: (this.table.y + this.table.height),
-            radius: 12.5 / 2
+            radius: 12.5 / 4
         }));
         this.pockets.push(new Hole(5, {
             x: this.table.x + this.table.width,
@@ -568,7 +568,7 @@ module.exports = class Game {
         this.table.width = data.height * (254 / 150);
 
         const offsetWidth = (data.windowWidth - this.table.width) / 2;
-        this.table.x = offsetWidth;
+        this.table.x = offsetWidth + data.radiusWhite / 2;
         const offsetHeight = (data.height - this.table.height) / 2;
         this.table.y = offsetHeight + data.radiusWhite / 2;
         moveX = data.windowWidth / 2;

@@ -57,7 +57,10 @@ module.exports = class Vector {
      * @returns {Number} degrees
      */
     computeAngle() {
-        return Math.acos((this.x * 1 + this.y * 0) / (this.getSize() * Math.sqrt(Math.pow(1, 2) + Math.pow(0, 2))));
+        if (this.y >= 0) {
+            return Math.acos((this.x * 1) / (this.getSize()));
+        }
+        return Math.PI + (Math.PI - Math.acos((this.x * 1) / (this.getSize())));
     }
 
     /**
