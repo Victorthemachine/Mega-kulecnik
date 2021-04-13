@@ -26,15 +26,15 @@ class Menu extends Component {
             <button >Nastavení</button>
           </div>
           <div className='text'>
-            <p>
+            <p1>
               Co je to kulečník?
-              </p>
+              </p1>
             <br />
-            <p>
+            <p2>
               Kulečník je hra pro dva hráče, ve které je cílem strkat koule tágem do dir.
               Hráč smí udeřit tágem pouze do bílé koule a každý hráč má svouv vlastní barvu koulí, každou z nich musí postupně nastrkat do dir.
               Vyhrává ten, který nastrká všechny koule svojí barvy do díry a černou kouly jako poslední.
-              </p>
+              </p2>
           </div>
         </div>
       </>

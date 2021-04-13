@@ -14,6 +14,7 @@ class Menu extends Component {
     };
     this.connectToGame = this.connectToGame.bind(this);
     this.validatePasshrase = this.validatePasshrase.bind(this);
+    this.cancelGame = this.cancelGame.bind(this);
     this.API = props.props.api;
   }
 
@@ -30,6 +31,9 @@ class Menu extends Component {
     console.log(target);
     this.setState({ passphrase: target.value });
   }
+  cancelGame() {
+    this.props.history.push('/lobby');
+  }
 
   render() {
     return (
@@ -42,16 +46,16 @@ class Menu extends Component {
           <div className='col'>
             <input id="id" type="text" placeholder="XXXXX" maxLength="5" className="superid" value={this.state.passphrase} onChange={this.validatePasshrase}></input>
             <button onClick={this.connectToGame}>Připojit</button>
-            <button >Zpět</button>
+            <button onClick={this.cancelGame}>Zpět</button>
           </div>
           <div className='text'>
-            <p>
+            <p1>
               Jak se napojit?
-                </p>
+                </p1>
             <br />
-            <p>
+            <p2>
               Zadejte passphrase, které vám poslal kamarád do volného pole a zmáčkněte připojit.
-                </p>
+                </p2>
           </div>
         </div>
       </>
