@@ -145,11 +145,8 @@ wss.on('connection', (ws, req) => {
         return;
       }
     }
-    console.log(parsedMessage[2]);
     WebSocketHandler.processOnMessage(parsedMessage, ws, clients).then(processedData => {
       if (processedData !== false) {
-
-        console.log(processedData);
         const { status, token, lobby, gameID } = processedData;
         //SPLIT CORRECT ^^^^^^^^^^^
 
@@ -172,7 +169,6 @@ wss.on('connection', (ws, req) => {
             //Initilizes statuses for all clients. Clients have to be synced
             clientStatus.push(obj);
           }
-          console.log(lobbyCheckValue);
         }
         if (lobbyCheckValue === true) {
           //Find the waiting client, notify to start (As of now only two players are playing in one game)
@@ -196,11 +192,9 @@ wss.on('connection', (ws, req) => {
             }
 
             if (recepients.length < 1) return;
-            console.log('Sending message');
             recepients.forEach(socket => {
               socket.send('Start game');
             })
-            console.log('Sent messages');
             startTheseNext.splice(startTheseNext.findIndex(el => el === gameID), 1);
             return;
           }
@@ -233,21 +227,17 @@ wss.on('connection', (ws, req) => {
                 }
     
                 if (recepients.length < 1) return;
-                console.log('Sending message');
                 recepients.forEach(socket => {
                   socket.send(`Play move:${playerOnMove}`);
                 });
                 for (let i in statusLobby[gameID]) {
                   statusLobby[gameID][i] = 'Processing'
                 }
-                console.log('Sent messages');
     
               })
             }
             break;
           case 'Start':
-            console.log('Start case');
-            console.log(statusLobby);
             statusLobby[gameID][token] = 'Start';
             let check = true;
             for (let i in statusLobby[gameID]) {
@@ -268,11 +258,9 @@ wss.on('connection', (ws, req) => {
                   }
 
                   if (recepients.length < 1) return;
-                  console.log('Sending message');
                   recepients.forEach(socket => {
                     socket.send('Init:' + JSON.stringify(positions));
                   })
-                  console.log('Sent messages');
                   for (let i in statusLobby[gameID]) {
                     statusLobby[gameID][i] = 'Processing'
                   }
@@ -289,22 +277,33 @@ wss.on('connection', (ws, req) => {
                   if (i === el) {
                     recepients.push(clients.verified[i]);
                   }
-                })
+                });
               }
 
               if (recepients.length < 1) return;
-              console.log('Sending message');
               recepients.forEach(socket => {
                 socket.send('Render:' + JSON.stringify(updatedCords));
               })
-              console.log('Sent messages');
               for (let i in statusLobby[gameID]) {
                 statusLobby[gameID][i] = 'Processing'
+              }
+              const { win } = updatedCords;
+              console.log('=============================');
+              console.log(win);
+              console.log('=============================');
+              let isOver = true;
+              win.forEach(el => {
+                if (el === false) isOver = false;
+              });
+              if (isOver === true) {
+                recepients.forEach(socket => {
+                  socket.send('Win');
+                })
               }
             });
             break;
           case 'Finished':
-            WebSocketHandler.gameFinished();
+            WebSocketHandler.gameFinished(gameID);
             break;
           default:
             break;

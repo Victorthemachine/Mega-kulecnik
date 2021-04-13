@@ -89,4 +89,16 @@ module.exports = new class FileManager {
                 return 'Something went wrong, there is no such child!';
         }
     }
+
+    deleteGame(id) {
+        this.readGames().then(pastData => {
+            let writeThis = pastData;
+            pastData.forEach((el, index) => {
+                if (el.connectionWizard.gameInfo.id === id) {
+                    delete writeThis[index];
+                }
+            });
+            fs.writeFileSync(gameJSONPath, JSON.stringify(writeThis));
+        });
+    }
 }

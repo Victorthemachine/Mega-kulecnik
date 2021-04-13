@@ -88,6 +88,6 @@ module.exports = new class WebSocketHandler {
     }
 
     gameFinished() {
-        FileManager.updateGames(gameID, 'status', 'FINISHED');
+        FileManager.deleteGame(gameID);
     }
 }

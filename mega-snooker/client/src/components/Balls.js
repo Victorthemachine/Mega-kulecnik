@@ -23,6 +23,7 @@ const whiteRad = 62 * (window.innerHeight / 1120) * 2;
 const points = [];
 //This is the game secret or otherwise referenced as game id
 let secret = '';
+let isRendering = false;
 /**
  * All balls are here. They are currently being rendered with positions from this.API so don't forget to turn it on.
  * Don't touch viewBox, only adjust X and Y cordinates, radius is calculated before based on window size and maintains aspect ratio
@@ -95,14 +96,14 @@ class Balls extends Component {
                         socket.send(this.prepareMessage('Ready'));
                         break;
                     case `Play move:${activeGame.myIndex}`:
-                        this.API.activeGame.whiteBall = {
+                        this.API.whiteBall = {
                             x: this.state.points[0].x,
                             y: this.state.points[0].y,
                             cue: true
                         };
                         this.playMove().then(obj => {
                             socket.send(this.prepareMessage('Played:' + JSON.stringify(obj)));
-                            this.API.activeGame.whiteBall = { cue: false };
+                            this.API.whiteBall.cue = false;
                         });
                         break;
                     case 'Render':
@@ -113,9 +114,11 @@ class Balls extends Component {
                         });
                         break;
                     case 'Win':
-                        socket.send(this.prepareMessage('Finished'));
-                        this.API.disconnectSocket(socket);
-                        this.props.history.push('/end');
+                        this.isReadyToEnd().then(ready => {
+                            socket.send(this.prepareMessage('Finished'));
+                            this.API.disconnectSocket(socket);
+                            this.props.history.push('/end');
+                        })
                         break;
                     default:
                         break;
@@ -123,6 +126,13 @@ class Balls extends Component {
             }.bind(this);
         });
         console.log(secret);
+    }
+
+    isReadyToEnd() {
+        return new Promise(resolve => {
+            while (isRendering) { }
+            resolve(true);
+        });
     }
 
     prepareMessage(content) {
@@ -151,11 +161,32 @@ class Balls extends Component {
 
     playMove() {
         return new Promise(resolve => {
-            //BIND EVENT, wait till clicks, get location
-            resolve({ x: 5, y: 0 });
+            window.addEventListener('click', function handleMouseClick(event) {
+                event.currentTarget.removeEventListener(event.type, handleMouseClick);
+                console.log(this.API.whiteBall);
+                console.log('================DEBUG PLAY================')
+                console.log({
+                    x: event.pageX,
+                    y: event.pageY,
+                    xx: this.API.whiteBall.x + window.innerWidth / 2,
+                    yy: (window.innerHeight - 100) - Math.abs(this.API.whiteBall.y + (whiteRad / 2))
+                });
+                console.log('================DEBUG PLAY================')
+                resolve({
+                    cursor: {
+                        x: event.pageX,
+                        y: event.pageY
+                    },
+                    cueBall: {
+                        x: this.API.whiteBall.x + window.innerWidth / 2,
+                        y: (window.innerHeight - 100) - Math.abs(this.API.whiteBall.y + (whiteRad / 2))
+                    }
+                });
+            }.bind(this));
         });
     }
     _renderMoves(payload) {
+        isRendering = true;
         return new Promise(resolve => {
             console.log('==========================================================');
             console.time('Parsing operation');
@@ -185,6 +216,7 @@ class Balls extends Component {
                 this.setState({ points: updates[counter] })
                 if (updates.length - 1 === counter) {
                     clearInterval(scheduleUpdates);
+                    isRendering = false;
                     resolve(true);
                     return;
                 }
