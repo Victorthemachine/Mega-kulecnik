@@ -232,7 +232,7 @@ module.exports = class Game {
         this.pockets.push(new Hole(0, {
             x: this.table.x,
             y: this.table.y,
-            radius: 11.25 / 4
+            radius: 11.25 / 2
         }));
         this.pockets.push(new Hole(1, {
             x: this.table.x + this.table.width / 2,
@@ -242,12 +242,12 @@ module.exports = class Game {
         this.pockets.push(new Hole(2, {
             x: (this.table.x + this.table.width),
             y: this.table.y,
-            radius: 11.25 / 4
+            radius: 11.25 / 2
         }));
         this.pockets.push(new Hole(3, {
             x: this.table.x,
             y: (this.table.y + this.table.height),
-            radius: 11.25 / 4
+            radius: 11.25 / 2
         }));
         this.pockets.push(new Hole(4, {
             x: this.table.x + (this.table.width / 2),
@@ -261,51 +261,120 @@ module.exports = class Game {
         }));
     }
     checkAndComputeCollisionBtPs(ball) {
-            this.pockets.forEach((el, index) => {
-                if (!el.hidden) {
-                    if (Math.pow(el.x - ball.x, 2) + Math.pow(el.y - ball.y, 2) <= el.radius * el.radius) {
-                        this.lastHole[this.player] = index;
+        if (!ball.hidden) {
+            if (ball.x + ball.radius / 2 <= this.table.x) {
+                console.log(ball.vector.angle);
+                if (ball.y >= this.table.height / 2 + this.table.y) {
+                    ball.hidden = true;
+                    ball.vector.force = 0;
+                    this.ballFall(ball, 3);
+                } else {
+                    ball.hidden = true;
+                    ball.vector.force = 0;
+                    this.ballFall(ball, 0);
+                }
+                return true;
+            }
+            if (ball.x - ball.radius / 2 >= this.table.x + this.table.width) {
+                console.log(ball.vector.angle);
+                if (ball.y >= this.table.height / 2 + this.table.y) {
+                    ball.hidden = true;
+                    ball.vector.force = 0;
+                    this.ballFall(ball, 5);
+                } else {
+                    ball.hidden = true;
+                    ball.vector.force = 0;
+                    this.ballFall(ball, 2);
+                }
+                return true;
+            }
+            if (ball.y - ball.radius / 2 >= this.table.y + this.table.height) {
+                console.log(ball.vector.angle);
+                if (ball.x >= 2 * this.table.width / 3 + this.table.x) {
+                    ball.hidden = true;
+                    ball.vector.force = 0;
+                    this.ballFall(ball, 5);
+                } else {
+                    if (ball.x >= this.table.width / 3 + this.table.x) {
                         ball.hidden = true;
                         ball.vector.force = 0;
-                        if (ball.id != 0 && ball.id != 8) {
-                            if (!this.playingFull[0] && !this.playingFull[1]) {
-                                if (ball.id < 8) {
-                                    this.playingFull[this.player - 1] = true;
-
-                                } else {
-                                    try {
-                                        this.playingFull[this.player - 2] = true;
-                                    } catch (ex) {
-                                        this.playingFull[this.player] = true;
-                                    }
-                                }
-                                this.ballsRemaining[this.player - 1]--;
-
-                            } else {
-                                if (ball.id < 8) {
-                                    if (this.playingFull[0]) {
-                                        this.ballsRemaining[0]--;
-                                    } else {
-                                        this.ballsRemaining[1]--;
-                                    }
-                                } else {
-                                    if (this.playingFull[0]) {
-                                        this.ballsRemaining[1]--;
-                                    } else {
-                                        this.ballsRemaining[0]--;
-                                    }
-                                }
-                            }
-                        } else {
-                            if (ball.id === 8) {
-                                this.blackHole = index;
-                            }
-                        }
-                        return true;
+                        this.ballFall(ball, 4);
+                    } else {
+                        ball.hidden = true;
+                        ball.vector.force = 0;
+                        this.ballFall(ball, 3);
                     }
                 }
+                return true;
+            }
+            if (ball.y + ball.radius / 2 <= this.table.y) {
+                console.log(ball.vector.angle);
+                if (ball.x >= 2 * this.table.width / 3 + this.table.x) {
+                    ball.hidden = true;
+                    ball.vector.force = 0;
+                    this.ballFall(ball, 2);
+                } else {
+                    if (ball.x >= this.table.width / 3 + this.table.x) {
+                        ball.hidden = true;
+                        ball.vector.force = 0;
+                        this.ballFall(ball, 1);
+                    } else {
+                        ball.hidden = true;
+                        ball.vector.force = 0;
+                        this.ballFall(ball, 0);
+                    }
+                }
+                return true;
+            }
+            /*this.pockets.forEach((el, index) => {
+                if (Math.pow(el.x - ball.x, 2) + Math.pow(el.y - ball.y, 2) <= el.radius * el.radius) {
+                    ball.hidden = true;
+                    ball.vector.force = 0;
+                    this.ballFall(ball, index);
+                    return true;
+                }
+
             });
-            return false;
+        }*/
+        }
+        return false;
+    }
+    ballFall(ball, index) {
+            if (ball.id != 0 && ball.id != 8) {
+                if (!this.playingFull[0] && !this.playingFull[1]) {
+                    this.lastHole[this.player] = index;
+                    if (ball.id < 8) {
+                        this.playingFull[this.player - 1] = true;
+
+                    } else {
+                        this.player === 1 ? this.playingFull[this.player] = true : this.playingFull[this.player - 2] = true;
+                    }
+                    this.ballsRemaining[this.player - 1]--;
+
+                } else {
+                    if (ball.id < 8) {
+                        if (this.playingFull[this.player - 1]) {
+                            this.ballsRemaining[this.player - 1]--;
+                            this.moves = 2;
+                        } else {
+                            this.player === 1 ? this.playingFull[this.player]-- : this.playingFull[this.player - 2]--;
+
+                        }
+                    } else {
+                        if (this.playingFull[this.player - 1]) {
+                            this.player === 1 ? this.ballsRemaining[this.player]-- : this.ballsRemaining[this.player - 2]--;
+                        } else {
+                            this.ballsRemaining[this.player - 1]--;
+                            this.moves = 2;
+                        }
+                    }
+                }
+            } else {
+                if (ball.id === 8) {
+                    this.blackHole = index;
+                    this.blackHandler();
+                }
+            }
         }
         /**
          * Checks if two supplied balls are colliding or not.
@@ -506,6 +575,8 @@ module.exports = class Game {
     computeBtBCollision(ball1, ball2) {
         let one = false;
         let two = false;
+        this.angleControl(ball1);
+        this.angleControl(ball2);
         let temp1 = JSON.parse(JSON.stringify(ball1));
         let temp2 = JSON.parse(JSON.stringify(ball2));
         let help1 = new Vector(ball1.x, ball1.y, ball2.x, ball2.y);
@@ -591,23 +662,23 @@ module.exports = class Game {
     computeInitialPositions(id) {
         const strictPosArray = [];
         const randomizePosArray = [];
-        this.pockets[0].x = this.table.x - this.pockets[0].radius;
-        this.pockets[0].y = this.table.y - this.pockets[0].radius;
+        this.pockets[0].x = this.table.x - this.pockets[0].radius / 2;
+        this.pockets[0].y = this.table.y - this.pockets[0].radius / 2;
         this.pockets[1].x = this.table.x + (this.table.width / 2);
         this.pockets[1].y = this.table.y - 2 * this.pockets[1].radius;
-        this.pockets[2].x = this.table.x + this.table.width + this.pockets[2].radius;
-        this.pockets[2].y = this.table.y - this.pockets[2].radius;
-        this.pockets[3].x = this.table.x - this.pockets[3].radius;
-        this.pockets[3].y = this.table.y + this.table.height + this.pockets[3].radius;
+        this.pockets[2].x = this.table.x + this.table.width + this.pockets[2].radius / 2;
+        this.pockets[2].y = this.table.y - this.pockets[2].radius / 2;
+        this.pockets[3].x = this.table.x - this.pockets[3].radius / 2;
+        this.pockets[3].y = this.table.y + this.table.height + this.pockets[3].radius / 2;
         this.pockets[4].x = this.table.x + (this.table.width / 2);
         this.pockets[4].y = this.table.y + this.table.height + 2 * this.pockets[4].radius;
-        this.pockets[5].x = this.table.x + this.table.width + this.pockets[5].radius;
-        this.pockets[5].y = this.table.y + this.table.height + this.pockets[5].radius;
+        this.pockets[5].x = this.table.x + this.table.width + this.pockets[5].radius / 2;
+        this.pockets[5].y = this.table.y + this.table.height + this.pockets[5].radius / 2;
 
         this.balls[0].x = (this.table.width / 4) + this.table.x;
         this.balls[0].y = (this.table.height / 2) + this.table.y;
 
-        const somethingLikeTheRadiusButNotQuite = this.balls[0].radius * 0.82;
+        const somethingLikeTheRadiusButNotQuite = this.balls[0].radius * 0.9;
 
         const centerBall = {
             x: (((this.table.width) / 4) * 3) + this.table.x,
@@ -619,47 +690,47 @@ module.exports = class Game {
         });
         strictPosArray.push(centerBall, {
             x: centerBall.x + (2 * somethingLikeTheRadiusButNotQuite),
-            y: centerBall.y + (4 * this.balls[1].radius) / 2
+            y: centerBall.y + (4 * this.balls[1].radius * 1.1) / 2
         }, {
             x: centerBall.x + (2 * somethingLikeTheRadiusButNotQuite),
-            y: centerBall.y - (4 * this.balls[1].radius) / 2
+            y: centerBall.y - (4 * this.balls[1].radius * 1.1) / 2
         });
         randomizePosArray.push({
             x: centerBall.x - (somethingLikeTheRadiusButNotQuite),
-            y: centerBall.y + (this.balls[1].radius) / 2,
+            y: centerBall.y + (this.balls[1].radius * 1.1) / 2,
         }, {
             x: centerBall.x,
-            y: centerBall.y + (2 * this.balls[1].radius) / 2
+            y: centerBall.y + (2 * this.balls[1].radius * 1.1) / 2
         }, {
             x: centerBall.x + (somethingLikeTheRadiusButNotQuite),
-            y: centerBall.y + (this.balls[1].radius) / 2,
+            y: centerBall.y + (this.balls[1].radius * 1.1) / 2,
         }, {
             x: centerBall.x + (somethingLikeTheRadiusButNotQuite),
-            y: centerBall.y + (3 * this.balls[1].radius) / 2,
+            y: centerBall.y + (3 * this.balls[1].radius * 1.1) / 2,
         }, {
             x: centerBall.x + (2 * somethingLikeTheRadiusButNotQuite),
             y: centerBall.y
         }, {
             x: centerBall.x + (2 * somethingLikeTheRadiusButNotQuite),
-            y: centerBall.y + (2 * this.balls[1].radius) / 2,
+            y: centerBall.y + (2 * this.balls[1].radius * 1.1) / 2,
         }, { //opposite vv
             x: centerBall.x - (somethingLikeTheRadiusButNotQuite),
-            y: centerBall.y - (this.balls[1].radius) / 2,
+            y: centerBall.y - (this.balls[1].radius * 1.1) / 2,
         }, {
             x: centerBall.x,
-            y: centerBall.y - (2 * this.balls[1].radius) / 2
+            y: centerBall.y - (2 * this.balls[1].radius * 1.1) / 2
         }, {
             x: centerBall.x + (somethingLikeTheRadiusButNotQuite),
-            y: centerBall.y - (this.balls[1].radius) / 2,
+            y: centerBall.y - (this.balls[1].radius * 1.1) / 2,
         }, {
             x: centerBall.x + (somethingLikeTheRadiusButNotQuite),
-            y: centerBall.y - (3 * this.balls[1].radius) / 2,
+            y: centerBall.y - (3 * this.balls[1].radius * 1.1) / 2,
         }, {
             x: centerBall.x + (2 * somethingLikeTheRadiusButNotQuite),
-            y: centerBall.y - (2 * this.balls[1].radius) / 2,
+            y: centerBall.y - (2 * this.balls[1].radius * 1.1) / 2,
         }, {
             x: centerBall.x + (2 * somethingLikeTheRadiusButNotQuite),
-            y: centerBall.y - (2 * this.balls[1].radius) / 2,
+            y: centerBall.y - (2 * this.balls[1].radius * 1.1) / 2,
         });
 
         //Adjust fixed positions
@@ -736,9 +807,9 @@ module.exports = class Game {
     blackHandler() {
         if (this.balls[8].hidden) {
             if (this.canPlayBlack[this.player - 1] && this.opositPocket(this.lastHole[this.player - 1]) === this.blackHole) {
-                winner[this.player - 1] = true;
+                this.winner[this.player - 1] = true;
             } else {
-                winner[this.player - 1] = true;
+                this.player === 1 ? this.winner[this.player] = true : this.winner[this.player - 2] = true;
             }
         }
     }
@@ -846,6 +917,7 @@ module.exports = class Game {
         this.foul = undefined;
         this.balls[0].vector = vector;
         this.forceControl(this.balls[0].vector);
+        this.angleControl(this.balls[0].vector);
         let timestamp = 0;
         while (!this.areBallsStill()) {
             timestamp++;
@@ -869,6 +941,11 @@ module.exports = class Game {
                 });
                 this.checkAndComputeCollisionBtPs(temp);
                 this.balls[i] = temp;
+                for (let l = 0; l < 16; l++) {
+                    if (l !== i) {
+                        this.positionCorrection(this.balls[i], this.balls[l]);
+                    }
+                }
             }
             let temp = [];
             this.balls.forEach(el => {
