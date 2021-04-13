@@ -14,6 +14,7 @@ import {
 
 import ErrorBoundary from './containers/ErrorBoundary';
 import Menu from './pages/Menu';
+import End from './pages/End';
 //import App from './pages/App';
 import Lobby from './pages/Lobby';
 import CreateRoom from './pages/CreateRoom';
@@ -46,6 +47,11 @@ ReactDOM.render(
         <Route path="/menu">
           <ErrorBoundary>
             <Menu />
+          </ErrorBoundary>
+        </Route>
+        <Route path="/end">
+          <ErrorBoundary>
+            <End props={{ api: API }}/>
           </ErrorBoundary>
         </Route>
         <Route path="/lobby">

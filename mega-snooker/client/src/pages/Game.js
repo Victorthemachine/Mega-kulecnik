@@ -18,7 +18,7 @@ class Game extends Component {
                 top: 0,
                 left: 0
             },
-            visible: "visible"
+            visible: "hidden"
         };
         this.state.children = this.props.children;
         this.state.api = this.props.props.api;
@@ -27,12 +27,14 @@ class Game extends Component {
     componentDidMount() {
         //let img = document.getElementById('circle');
         window.addEventListener("mousemove", function (event) {
-            if (this.state.api.activeGame.cue === true) {
-                let x = (this.state.api.activeGame.whiteBall.x) - (250 / 2);
-                let y = (this.state.api.activeGame.whiteBall.y) - (250 / 2);
+            if (!this.state.api.hasOwnProperty('cue')) return;
+            if (this.state.api.cue === true) {
+                this.setState({visible: "visible"});
+                let x = (this.state.api.whiteBall.x) - (250 / 2);
+                let y = (this.state.api.whiteBall.y) - (250 / 2);
                 let degrees = Math.atan2(
-                    event.pageX - this.state.api.activeGame.whiteBall.x,
-                    event.pageY - this.state.api.activeGame.whiteBall.y
+                    event.pageX - this.state.api.whiteBall.x,
+                    event.pageY - this.state.api.whiteBall.y
                 ) * (-180 / Math.PI) + 90;;
                 this.setState({
                     cords: {
@@ -41,12 +43,14 @@ class Game extends Component {
                     },
                     degree: degrees
                 });
+            } else {
+              this.setState({visible: "hidden"});
             }
         }.bind(this));
     }
 
     render() {
-        return (
+            return (
             <>
                 <Canvas images={this.props.children} api={this.state.api} />
                 <div id="circle" class="circle" style={{
