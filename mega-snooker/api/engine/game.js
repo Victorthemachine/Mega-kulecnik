@@ -701,6 +701,7 @@ module.exports = class Game {
                 y: -el.y,
             }
         });
+        response.player = this.player;
         return response;
     }
     areBallsStill() {
