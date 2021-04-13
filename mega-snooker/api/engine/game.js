@@ -105,12 +105,12 @@ module.exports = class Game {
     }
 
     hittingBottom(ball) {
-        return ((ball.y - (ball.radius / 2)) <= this.table.y && ball.vector.angle > Math.PI && ball.vector.angle < 2 * Math.PI) && (!(this.pocketChecker(ball, 2) || this.pocketChecker(ball, 1) || this.pocketChecker(ball, 0)));
+        return ((ball.y + (ball.radius / 2)) <= this.table.y && ball.vector.angle > Math.PI && ball.vector.angle < 2 * Math.PI) && (!(this.pocketChecker(ball, 2) || this.pocketChecker(ball, 1) || this.pocketChecker(ball, 0)));
 
     }
 
     hittingTop(ball) {
-        return ((ball.y + (ball.radius / 2)) >= (this.table.height + this.table.y) && ball.vector.angle > 0 && ball.vector.angle < Math.PI) && (!(this.pocketChecker(ball, 3) || this.pocketChecker(ball, 4) || this.pocketChecker(ball, 5)));
+        return ((ball.y - (ball.radius / 2)) >= (this.table.height + this.table.y) && ball.vector.angle > 0 && ball.vector.angle < Math.PI) && (!(this.pocketChecker(ball, 3) || this.pocketChecker(ball, 4) || this.pocketChecker(ball, 5)));
     }
 
     pocketChecker(ball, pocketId) {
@@ -564,13 +564,13 @@ module.exports = class Game {
      * @param {JSON} data 
      */
     updateSizes(id, data) {
-        this.table.height = data.height * (127 / 150);
+        this.table.height = data.height * (112 / 150);
         this.table.width = data.height * (254 / 150);
 
         const offsetWidth = (data.windowWidth - this.table.width) / 2;
-        this.table.x = offsetWidth;
+        this.table.x = offsetWidth + data.radiusWhite / 2;
         const offsetHeight = (data.height - this.table.height) / 2;
-        this.table.y = offsetHeight + data.height / 30;
+        this.table.y = offsetHeight + data.radiusWhite / 2;
         moveX = data.windowWidth / 2;
 
 
@@ -747,7 +747,6 @@ module.exports = class Game {
             this.foul = true;
             this.balls[0].x = (this.table.width / 4) + this.table.x;
             this.balls[0].y = (this.table.height / 2) + this.table.y;
-            this.balls[0].hidden = false;
         }
     }
     moveCalculater() {
@@ -869,6 +868,11 @@ module.exports = class Game {
                 this.checkAndComputeCollisionBtPs(temp);
                 this.balls[i] = temp;
             }
+            for (let i = 0; i < 16; i++) {
+                for (let l = i + 1; l < 16; l++) {
+                    this.positionCorrection(this.balls[i], this.balls[l]);
+                }
+            }
             let temp = [];
             this.balls.forEach(el => {
                 temp.push({
@@ -888,25 +892,11 @@ module.exports = class Game {
         if (this.foul === undefined) {
             this.foul = true;
         }
-        timestamp++;
         this.canPlayBlackHandler();
         this.blackHandler();
         this.whiteHandler();
         this.moveCalculater();
-        let temp = [];
-        this.balls.forEach(el => {
-            temp.push({
-                [el.id]: {
-                    x: (el.x - moveX - el.radius / 2),
-                    y: -el.y,
-                    doHide: el.hidden,
-                    angle: el.vector.angle
-                }
-            });
-        });
-        response.balls.push({
-            [timestamp]: temp
-        });
+
         response.player = this.player;
         response.win = this.winner;
         console.log(timestamp);
