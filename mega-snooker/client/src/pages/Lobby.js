@@ -12,17 +12,6 @@ class Lobby extends Component {
     }
 
     render() {
-        /**
-         *
-                 * FIX: adjust this label node to be a slider ON/OFF
-    
-                 <label >
-                 Multiplayer:
-                 <input type="checkbox"/>
-                 <span class="slider round"></span>
-             </label>
-         */
-
         return (
             <>
                 <Background className="back" />

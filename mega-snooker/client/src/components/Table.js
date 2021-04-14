@@ -1,4 +1,4 @@
-import React, { useState, useEffect, useRef } from 'react'
+import React from 'react'
 import TableImage from './../assets/table/table.min.pepa.svg';
 
 /**
@@ -7,17 +7,6 @@ import TableImage from './../assets/table/table.min.pepa.svg';
  * @returns 
  */
 export default function Table(props) {
-    const offsetTop = window.innerHeight / 20;
-/*    const [height, setHeight] = useState(0);
-    const [width, setWidth] = useState(1);
-
-    const ref = useRef(null);
-
-    useEffect(() => {
-        setHeight(ref.current.clientHeight);
-        setWidth(ref.current.clientWidth)
-    }, []);*/
-
     return (
         <TableImage
             x={window.innerWidth / -2}

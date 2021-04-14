@@ -94,8 +94,6 @@ function onListening() {
     const bind = typeof addr === 'string' ?
         'pipe ' + addr :
         'port ' + addr.port;
-    debug('Listening on ' + bind);
-    console.log(`Listening at https://localhost:${bind}`);
 }
 
 
@@ -105,7 +103,6 @@ function onListening() {
 const jwt = require('./../utilities/jwt');
 const WebSocket = require('ws');
 const WebSocketHandler = require('./websocket_utils/websocketHandler');
-const { handleInstructions } = require('./websocket_utils/websocketHandler');
 const wss = new WebSocket.Server({
     server: server,
 });
@@ -122,7 +119,6 @@ let turn = 1;
 
 wss.on('listening', () => {
     console.log('WSS online');
-    console.log(wss.address());
 })
 
 wss.on('connection', (ws, req) => {
@@ -148,77 +144,107 @@ wss.on('connection', (ws, req) => {
             }
         }
         WebSocketHandler.processOnMessage(parsedMessage, ws, clients).then(processedData => {
-                if (processedData !== false) {
-                    const { status, token, lobby, gameID } = processedData;
-                    //SPLIT CORRECT ^^^^^^^^^^^
+            if (processedData !== false) {
+                const { status, token, lobby, gameID } = processedData;
+                //SPLIT CORRECT ^^^^^^^^^^^
 
-                    //Log client, automatically rewrites on each message, but it doesn't change anything
-                    clients.verified[token] = ws;
+                //Log client, automatically rewrites on each message, but it doesn't change anything
+                clients.verified[token] = ws;
 
-                    //If true => notify pending client to start || if false => dont do anything
-                    let lobbyCheckValue = false;
-                    //If the client is waiting in queue run this
-                    if (status === 'STARTING') {
-                        //if new player connected
-                        if (lobby.length > 1) {
-                            lobbyCheckValue = true;
-                            let obj = {
-                                [gameID]: {
+                //If true => notify pending client to start || if false => dont do anything
+                let lobbyCheckValue = false;
+                //If the client is waiting in queue run this
+                if (status === 'STARTING') {
+                    //if new player connected
+                    if (lobby.length > 1) {
+                        lobbyCheckValue = true;
+                        let obj = {
+                            [gameID]: {
 
-                                }
                             }
-                            lobby.forEach(el => obj[gameID][el] = 'Processing');
-                            //Initilizes statuses for all clients. Clients have to be synced
-                            clientStatus.push(obj);
                         }
+                        lobby.forEach(el => obj[gameID][el] = 'Processing');
+                        //Initilizes statuses for all clients. Clients have to be synced
+                        clientStatus.push(obj);
                     }
-                    if (lobbyCheckValue === true) {
-                        //Find the waiting client, notify to start (As of now only two players are playing in one game).
-                        clients.verified[lobby[0]].send('Start');
-                        WebSocketHandler.startUpGame(gameID);
-                        startTheseNext.push(gameID);
+                }
+                if (lobbyCheckValue === true) {
+                    //Find the waiting client, notify to start (As of now only two players are playing in one game).
+                    clients.verified[lobby[0]].send('Start');
+                    WebSocketHandler.startUpGame(gameID);
+                    startTheseNext.push(gameID);
+                    return;
+                }
+                //TEST TO SEE IF CORRECT ^
+
+                //Start game if should be started
+                if (startTheseNext.length !== 0) {
+                    if (startTheseNext.includes(gameID)) {
+                        const recepients = [];
+                        for (let i in clients.verified) {
+                            lobby.forEach(el => {
+                                if (i === el) {
+                                    recepients.push(clients.verified[i]);
+                                }
+                            })
+                        }
+                        if (recepients.length < 1) return;
+                        recepients.forEach(socket => {
+                            socket.send('Start game');
+                        })
+                        startTheseNext.splice(startTheseNext.findIndex(el => el === gameID), 1);
                         return;
                     }
-                    //TEST TO SEE IF CORRECT ^
+                }
+                //TEST TO SEE IF CORRECT ^
 
-                    //Start game if should be started
-                    if (startTheseNext.length !== 0) {
-                        if (startTheseNext.includes(gameID)) {
-                            const recepients = [];
-                            for (let i in clients.verified) {
-                                lobby.forEach(el => {
-                                    if (i === el) {
-                                        recepients.push(clients.verified[i]);
-                                    }
-                                })
-                            }
-
-                            if (recepients.length < 1) return;
-                            recepients.forEach(socket => {
-                                socket.send('Start game');
-                            })
-                            startTheseNext.splice(startTheseNext.findIndex(el => el === gameID), 1);
-                            return;
+                let clientPayload = null;
+                if (parsedMessage[2].startsWith('Played')) {
+                    clientPayload = JSON.parse(parsedMessage[2].slice(7));
+                    parsedMessage[2] = 'Played';
+                }
+                const statusLobby = clientStatus.find(el => Object.keys(el)[0] === gameID);
+                switch (parsedMessage[2]) {
+                    case 'Ready':
+                        statusLobby[gameID][token] = 'Ready';
+                        let nextMove = true;
+                        for (let i in statusLobby[gameID]) {
+                            if (statusLobby[gameID][i] !== 'Ready') nextMove = false;
                         }
-                    }
-                    //TEST TO SEE IF CORRECT ^
+                        if (nextMove === true) {
+                            WebSocketHandler.fetchPlayerOnMove(gameID).then(playerOnMove => {
+                                if (playerOnMove === false) return;
+                                const recepients = [];
+                                for (let i in clients.verified) {
+                                    lobby.forEach(el => {
+                                        if (i === el) {
+                                            recepients.push(clients.verified[i]);
+                                        }
+                                    })
+                                }
 
-                    let clientPayload = null;
-                    if (parsedMessage[2].startsWith('Played')) {
-                        clientPayload = JSON.parse(parsedMessage[2].slice(7));
-                        parsedMessage[2] = 'Played';
-                    }
-                    const statusLobby = clientStatus.find(el => Object.keys(el)[0] === gameID);
-                    switch (parsedMessage[2]) {
-                        case 'Ready':
-                            statusLobby[gameID][token] = 'Ready';
-                            let nextMove = true;
-                            for (let i in statusLobby[gameID]) {
-                                if (statusLobby[gameID][i] !== 'Ready') nextMove = false;
+                                if (recepients.length < 1) return;
+                                recepients.forEach(socket => {
+                                    socket.send(`Play move:${playerOnMove}`);
+                                });
+                                for (let i in statusLobby[gameID]) {
+                                    statusLobby[gameID][i] = 'Processing'
+                                }
+
+                            })
+                        }
+                        break;
+                    case 'Start':
+                        statusLobby[gameID][token] = 'Start';
+                        let check = true;
+                        for (let i in statusLobby[gameID]) {
+                            if (statusLobby[gameID][i] !== 'Start') {
+                                check = false;
                             }
-                            if (nextMove === true) {
-                                WebSocketHandler.fetchPlayerOnMove(gameID).then(playerOnMove => {
-                                    if (playerOnMove === false) return;
+                        }
+                        if (check === true) {
+                            WebSocketHandler.getInitCordinates(gameID).then(positions => {
+                                if (positions !== false) {
                                     const recepients = [];
                                     for (let i in clients.verified) {
                                         lobby.forEach(el => {
@@ -230,99 +256,57 @@ wss.on('connection', (ws, req) => {
 
                                     if (recepients.length < 1) return;
                                     recepients.forEach(socket => {
-                                        socket.send(`Play move:${playerOnMove}`);
-                                    });
+                                        socket.send('Init:' + JSON.stringify(positions));
+                                    })
                                     for (let i in statusLobby[gameID]) {
                                         statusLobby[gameID][i] = 'Processing'
                                     }
-
-                                })
-                            }
-                            break;
-                        case 'Start':
-                            statusLobby[gameID][token] = 'Start';
-                            let check = true;
-                            for (let i in statusLobby[gameID]) {
-                                if (statusLobby[gameID][i] !== 'Start') {
-                                    check = false;
-                                }
-                            }
-                            if (check === true) {
-                                WebSocketHandler.getInitCordinates(gameID).then(positions => {
-                                    if (positions !== false) {
-                                        const recepients = [];
-                                        for (let i in clients.verified) {
-                                            lobby.forEach(el => {
-                                                if (i === el) {
-                                                    recepients.push(clients.verified[i]);
-                                                }
-                                            })
-                                        }
-
-                                        if (recepients.length < 1) return;
-                                        recepients.forEach(socket => {
-                                            socket.send('Init:' + JSON.stringify(positions));
-                                        })
-                                        for (let i in statusLobby[gameID]) {
-                                            statusLobby[gameID][i] = 'Processing'
-                                        }
-                                    }
-                                });
-                            }
-                            break;
-                        case 'Played':
-                            WebSocketHandler.calculatePlay(clientPayload, gameID).then(updatedCords => {
-                                if (updatedCords === false) return;
-                                const recepients = [];
-                                for (let i in clients.verified) {
-                                    lobby.forEach(el => {
-                                        if (i === el) {
-                                            recepients.push(clients.verified[i]);
-                                        }
-                                    });
-                                }
-
-                                if (recepients.length < 1) return;
-                                recepients.forEach(socket => {
-                                    socket.send('Render:' + JSON.stringify(updatedCords));
-                                })
-                                for (let i in statusLobby[gameID]) {
-                                    statusLobby[gameID][i] = 'Processing'
-                                }
-                                let { win } = updatedCords;
-                                console.log('=============================');
-                                console.log(win);
-                                console.log('=============================');
-                                let isOver = false;
-                                win.forEach((el, index) => {
-                                    if (el === true) {
-                                        isOver = index;
-                                    }
-                                });
-                                if (isOver !== false) {
-                                    recepients.forEach(socket => {
-                                        socket.send(`Win:${isOver + 1}`);
-                                    })
                                 }
                             });
-                            break;
-                        case 'Finished':
-                            WebSocketHandler.gameFinished(gameID);
-                            break;
-                        default:
-                            break;
-                    }
-                }
-
-            })
-            /**
-             *             let check = true;
-                        for (let i in statusLobby[gameID]) {
-                          if (statusLobby[gameID][i] !== 'Ready') {
-                            check = false;
-                          }
                         }
-             */
+                        break;
+                    case 'Played':
+                        WebSocketHandler.calculatePlay(clientPayload, gameID).then(updatedCords => {
+                            if (updatedCords === false) return;
+                            const recepients = [];
+                            for (let i in clients.verified) {
+                                lobby.forEach(el => {
+                                    if (i === el) {
+                                        recepients.push(clients.verified[i]);
+                                    }
+                                });
+                            }
+
+                            if (recepients.length < 1) return;
+                            recepients.forEach(socket => {
+                                socket.send('Render:' + JSON.stringify(updatedCords));
+                            })
+                            for (let i in statusLobby[gameID]) {
+                                statusLobby[gameID][i] = 'Processing'
+                            }
+                            const { win } = updatedCords;
+                            let isOver = false;
+                            win.forEach((el, index) => {
+                                if (el === true) {
+                                    isOver = index;
+                                }
+                            });
+                            if (isOver !== false) {
+                                recepients.forEach(socket => {
+                                    socket.send(`Win:${isOver + 1}`);
+                                })
+                            }
+                        });
+                        break;
+                    case 'Finished':
+                        WebSocketHandler.gameFinished(gameID);
+                        break;
+                    default:
+                        break;
+                }
+            }
+
+        })
     });
 });
 

@@ -17,7 +17,7 @@ router.post('/', function (req, res, next) {
                 return res.send('Error, invalid game');
             } else {
                 const wizard = Object.assign(new ConnectionWizard, wizardChild.connectionWizard);
-                return res.send(wizard.joinGame(req.get('username')));    
+                return res.send(wizard.joinGame(req.get('username')));
             }
         })
     } else {

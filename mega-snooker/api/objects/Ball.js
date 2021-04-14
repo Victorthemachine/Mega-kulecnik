@@ -66,34 +66,34 @@ module.exports = class Ball {
         }
     }
 
-    //TODO Add check for holes!
     /**
      * Checks for all collision, processes and returns a JSON with status.
      * 
      * @returns {JSON} { withBalls: { collision: true/false, affectedBalls: [ball_1, ball_2...] }, withTable: true/false }
      */
     collisionCheck() {
-            let answer = { withBalls: { collision: false, affectedBalls: [] }, withTable: false };
-            console.log(this.id);
-            const tempArr = this.game.getBalls().filter(el => {
-                console.log(`${el.id} ${el.id !== this.id}`);
-                return el.id !== this.id;
-            });
-            console.log(tempArr);
-            tempArr.forEach(el => {
-                if (this.game.checkCollisionBtB(this, el)) {
-                    answer.withBalls.collision = true;
-                    answer.withBalls.affectedBalls.push(el);
-                }
-            });
-            if (this.game.checkCollisionBtT(this)) answer.withTable = true;
-            return answer;
-        }
-        /**
-         * Moves the ball by the supplied vector.
-         * 
-         * @param {Vector} vector 
-         */
+        let answer = { withBalls: { collision: false, affectedBalls: [] }, withTable: false };
+        console.log(this.id);
+        const tempArr = this.game.getBalls().filter(el => {
+            console.log(`${el.id} ${el.id !== this.id}`);
+            return el.id !== this.id;
+        });
+        console.log(tempArr);
+        tempArr.forEach(el => {
+            if (this.game.checkCollisionBtB(this, el)) {
+                answer.withBalls.collision = true;
+                answer.withBalls.affectedBalls.push(el);
+            }
+        });
+        if (this.game.checkCollisionBtT(this)) answer.withTable = true;
+        return answer;
+    }
+
+    /**
+     * Moves the ball by the supplied vector.
+     * 
+     * @param {Vector} vector 
+     */
     moveByVector(vector) {
         this.x += vector.x;
         this.y += vector.y;

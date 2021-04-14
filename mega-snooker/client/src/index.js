@@ -14,7 +14,6 @@ import {
 
 import ErrorBoundary from './containers/ErrorBoundary';
 import Menu from './pages/Menu';
-//import App from './pages/App';
 import Lobby from './pages/Lobby';
 import CreateRoom from './pages/CreateRoom';
 import JoinRoom from './pages/JoinRoom';
@@ -28,6 +27,7 @@ const store = createStore(
   reducer, /* preloadedState, */
   window.__REDUX_DEVTOOLS_EXTENSION__ && window.__REDUX_DEVTOOLS_EXTENSION__(),
 );
+
 /**
  * If you cannot see your pages, you need to have them written down here.
  * As you can see we use the react router for this. Add your route and pages
@@ -41,7 +41,6 @@ ReactDOM.render(
         <Route exact path="/">
           <ErrorBoundary>
             <Redirect to="/menu" />
-            {/*<App />*/}
           </ErrorBoundary>
         </Route>
         <Route path="/menu">
@@ -73,7 +72,7 @@ ReactDOM.render(
         </Route>
         <Route path="/end">
           <ErrorBoundary>
-            <EndScreen props={{ api: API }}/>
+            <EndScreen props={{ api: API }} />
           </ErrorBoundary>
         </Route>
       </Switch>

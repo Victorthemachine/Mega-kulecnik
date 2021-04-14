@@ -13,7 +13,7 @@ module.exports = new class Hasher {
     generateLobbyPassphrase() {
         let pass = '';
         for (let i = 0; i < 5; i++) {
-            let random = Math.floor(Math.random()*alphabet.length + numbers.length);
+            let random = Math.floor(Math.random() * alphabet.length + numbers.length);
             random >= alphabet.length ? pass += numbers[random - alphabet.length] : pass += alphabet[random];
         }
         return pass;

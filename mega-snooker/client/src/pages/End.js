@@ -13,7 +13,6 @@ class CreateRoom extends Component {
         console.log(this.API);
     }
 
-
     //TODO
     cancelGame() {
         this.props.history.push('/menu');

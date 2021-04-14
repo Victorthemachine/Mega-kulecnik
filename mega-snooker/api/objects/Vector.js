@@ -69,28 +69,30 @@ module.exports = class Vector {
      * @param {Number} force
      */
     setForce(force) {
-            if (force < 0) throw new Error('FORCE CANNOT BE NEGATIVE');
-            this.force = force;
-            let adjustParams = this.convertForce();
-            this.x = adjustParams.x;
-            this.y = adjustParams.y;
-        }
-        /**
-         * 
-         * @param {Number} angle 
-         * @param {Number} force 
-         */
+        if (force < 0) throw new Error('FORCE CANNOT BE NEGATIVE');
+        this.force = force;
+        let adjustParams = this.convertForce();
+        this.x = adjustParams.x;
+        this.y = adjustParams.y;
+    }
+
+    /**
+     * 
+     * @param {Number} angle 
+     * @param {Number} force 
+     */
     setVector(angle, force) {
-            this.angle = angle;
-            this.setForce(force);
-        }
-        /**
-         * Private function
-         * 
-         * Convert force to X and Y cordinates
-         * 
-         * @returns {JSON} X,Y returns { x: something, y: something }
-         */
+        this.angle = angle;
+        this.setForce(force);
+    }
+
+    /**
+     * Private function
+     * 
+     * Convert force to X and Y cordinates
+     * 
+     * @returns {JSON} X,Y returns { x: something, y: something }
+     */
     convertForce() {
         let answer = {};
         answer.x = this.force * Math.cos(this.angle);
@@ -128,6 +130,4 @@ module.exports = class Vector {
         this.angle = this.computeAngle();
         this.force = this.getSize();
     }
-
-    //TODO setAngle() with update to cordinates
 }

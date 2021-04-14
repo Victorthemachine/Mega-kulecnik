@@ -5,7 +5,6 @@ const Game = require('./Game');
 const jwt = require('./../utilities/jwt');
 
 const currGame = new Game();
-//Good lil wizard *pat pat* UwU
 module.exports = class ConnectionWizard {
 
     constructor(options = {}) {

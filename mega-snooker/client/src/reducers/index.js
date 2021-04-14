@@ -8,7 +8,7 @@ const initialState = {
     children: [
         <Table key={0} />,
     ],
-    message: `How in the fucks name is this working`,
+    message: `Hewwo there UwU!`,
 };
 
 function reducer(state = initialState) {

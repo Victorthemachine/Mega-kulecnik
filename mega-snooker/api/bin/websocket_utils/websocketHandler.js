@@ -4,7 +4,6 @@ const ConnectionWizard = require('./../../engine/ConnectionWizard');
 module.exports = new class WebSocketHandler {
 
     processOnMessage(parsedMessage, ws) {
-        console.log('PROCESSING MESSAGE');
         let token = parsedMessage[0];
         let lobby = [];
         let player = 0;
@@ -23,11 +22,8 @@ module.exports = new class WebSocketHandler {
                 if (game.hasOwnProperty('connectionWizard')) {
                     if (game.connectionWizard.hasOwnProperty('gameInfo')) {
                         const { status, connectionWizard: { gameInfo } } = game;
-                        console.log(gameInfo.players);
                         lobby = gameInfo.players;
                         player = lobby.findIndex(el => el === token);
-                        console.log(`ClIENT (${lobby[player]}): ${parsedMessage[2]}`);
-                        console.log(lobby);
                         resolve({
                             token: token,
                             lobby: lobby,
@@ -44,8 +40,6 @@ module.exports = new class WebSocketHandler {
 
     startUpGame(gameID) {
         FileManager.updateGames(gameID, 'status', 'IN PROGRESS');
-        console.log('Sent messages');
-
     }
 
     getInitCordinates(gameID) {

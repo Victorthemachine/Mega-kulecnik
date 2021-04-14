@@ -95,7 +95,7 @@ module.exports = new class FileManager {
             let writeThis = pastData;
             pastData.forEach((el, index) => {
                 if (el.connectionWizard.gameInfo.id === id) {
-                    delete writeThis[index];
+                    writeThis.splice(index, 1);
                 }
             });
             fs.writeFileSync(gameJSONPath, JSON.stringify(writeThis));
