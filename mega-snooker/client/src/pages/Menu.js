@@ -23,7 +23,6 @@ class Menu extends Component {
             <Link to='lobby'>
               <button >Hrát</button>
             </Link>
-            <button >Nastavení</button>
           </div>
           <div className='text'>
             <p>
