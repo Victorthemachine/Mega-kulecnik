@@ -18,23 +18,27 @@ class Game extends Component {
                 top: 0,
                 left: 0
             },
-            visible: "hidden"
+            visible: "visible"
         };
         this.state.children = this.props.children;
         this.state.api = this.props.props.api;
     }
 
     componentDidMount() {
-        //let img = document.getElementById('circle');
-        window.addEventListener("mousemove", function (event) {
-            if (!this.state.api.hasOwnProperty('cue')) return;
-            if (this.state.api.cue === true) {
-                this.setState({visible: "visible"});
-                let x = (this.state.api.whiteBall.x) - (250 / 2);
-                let y = (this.state.api.whiteBall.y) - (250 / 2);
+        let img = document.getElementById('circle');
+        console.log('TEST IS THIS MOUNTING?');
+        window.addEventListener("mousemove", function(event) {
+            if (this.state.api.whiteBall.cue === true) {
+                this.setState({ visible: "visible" });
+                let canvascords = window.innerWidth / 2;
+
+                console.log(this.state.api.whiteBall.x + " " + this.state.api.whiteBall.y);
+                console.log(this.state.api.whiteBall.radius);
+                let x = (this.state.api.whiteBall.x + canvascords + this.state.api.whiteBall.radius / 2) - (img.clientWidth / 2);
+                let y = (this.state.api.whiteBall.y + innerHeight - this.state.api.whiteBall.radius / 2) - (img.clientHeight / 2);
                 let degrees = Math.atan2(
-                    event.pageX - this.state.api.whiteBall.x,
-                    event.pageY - this.state.api.whiteBall.y
+                    event.pageX - (this.state.api.whiteBall.x + this.state.api.whiteBall.radius / 2 + canvascords),
+                    event.pageY - (this.state.api.whiteBall.y - this.state.api.whiteBall.radius / 2 + innerHeight)
                 ) * (-180 / Math.PI) + 90;;
                 this.setState({
                     cords: {
@@ -44,24 +48,33 @@ class Game extends Component {
                     degree: degrees
                 });
             } else {
-              this.setState({visible: "hidden"});
+                console.log(this.state.api.cue);
+                this.setState({ visible: "hidden" });
             }
         }.bind(this));
     }
 
     render() {
-            return (
-            <>
-                <Canvas images={this.props.children} api={this.state.api} />
-                <div id="circle" class="circle" style={{
+        return ( <
+            >
+            <
+            Canvas images = { this.props.children }
+            api = { this.state.api }
+            /> <
+            div id = "circle"
+            class = "circle"
+            style = {
+                {
                     transform: `rotate(${this.state.degree}deg)`,
                     visibility: `${this.state.visible}`,
                     top: `${this.state.cords.left}px`,
                     left: `${this.state.cords.top}px`
-                }}>
-                    <div class="pointer"></div>
-                </div>
-            </>
+                }
+            } >
+            <
+            div class = "pointer" > < /div> < /
+            div > <
+            />
         );
     }
 }

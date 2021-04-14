@@ -60,10 +60,11 @@ class Balls extends Component {
     }
 
     componentDidMount() {
+        this.API.whiteBall.radius = whiteRad / 2;
         console.log(this.API.activeGame);
         const { activeGame } = this.API;
         this.API.connectSocket().then(socket => {
-            socket.onmessage = function (event) {
+            socket.onmessage = function(event) {
                 if (isFinished === true) return;
                 console.log(event.data);
                 let serverInstructions = event.data;
@@ -99,6 +100,7 @@ class Balls extends Component {
                         this.API.whiteBall = {
                             x: this.state.points[0].x,
                             y: this.state.points[0].y,
+                            radius: whiteRad / 2,
                             cue: true
                         };
                         this.playMove().then(obj => {
@@ -143,7 +145,7 @@ class Balls extends Component {
     startGame() {
         return new Promise(resolve => {
             this.API.gameUpdatePositions({
-                "height": -(100 - window.innerHeight),
+                "height": window.innerHeight - 50,
                 "windowWidth": window.innerWidth,
                 "radius": ballRad / 2,
                 "radiusWhite": whiteRad / 2
@@ -167,12 +169,12 @@ class Balls extends Component {
                 const { pageX, pageY } = event;
                 const ballx = (this.API.whiteBall.x + window.innerWidth / 2) + whiteRad / 2;
                 let rotatedPageY = window.innerHeight - pageY;
-                let bally = 0;
-                if (Math.abs(Math.abs(this.API.whiteBall.y) - rotatedPageY) <= 60) {
+                let bally = this.API.whiteBall.y - this.API.whiteBall.radius / 2 + innerHeight;
+                /*if (Math.abs(Math.abs(this.API.whiteBall.y) - rotatedPageY) <= 60) {
                     bally = pageY + 100;
                 } else {
-                    bally = ((Math.abs(this.API.whiteBall.y) + whiteRad / 2));
-                }
+                    bally = ((this.API.whiteBall.y + window.innerHeight + whiteRad / 2));
+                }*/
                 resolve({
                     cursor: {
                         x: pageX,
@@ -212,7 +214,7 @@ class Balls extends Component {
             console.timeEnd('Parsing operation');
             console.log('==========================================================');
             counter = 0;
-            let scheduleUpdates = setInterval(function () {
+            let scheduleUpdates = setInterval(function() {
                 this.setState({ points: updates[counter] })
                 if (updates.length - 1 === counter) {
                     clearInterval(scheduleUpdates);
@@ -224,8 +226,7 @@ class Balls extends Component {
         });
     }
 
-    componentDidUpdate(prevProps, prevState) {
-    }
+    componentDidUpdate(prevProps, prevState) {}
 
     /**
      * Needs to be implemented with event listener.
@@ -242,21 +243,21 @@ class Balls extends Component {
                     const res = {
                         "balls": [{
                             "1": [{
-                                "0": {
-                                    "x": "5",
-                                    "y": "80",
-                                    "doHide": false,
-                                    "angle": 97
+                                    "0": {
+                                        "x": "5",
+                                        "y": "80",
+                                        "doHide": false,
+                                        "angle": 97
+                                    }
+                                },
+                                {
+                                    "7": {
+                                        "x": "578",
+                                        "y": "-801",
+                                        "doHide": true,
+                                        "angle": 157
+                                    }
                                 }
-                            },
-                            {
-                                "7": {
-                                    "x": "578",
-                                    "y": "-801",
-                                    "doHide": true,
-                                    "angle": 157
-                                }
-                            }
                             ]
                         }],
                         "player": 1,
@@ -276,7 +277,7 @@ class Balls extends Component {
                             } else {
                                 throw Error('Incorrect JSON received from this.API when attempting to update positions');
                             }
-                            setTimeout(function () {
+                            setTimeout(function() {
                                 this.setState({ points: temp })
                             }, 500);
                         }
@@ -287,170 +288,169 @@ class Balls extends Component {
     }
 
     render() {
-        return (
-            <>
-                <
-                    BALL_0 id={0}
-                    x={this.state.points[0].x}
-                    y={this.state.points[0].y}
-                    style={
-                        { visibility: `${this.state.points[0].hidden}` }
-                    }
-                    width={whiteRad}
-                    viewBox={viewBox}
-                    key={1}
-                />, <
-                    BALL_1 id={1}
-                    x={this.state.points[1].x}
-                    y={this.state.points[1].y}
-                    style={
-                        { visibility: `${this.state.points[1].hidden}` }
-                    }
-                    width={ballRad}
-                    viewBox={viewBox}
-                    key={2}
-                />, <
-                    BALL_2 id={2}
-                    x={this.state.points[2].x}
-                    y={this.state.points[2].y}
-                    style={
-                        { visibility: `${this.state.points[2].hidden}` }
-                    }
-                    width={ballRad}
-                    viewBox={viewBox}
-                    key={3}
-                />, <
-                    BALL_3 id={3}
-                    x={this.state.points[3].x}
-                    y={this.state.points[3].y}
-                    style={
-                        { visibility: `${this.state.points[3].hidden}` }
-                    }
-                    width={ballRad}
-                    viewBox={viewBox}
-                    key={4}
-                />, <
-                    BALL_4 id={4}
-                    x={this.state.points[4].x}
-                    y={this.state.points[4].y}
-                    style={
-                        { visibility: `${this.state.points[4].hidden}` }
-                    }
-                    width={ballRad}
-                    viewBox={viewBox}
-                    key={5}
-                />, <
-                    BALL_5 id={5}
-                    x={this.state.points[5].x}
-                    y={this.state.points[5].y}
-                    style={
-                        { visibility: `${this.state.points[5].hidden}` }
-                    }
-                    width={ballRad}
-                    viewBox={viewBox}
-                    key={6}
-                />, <
-                    BALL_6 id={6}
-                    x={this.state.points[6].x}
-                    y={this.state.points[6].y}
-                    style={
-                        { visibility: `${this.state.points[6].hidden}` }
-                    }
-                    width={ballRad}
-                    viewBox={viewBox}
-                    key={7}
-                />, <
-                    BALL_7 id={7}
-                    x={this.state.points[7].x}
-                    y={this.state.points[7].y}
-                    style={
-                        { visibility: `${this.state.points[7].hidden}` }
-                    }
-                    width={ballRad}
-                    viewBox={viewBox}
-                    key={8}
-                />, <
-                    BALL_8 id={8}
-                    x={this.state.points[8].x}
-                    y={this.state.points[8].y}
-                    style={
-                        { visibility: `${this.state.points[8].hidden}` }
-                    }
-                    width={ballRad}
-                    viewBox={viewBox}
-                    key={9}
-                />, <
-                    BALL_9 id={9}
-                    x={this.state.points[9].x}
-                    y={this.state.points[9].y}
-                    style={
-                        { visibility: `${this.state.points[9].hidden}` }
-                    }
-                    width={ballRad}
-                    viewBox={viewBox}
-                    key={10}
-                />, <
-                    BALL_10 id={10}
-                    x={this.state.points[10].x}
-                    y={this.state.points[10].y}
-                    style={
-                        { visibility: `${this.state.points[10].hidden}` }
-                    }
-                    width={ballRad}
-                    viewBox={viewBox}
-                    key={11}
-                />, <
-                    BALL_11 id={11}
-                    x={this.state.points[11].x}
-                    y={this.state.points[11].y}
-                    style={
-                        { visibility: `${this.state.points[11].hidden}` }
-                    }
-                    width={ballRad}
-                    viewBox={viewBox}
-                    key={12}
-                />, <
-                    BALL_12 id={12}
-                    x={this.state.points[12].x}
-                    y={this.state.points[12].y}
-                    style={
-                        { visibility: `${this.state.points[12].hidden}` }
-                    }
-                    width={ballRad}
-                    viewBox={viewBox}
-                    key={13}
-                />, <
-                    BALL_13 id={13}
-                    x={this.state.points[13].x}
-                    y={this.state.points[13].y}
-                    style={
-                        { visibility: `${this.state.points[13].hidden}` }
-                    }
-                    width={ballRad}
-                    viewBox={viewBox}
-                    key={14}
-                />, <
-                    BALL_14 id={14}
-                    x={this.state.points[14].x}
-                    y={this.state.points[14].y}
-                    style={
-                        { visibility: `${this.state.points[14].hidden}` }
-                    }
-                    width={ballRad}
-                    viewBox={viewBox}
-                    key={15}
-                />, <
-                    BALL_15 id={15}
-                    x={this.state.points[15].x}
-                    y={this.state.points[15].y}
-                    style={
-                        { visibility: `${this.state.points[15].hidden}` }
-                    }
-                    width={ballRad}
-                    viewBox={viewBox}
-                    key={16}
-                />,
-            </>
+        return ( <
+            >
+            <
+            BALL_0 id = { 0 }
+            x = { this.state.points[0].x }
+            y = { this.state.points[0].y }
+            style = {
+                { visibility: `${this.state.points[0].hidden}` }
+            }
+            width = { whiteRad }
+            viewBox = { viewBox }
+            key = { 1 }
+            />, <
+            BALL_1 id = { 1 }
+            x = { this.state.points[1].x }
+            y = { this.state.points[1].y }
+            style = {
+                { visibility: `${this.state.points[1].hidden}` }
+            }
+            width = { ballRad }
+            viewBox = { viewBox }
+            key = { 2 }
+            />, <
+            BALL_2 id = { 2 }
+            x = { this.state.points[2].x }
+            y = { this.state.points[2].y }
+            style = {
+                { visibility: `${this.state.points[2].hidden}` }
+            }
+            width = { ballRad }
+            viewBox = { viewBox }
+            key = { 3 }
+            />, <
+            BALL_3 id = { 3 }
+            x = { this.state.points[3].x }
+            y = { this.state.points[3].y }
+            style = {
+                { visibility: `${this.state.points[3].hidden}` }
+            }
+            width = { ballRad }
+            viewBox = { viewBox }
+            key = { 4 }
+            />, <
+            BALL_4 id = { 4 }
+            x = { this.state.points[4].x }
+            y = { this.state.points[4].y }
+            style = {
+                { visibility: `${this.state.points[4].hidden}` }
+            }
+            width = { ballRad }
+            viewBox = { viewBox }
+            key = { 5 }
+            />, <
+            BALL_5 id = { 5 }
+            x = { this.state.points[5].x }
+            y = { this.state.points[5].y }
+            style = {
+                { visibility: `${this.state.points[5].hidden}` }
+            }
+            width = { ballRad }
+            viewBox = { viewBox }
+            key = { 6 }
+            />, <
+            BALL_6 id = { 6 }
+            x = { this.state.points[6].x }
+            y = { this.state.points[6].y }
+            style = {
+                { visibility: `${this.state.points[6].hidden}` }
+            }
+            width = { ballRad }
+            viewBox = { viewBox }
+            key = { 7 }
+            />, <
+            BALL_7 id = { 7 }
+            x = { this.state.points[7].x }
+            y = { this.state.points[7].y }
+            style = {
+                { visibility: `${this.state.points[7].hidden}` }
+            }
+            width = { ballRad }
+            viewBox = { viewBox }
+            key = { 8 }
+            />, <
+            BALL_8 id = { 8 }
+            x = { this.state.points[8].x }
+            y = { this.state.points[8].y }
+            style = {
+                { visibility: `${this.state.points[8].hidden}` }
+            }
+            width = { ballRad }
+            viewBox = { viewBox }
+            key = { 9 }
+            />, <
+            BALL_9 id = { 9 }
+            x = { this.state.points[9].x }
+            y = { this.state.points[9].y }
+            style = {
+                { visibility: `${this.state.points[9].hidden}` }
+            }
+            width = { ballRad }
+            viewBox = { viewBox }
+            key = { 10 }
+            />, <
+            BALL_10 id = { 10 }
+            x = { this.state.points[10].x }
+            y = { this.state.points[10].y }
+            style = {
+                { visibility: `${this.state.points[10].hidden}` }
+            }
+            width = { ballRad }
+            viewBox = { viewBox }
+            key = { 11 }
+            />, <
+            BALL_11 id = { 11 }
+            x = { this.state.points[11].x }
+            y = { this.state.points[11].y }
+            style = {
+                { visibility: `${this.state.points[11].hidden}` }
+            }
+            width = { ballRad }
+            viewBox = { viewBox }
+            key = { 12 }
+            />, <
+            BALL_12 id = { 12 }
+            x = { this.state.points[12].x }
+            y = { this.state.points[12].y }
+            style = {
+                { visibility: `${this.state.points[12].hidden}` }
+            }
+            width = { ballRad }
+            viewBox = { viewBox }
+            key = { 13 }
+            />, <
+            BALL_13 id = { 13 }
+            x = { this.state.points[13].x }
+            y = { this.state.points[13].y }
+            style = {
+                { visibility: `${this.state.points[13].hidden}` }
+            }
+            width = { ballRad }
+            viewBox = { viewBox }
+            key = { 14 }
+            />, <
+            BALL_14 id = { 14 }
+            x = { this.state.points[14].x }
+            y = { this.state.points[14].y }
+            style = {
+                { visibility: `${this.state.points[14].hidden}` }
+            }
+            width = { ballRad }
+            viewBox = { viewBox }
+            key = { 15 }
+            />, <
+            BALL_15 id = { 15 }
+            x = { this.state.points[15].x }
+            y = { this.state.points[15].y }
+            style = {
+                { visibility: `${this.state.points[15].hidden}` }
+            }
+            width = { ballRad }
+            viewBox = { viewBox }
+            key = { 16 }
+            />, < / >
         );
     }
 }

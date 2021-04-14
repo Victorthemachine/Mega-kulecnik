@@ -24,8 +24,8 @@ app.set('port', port);
  */
 
 const server = https.createServer({
-  key: KEY,
-  cert: CERT
+    key: KEY,
+    cert: CERT
 }, app);
 //const server = http.createServer(app);
 
@@ -42,19 +42,19 @@ server.on('listening', onListening);
  */
 
 function normalizePort(val) {
-  const port = parseInt(val, 10);
+    const port = parseInt(val, 10);
 
-  if (isNaN(port)) {
-    // named pipe
-    return val;
-  }
+    if (isNaN(port)) {
+        // named pipe
+        return val;
+    }
 
-  if (port >= 0) {
-    // port number
-    return port;
-  }
+    if (port >= 0) {
+        // port number
+        return port;
+    }
 
-  return false;
+    return false;
 }
 
 /**
@@ -62,27 +62,27 @@ function normalizePort(val) {
  */
 
 function onError(error) {
-  if (error.syscall !== 'listen') {
-    throw error;
-  }
+    if (error.syscall !== 'listen') {
+        throw error;
+    }
 
-  const bind = typeof port === 'string'
-    ? 'Pipe ' + port
-    : 'Port ' + port;
+    const bind = typeof port === 'string' ?
+        'Pipe ' + port :
+        'Port ' + port;
 
-  // handle specific listen errors with friendly messages
-  switch (error.code) {
-    case 'EACCES':
-      console.error(bind + ' requires elevated privileges');
-      process.exit(1);
-      break;
-    case 'EADDRINUSE':
-      console.error(bind + ' is already in use');
-      process.exit(1);
-      break;
-    default:
-      throw error;
-  }
+    // handle specific listen errors with friendly messages
+    switch (error.code) {
+        case 'EACCES':
+            console.error(bind + ' requires elevated privileges');
+            process.exit(1);
+            break;
+        case 'EADDRINUSE':
+            console.error(bind + ' is already in use');
+            process.exit(1);
+            break;
+        default:
+            throw error;
+    }
 }
 
 /**
@@ -90,12 +90,12 @@ function onError(error) {
  */
 
 function onListening() {
-  const addr = server.address();
-  const bind = typeof addr === 'string'
-    ? 'pipe ' + addr
-    : 'port ' + addr.port;
-  debug('Listening on ' + bind);
-  console.log(`Listening at https://localhost:${bind}`);
+    const addr = server.address();
+    const bind = typeof addr === 'string' ?
+        'pipe ' + addr :
+        'port ' + addr.port;
+    debug('Listening on ' + bind);
+    console.log(`Listening at https://localhost:${bind}`);
 }
 
 
@@ -107,12 +107,12 @@ const WebSocket = require('ws');
 const WebSocketHandler = require('./websocket_utils/websocketHandler');
 const { handleInstructions } = require('./websocket_utils/websocketHandler');
 const wss = new WebSocket.Server({
-  server: server,
+    server: server,
 });
 const clients = {
-  verified: {
+    verified: {
 
-  }
+    }
 };
 let clientStatus = [];
 let startTheseNext = [];
@@ -121,217 +121,211 @@ let userID = 0;
 let turn = 1;
 
 wss.on('listening', () => {
-  console.log('WSS online');
-  console.log(wss.address());
+    console.log('WSS online');
+    console.log(wss.address());
 })
 
 wss.on('connection', (ws, req) => {
-  let token = '';
+    let token = '';
 
-  //Log client
-  userID++;
+    //Log client
+    userID++;
 
-  ws.on('message', (msg) => {
-    parsedMessage = msg.split('|');
-    token = parsedMessage[0];
-    if (!token) {
-      ws.send('Unauthorized');
-      return;
-    } else {
-      const verification = jwt.verifyToken(token);
-      if (verification !== '') {
-        username = token;
-        ws.send('SERVER: Testing connection...');
-      } else {
-        ws.send('Unauthorized');
-        return;
-      }
-    }
-    WebSocketHandler.processOnMessage(parsedMessage, ws, clients).then(processedData => {
-      if (processedData !== false) {
-        const { status, token, lobby, gameID } = processedData;
-        //SPLIT CORRECT ^^^^^^^^^^^
-
-        //Log client, automatically rewrites on each message, but it doesn't change anything
-        clients.verified[token] = ws;
-
-        //If true => notify pending client to start || if false => dont do anything
-        let lobbyCheckValue = false;
-        //If the client is waiting in queue run this
-        if (status === 'STARTING') {
-          //if new player connected
-          if (lobby.length > 1) {
-            lobbyCheckValue = true;
-            let obj = {
-              [gameID]: {
-
-              }
-            }
-            lobby.forEach(el => obj[gameID][el] = 'Processing');
-            //Initilizes statuses for all clients. Clients have to be synced
-            clientStatus.push(obj);
-          }
-        }
-        if (lobbyCheckValue === true) {
-          //Find the waiting client, notify to start (As of now only two players are playing in one game).
-          clients.verified[lobby[0]].send('Start');
-          WebSocketHandler.startUpGame(gameID);
-          startTheseNext.push(gameID);
-          return;
-        }
-        //TEST TO SEE IF CORRECT ^
-
-        //Start game if should be started
-        if (startTheseNext.length !== 0) {
-          if (startTheseNext.includes(gameID)) {
-            const recepients = [];
-            for (let i in clients.verified) {
-              lobby.forEach(el => {
-                if (i === el) {
-                  recepients.push(clients.verified[i]);
-                }
-              })
-            }
-
-            if (recepients.length < 1) return;
-            recepients.forEach(socket => {
-              socket.send('Start game');
-            })
-            startTheseNext.splice(startTheseNext.findIndex(el => el === gameID), 1);
+    ws.on('message', (msg) => {
+        parsedMessage = msg.split('|');
+        token = parsedMessage[0];
+        if (!token) {
+            ws.send('Unauthorized');
             return;
-          }
-        }
-        //TEST TO SEE IF CORRECT ^
-
-        let clientPayload = null;
-        if (parsedMessage[2].startsWith('Played')) {
-          clientPayload = JSON.parse(parsedMessage[2].slice(7));
-          parsedMessage[2] = 'Played';
-        }
-        const statusLobby = clientStatus.find(el => Object.keys(el)[0] === gameID);
-        switch (parsedMessage[2]) {
-          case 'Ready':
-            statusLobby[gameID][token] = 'Ready';
-            let nextMove = true;
-            for (let i in statusLobby[gameID]) {
-              if (statusLobby[gameID][i] !== 'Ready') nextMove = false;
+        } else {
+            const verification = jwt.verifyToken(token);
+            if (verification !== '') {
+                username = token;
+                ws.send('SERVER: Testing connection...');
+            } else {
+                ws.send('Unauthorized');
+                return;
             }
-            if (nextMove === true) {
-              WebSocketHandler.fetchPlayerOnMove(gameID).then(playerOnMove => {
-                if (playerOnMove === false) return;
-                const recepients = [];
-                for (let i in clients.verified) {
-                  lobby.forEach(el => {
-                    if (i === el) {
-                      recepients.push(clients.verified[i]);
+        }
+        WebSocketHandler.processOnMessage(parsedMessage, ws, clients).then(processedData => {
+                if (processedData !== false) {
+                    const { status, token, lobby, gameID } = processedData;
+                    //SPLIT CORRECT ^^^^^^^^^^^
+
+                    //Log client, automatically rewrites on each message, but it doesn't change anything
+                    clients.verified[token] = ws;
+
+                    //If true => notify pending client to start || if false => dont do anything
+                    let lobbyCheckValue = false;
+                    //If the client is waiting in queue run this
+                    if (status === 'STARTING') {
+                        //if new player connected
+                        if (lobby.length > 1) {
+                            lobbyCheckValue = true;
+                            let obj = {
+                                [gameID]: {
+
+                                }
+                            }
+                            lobby.forEach(el => obj[gameID][el] = 'Processing');
+                            //Initilizes statuses for all clients. Clients have to be synced
+                            clientStatus.push(obj);
+                        }
                     }
-                  })
-                }
-    
-                if (recepients.length < 1) return;
-                recepients.forEach(socket => {
-                  socket.send(`Play move:${playerOnMove}`);
-                });
-                for (let i in statusLobby[gameID]) {
-                  statusLobby[gameID][i] = 'Processing'
-                }
-    
-              })
-            }
-            break;
-          case 'Start':
-            statusLobby[gameID][token] = 'Start';
-            let check = true;
-            for (let i in statusLobby[gameID]) {
-              if (statusLobby[gameID][i] !== 'Start') {
-                check = false;
-              }
-            }
-            if (check === true) {
-              WebSocketHandler.getInitCordinates(gameID).then(positions => {
-                if (positions !== false) {
-                  const recepients = [];
-                  for (let i in clients.verified) {
-                    lobby.forEach(el => {
-                      if (i === el) {
-                        recepients.push(clients.verified[i]);
-                      }
-                    })
-                  }
+                    if (lobbyCheckValue === true) {
+                        //Find the waiting client, notify to start (As of now only two players are playing in one game).
+                        clients.verified[lobby[0]].send('Start');
+                        WebSocketHandler.startUpGame(gameID);
+                        startTheseNext.push(gameID);
+                        return;
+                    }
+                    //TEST TO SEE IF CORRECT ^
 
-                  if (recepients.length < 1) return;
-                  recepients.forEach(socket => {
-                    socket.send('Init:' + JSON.stringify(positions));
-                  })
-                  for (let i in statusLobby[gameID]) {
-                    statusLobby[gameID][i] = 'Processing'
-                  }
-                }
-              });
-            }
-            break;
-          case 'Played':
-            WebSocketHandler.calculatePlay(clientPayload, gameID).then(updatedCords => {
-              if (updatedCords === false) return;
-              const recepients = [];
-              for (let i in clients.verified) {
-                lobby.forEach(el => {
-                  if (i === el) {
-                    recepients.push(clients.verified[i]);
-                  }
-                });
-              }
+                    //Start game if should be started
+                    if (startTheseNext.length !== 0) {
+                        if (startTheseNext.includes(gameID)) {
+                            const recepients = [];
+                            for (let i in clients.verified) {
+                                lobby.forEach(el => {
+                                    if (i === el) {
+                                        recepients.push(clients.verified[i]);
+                                    }
+                                })
+                            }
 
-              if (recepients.length < 1) return;
-              recepients.forEach(socket => {
-                socket.send('Render:' + JSON.stringify(updatedCords));
-              })
-              for (let i in statusLobby[gameID]) {
-                statusLobby[gameID][i] = 'Processing'
-              }
-              let { win } = updatedCords;
-              console.log(turn);
-              if (turn === 5) {
-                win[0] = true;
-              } else {
-                turn++;
-              }
-              console.log('=============================');
-              console.log(win);
-              console.log('=============================');
-              let isOver = false;
-              win.forEach((el, index) => {
-                if (el === true) {
-                  isOver = index;
-                }
-              });
-              if (isOver !== false) {
-                recepients.forEach(socket => {
-                  socket.send(`Win:${isOver + 1}`);
-                })
-              }
-            });
-            break;
-          case 'Finished':
-            WebSocketHandler.gameFinished(gameID);
-            break;
-          default:
-            break;
-        }
-      }
+                            if (recepients.length < 1) return;
+                            recepients.forEach(socket => {
+                                socket.send('Start game');
+                            })
+                            startTheseNext.splice(startTheseNext.findIndex(el => el === gameID), 1);
+                            return;
+                        }
+                    }
+                    //TEST TO SEE IF CORRECT ^
 
-    })
-    /**
-     *             let check = true;
-                for (let i in statusLobby[gameID]) {
-                  if (statusLobby[gameID][i] !== 'Ready') {
-                    check = false;
-                  }
+                    let clientPayload = null;
+                    if (parsedMessage[2].startsWith('Played')) {
+                        clientPayload = JSON.parse(parsedMessage[2].slice(7));
+                        parsedMessage[2] = 'Played';
+                    }
+                    const statusLobby = clientStatus.find(el => Object.keys(el)[0] === gameID);
+                    switch (parsedMessage[2]) {
+                        case 'Ready':
+                            statusLobby[gameID][token] = 'Ready';
+                            let nextMove = true;
+                            for (let i in statusLobby[gameID]) {
+                                if (statusLobby[gameID][i] !== 'Ready') nextMove = false;
+                            }
+                            if (nextMove === true) {
+                                WebSocketHandler.fetchPlayerOnMove(gameID).then(playerOnMove => {
+                                    if (playerOnMove === false) return;
+                                    const recepients = [];
+                                    for (let i in clients.verified) {
+                                        lobby.forEach(el => {
+                                            if (i === el) {
+                                                recepients.push(clients.verified[i]);
+                                            }
+                                        })
+                                    }
+
+                                    if (recepients.length < 1) return;
+                                    recepients.forEach(socket => {
+                                        socket.send(`Play move:${playerOnMove}`);
+                                    });
+                                    for (let i in statusLobby[gameID]) {
+                                        statusLobby[gameID][i] = 'Processing'
+                                    }
+
+                                })
+                            }
+                            break;
+                        case 'Start':
+                            statusLobby[gameID][token] = 'Start';
+                            let check = true;
+                            for (let i in statusLobby[gameID]) {
+                                if (statusLobby[gameID][i] !== 'Start') {
+                                    check = false;
+                                }
+                            }
+                            if (check === true) {
+                                WebSocketHandler.getInitCordinates(gameID).then(positions => {
+                                    if (positions !== false) {
+                                        const recepients = [];
+                                        for (let i in clients.verified) {
+                                            lobby.forEach(el => {
+                                                if (i === el) {
+                                                    recepients.push(clients.verified[i]);
+                                                }
+                                            })
+                                        }
+
+                                        if (recepients.length < 1) return;
+                                        recepients.forEach(socket => {
+                                            socket.send('Init:' + JSON.stringify(positions));
+                                        })
+                                        for (let i in statusLobby[gameID]) {
+                                            statusLobby[gameID][i] = 'Processing'
+                                        }
+                                    }
+                                });
+                            }
+                            break;
+                        case 'Played':
+                            WebSocketHandler.calculatePlay(clientPayload, gameID).then(updatedCords => {
+                                if (updatedCords === false) return;
+                                const recepients = [];
+                                for (let i in clients.verified) {
+                                    lobby.forEach(el => {
+                                        if (i === el) {
+                                            recepients.push(clients.verified[i]);
+                                        }
+                                    });
+                                }
+
+                                if (recepients.length < 1) return;
+                                recepients.forEach(socket => {
+                                    socket.send('Render:' + JSON.stringify(updatedCords));
+                                })
+                                for (let i in statusLobby[gameID]) {
+                                    statusLobby[gameID][i] = 'Processing'
+                                }
+                                let { win } = updatedCords;
+                                console.log('=============================');
+                                console.log(win);
+                                console.log('=============================');
+                                let isOver = false;
+                                win.forEach((el, index) => {
+                                    if (el === true) {
+                                        isOver = index;
+                                    }
+                                });
+                                if (isOver !== false) {
+                                    recepients.forEach(socket => {
+                                        socket.send(`Win:${isOver + 1}`);
+                                    })
+                                }
+                            });
+                            break;
+                        case 'Finished':
+                            WebSocketHandler.gameFinished(gameID);
+                            break;
+                        default:
+                            break;
+                    }
                 }
-     */
-  });
+
+            })
+            /**
+             *             let check = true;
+                        for (let i in statusLobby[gameID]) {
+                          if (statusLobby[gameID][i] !== 'Ready') {
+                            check = false;
+                          }
+                        }
+             */
+    });
 });
 
 wss.on('close', (cli, req) => {
-  //TODO close out the game, remove player etc.
+    //TODO close out the game, remove player etc.
 })

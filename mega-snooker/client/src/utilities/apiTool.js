@@ -23,7 +23,8 @@ module.exports = class apiTool {
         };
         this.whiteBall = {
             x: 0,
-            y: 0
+            y: 0,
+            radius: 0
         };
         this.winnerWinnerChickenDinner = 0;
         this.ws = null;
@@ -251,23 +252,23 @@ module.exports = class apiTool {
 
     //WebSockets ahead
     connectSocket() {
-        console.log(this.activeGame);
-        return new Promise(resolve => {
-            const ws = new WebSocket('wss://localhost:9000');
-            this.ws = ws;
-            ws.onopen = function (event) {
-                ws.send(`${this.activeGame.serverToken}|${this.activeGame.id}|Hello server!`);
-                resolve(ws);
-            }.bind(this);    
-        })
-    }
- /**
-  *     ws.onmessage = function (event) {
-        console.log(event.data);
-    }
-  * @param {WebSocket} socket 
-  */
-    
+            console.log(this.activeGame);
+            return new Promise(resolve => {
+                const ws = new WebSocket('wss://localhost:9000');
+                this.ws = ws;
+                ws.onopen = function(event) {
+                    ws.send(`${this.activeGame.serverToken}|${this.activeGame.id}|Hello server!`);
+                    resolve(ws);
+                }.bind(this);
+            })
+        }
+        /**
+         *     ws.onmessage = function (event) {
+               console.log(event.data);
+           }
+         * @param {WebSocket} socket 
+         */
+
     disconnectSocket(socket, reason, code) {
         if (code === undefined) {
             if (reason === undefined || typeof reason !== String) {

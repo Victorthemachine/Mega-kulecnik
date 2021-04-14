@@ -96,7 +96,7 @@ module.exports = class Game {
             return false;
         }*/
     hittingLeft(ball) {
-        return ((ball.x - (ball.radius / 2)) <= this.table.x && ball.vector.angle > (Math.PI / 2) && ball.vector.angle < (3 * Math.PI / 2)) && (!(this.pocketChecker(ball, 0) || this.pocketChecker(ball, 3)));
+        return ((ball.x - ball.radius / 2) <= this.table.x && ball.vector.angle > (Math.PI / 2) && ball.vector.angle < (3 * Math.PI / 2)) && (!(this.pocketChecker(ball, 0) || this.pocketChecker(ball, 3)));
     }
 
     hittingRight(ball) {
@@ -105,7 +105,7 @@ module.exports = class Game {
     }
 
     hittingBottom(ball) {
-        return ((ball.y - (ball.radius / 2)) <= this.table.y && ball.vector.angle > Math.PI && ball.vector.angle < 2 * Math.PI) && (!(this.pocketChecker(ball, 2) || this.pocketChecker(ball, 1) || this.pocketChecker(ball, 0)));
+        return ((ball.y - ball.radius / 2) <= this.table.y && ball.vector.angle > Math.PI && ball.vector.angle < 2 * Math.PI) && (!(this.pocketChecker(ball, 2) || this.pocketChecker(ball, 1) || this.pocketChecker(ball, 0)));
 
     }
 
@@ -404,7 +404,7 @@ module.exports = class Game {
             } else {
                 ball_2.vector.angle = 20000;
             }
-            if (Math.abs(ball_1.vector.angle - help1.angle) < (Math.PI / 2) || Math.abs(ball_2.vector.angle - help2.angle) < (Math.PI / 2)) {
+            if (Math.abs(ball_1.vector.angle - help1.angle) < (2 * Math.PI / 3) || Math.abs(ball_2.vector.angle - help2.angle) < (2 * Math.PI / 3)) {
                 if (ball_1.vector.angle === 20000) ball_1.vector.angle = null;
                 if (ball_2.vector.angle === 20000) ball_1.vector.angle = null;
                 if (ball_1.vector.angle > 2 * Math.PI) ball_1.vector.angle -= 2 * Math.PI;
@@ -559,13 +559,13 @@ module.exports = class Game {
             this.setVector(ball1.vector, a.angle, ball1.vector.force);
             ball1.vector.x = -ball1.vector.x;
             ball1.vector.y = -ball1.vector.y;
-            ball1.vector.angle = this.computeAngle(ball1.vector);
+            ball1.vector.angle += Math.PI;
+            this.angleControl(ball1.vector);
             let coeficient = Math.abs(Math.sin(this.getAngle(ball1.vector, ball2.vector)));
             let help = ball1.vector.force;
             ball1.vector.force *= coeficient;
             ball2.vector.force = help * (1 - coeficient);
-            this.forceControl(ball2.vector);
-            this.forceControl(ball1.vector);
+
         }
         /**
          * 
@@ -635,13 +635,13 @@ module.exports = class Game {
      * @param {JSON} data 
      */
     updateSizes(id, data) {
-        this.table.height = data.height * (127 / 150);
-        this.table.width = data.height * (254 / 150);
+        this.table.height = (data.height) * (117 / 150);
+        this.table.width = (data.height) * (234 / 150);
 
         const offsetWidth = (data.windowWidth - this.table.width) / 2;
         this.table.x = offsetWidth;
         const offsetHeight = (data.height - this.table.height) / 2;
-        this.table.y = offsetHeight + data.height / 30;
+        this.table.y = offsetHeight;
         moveX = data.windowWidth / 2;
 
 
@@ -887,22 +887,24 @@ module.exports = class Game {
         vector.angle >= 2 * Math.PI ? vector.angle -= 2 * Math.PI : vector.angle = vector.angle;
     }
     positionCorrection(ball1, ball2) {
-        if (!(ball1.hidden || ball2.hidden)) {
-            if (Math.pow(ball2.x - ball1.x, 2) + Math.pow(ball2.y - ball1.y, 2) <= (Math.pow(((ball1.radius + ball2.radius) / 2), 2))) {
-                let help2 = new Vector(ball1.x, ball1.y, ball2.x, ball2.y);
-                let help1 = new Vector(ball2.x, ball2.y, ball1.x, ball1.y);
-                let distance = ((ball1.radius + ball2.radius) / 2) - this.getSize(help1);
-                help1.force = distance / 2;
-                help2.force = distance / 2;
-                this.forceControl(help2);
-                this.forceControl(help1);
-                if (ball2.vector.force !== 0) {
+        if (!this.checkCollisionBtB(ball1, ball2)) {
+            if (!(ball1.hidden || ball2.hidden)) {
+                if (Math.pow(ball2.x - ball1.x, 2) + Math.pow(ball2.y - ball1.y, 2) <= (Math.pow(((ball1.radius + ball2.radius) / 2), 2))) {
+                    let help2 = new Vector(ball1.x, ball1.y, ball2.x, ball2.y);
+                    let help1 = new Vector(ball2.x, ball2.y, ball1.x, ball1.y);
+                    let distance = ((ball1.radius + ball2.radius) / 2) - this.getSize(help1);
+                    help1.force = distance / 2;
+                    help2.force = distance / 2;
+                    this.forceControl(help2);
+                    this.forceControl(help1);
+                    if (ball2.vector.force !== 0) {
 
+                    }
+                    ball2.x += help2.x;
+                    ball2.y += help2.y;
+                    ball1.x += help1.x;
+                    ball1.y += help1.y;
                 }
-                ball2.x += help2.x;
-                ball2.y += help2.y;
-                ball1.x += help1.x;
-                ball1.y += help1.y;
             }
         }
     }

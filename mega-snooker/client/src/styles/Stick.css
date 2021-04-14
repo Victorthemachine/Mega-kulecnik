@@ -1,7 +1,7 @@
 .circle {
 position: absolute;
-width: 250px;
-height: 250px;
+width: 20.325vw;
+height: 20.325vw;
 transform-origin: center center;
 }
 .pointer {
