@@ -1,57 +1,39 @@
 import React, { Component } from 'react';
-import Background from './../assets/other/Background.svg';
-import { Link } from 'react-router-dom';
+import { withRouter } from 'react-router-dom'
 
-
-import './../styles/Menu.css';
-
-class Lobby extends Component {
-
+class CreateRoom extends Component {
     constructor(props) {
         super(props);
-        this.state = {           
-            win: 1
+        this.state = {
+            message: ''
         };
+        console.log(props);
         this.API = props.props.api;
+        this.cancelGame = this.cancelGame.bind(this);
+        console.log(this.API);
+    }
+
+
+    //TODO
+    cancelGame() {
+        this.props.history.push('/menu');
+    }
+
+    componentDidMount() {
+        console.log(this.API.winnerWinnerChickenDinner === this.API.activeGame.myIndex ? 'YOU WIN! :)' : 'YOU LOSE! :(');
+        this.setState({ message: this.API.winnerWinnerChickenDinner === this.API.activeGame.myIndex ? 'YOU WIN! :)' : 'YOU LOSE! :(' });
     }
 
     render() {
-        if(this.state.win === 1) {
         return (
             <>
-                <Background className="back" />
                 <div className='container'>
-                    <div className='head'>
-                        <h1>!!Gratuluji!!</h1>
-                    </div>                                    
-                    <div className='col'> 
-                    <p3><b>Vyhrál jsi!!!</b></p3>                                     
-                        <Link to='/menu'>
-                            <button >Zpět do menu</button>
-                        </Link>
-                    </div>
+                    <h1>{this.state.message}</h1>
+                    <button onClick={this.cancelGame}>Zpět</button>
                 </div>
             </>
         );
-        } else {
-            return (
-                <>
-                    <Background className="back" />
-                    <div className='container'>
-                        <div className='head'>
-                            <h1>Nevadí :(</h1>
-                        </div>
-                        <div className='col'>    
-                        <p3><b>Třeba někdy příště</b></p3>                                
-                            <Link to='/menu'>
-                                <button >Zpět do menu</button>
-                            </Link>
-                        </div>
-                    </div>
-                </>
-            );
-        }
     }
 }
 
-export default Lobby;
+export default withRouter(CreateRoom);

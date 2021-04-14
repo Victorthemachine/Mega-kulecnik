@@ -25,6 +25,7 @@ module.exports = class apiTool {
             x: 0,
             y: 0
         };
+        this.winnerWinnerChickenDinner = 0;
         this.ws = null;
     }
 
@@ -166,6 +167,7 @@ module.exports = class apiTool {
                 this.activeGame.serverToken = token;
                 this.activeGame.id = id;
                 this.activeGame.myIndex = yourIndex;
+                console.log(this.activeGame);
                 currGame.serverToken = token;
                 currGame.id = id;
                 resolve(res.data);
@@ -249,6 +251,7 @@ module.exports = class apiTool {
 
     //WebSockets ahead
     connectSocket() {
+        console.log(this.activeGame);
         return new Promise(resolve => {
             const ws = new WebSocket('wss://localhost:9000');
             this.ws = ws;

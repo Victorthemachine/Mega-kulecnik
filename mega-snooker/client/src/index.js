@@ -14,12 +14,12 @@ import {
 
 import ErrorBoundary from './containers/ErrorBoundary';
 import Menu from './pages/Menu';
-import End from './pages/End';
 //import App from './pages/App';
 import Lobby from './pages/Lobby';
 import CreateRoom from './pages/CreateRoom';
 import JoinRoom from './pages/JoinRoom';
 import Snooker from './containers/Snooker';
+import EndScreen from './pages/End';
 
 const apiTool = require('./utilities/apiTool');
 const API = new apiTool();
@@ -49,11 +49,6 @@ ReactDOM.render(
             <Menu />
           </ErrorBoundary>
         </Route>
-        <Route path="/end">
-          <ErrorBoundary>
-            <End props={{ api: API }}/>
-          </ErrorBoundary>
-        </Route>
         <Route path="/lobby">
           <ErrorBoundary>
             <Lobby props={{ api: API }} />
@@ -75,6 +70,11 @@ ReactDOM.render(
               <Snooker props={{ api: API }} />
             </ErrorBoundary>
           </Provider>
+        </Route>
+        <Route path="/end">
+          <ErrorBoundary>
+            <EndScreen props={{ api: API }}/>
+          </ErrorBoundary>
         </Route>
       </Switch>
     </Router>

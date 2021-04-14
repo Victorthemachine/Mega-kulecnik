@@ -23,7 +23,7 @@ const whiteRad = 62 * (window.innerHeight / 1120) * 2;
 const points = [];
 //This is the game secret or otherwise referenced as game id
 let secret = '';
-let isRendering = false;
+let isFinished = false;
 /**
  * All balls are here. They are currently being rendered with positions from this.API so don't forget to turn it on.
  * Don't touch viewBox, only adjust X and Y cordinates, radius is calculated before based on window size and maintains aspect ratio
@@ -64,6 +64,7 @@ class Balls extends Component {
         const { activeGame } = this.API;
         this.API.connectSocket().then(socket => {
             socket.onmessage = function (event) {
+                if (isFinished === true) return;
                 console.log(event.data);
                 let serverInstructions = event.data;
                 let payload = null;
@@ -91,7 +92,6 @@ class Balls extends Component {
                         for (let i = 0; i < 16; i++) {
                             points.push(payload[i]);
                         }
-                        console.log(points);
                         this.setState({ points: points })
                         socket.send(this.prepareMessage('Ready'));
                         break;
@@ -117,8 +117,10 @@ class Balls extends Component {
                         this.isReadyToEnd().then(ready => {
                             socket.send(this.prepareMessage('Finished'));
                             this.API.disconnectSocket(socket);
+                            this.API.winnerWinnerChickenDinner = payload;
+                            isFinished = true;
                             this.props.history.push('/end');
-                        })
+                        });
                         break;
                     default:
                         break;
@@ -130,7 +132,6 @@ class Balls extends Component {
 
     isReadyToEnd() {
         return new Promise(resolve => {
-            while (isRendering) { }
             resolve(true);
         });
     }
@@ -163,30 +164,29 @@ class Balls extends Component {
         return new Promise(resolve => {
             window.addEventListener('click', function handleMouseClick(event) {
                 event.currentTarget.removeEventListener(event.type, handleMouseClick);
-                console.log(this.API.whiteBall);
-                console.log('================DEBUG PLAY================')
-                console.log({
-                    x: event.pageX,
-                    y: event.pageY,
-                    xx: this.API.whiteBall.x + window.innerWidth / 2,
-                    yy: (window.innerHeight - 100) - Math.abs(this.API.whiteBall.y + (whiteRad / 2))
-                });
-                console.log('================DEBUG PLAY================')
+                const { pageX, pageY } = event;
+                const ballx = (this.API.whiteBall.x + window.innerWidth / 2) + whiteRad / 2;
+                let rotatedPageY = window.innerHeight - pageY;
+                let bally = 0;
+                if (Math.abs(Math.abs(this.API.whiteBall.y) - rotatedPageY) <= 60) {
+                    bally = pageY + 100;
+                } else {
+                    bally = ((Math.abs(this.API.whiteBall.y) + whiteRad / 2));
+                }
                 resolve({
                     cursor: {
-                        x: event.pageX,
-                        y: event.pageY
+                        x: pageX,
+                        y: rotatedPageY
                     },
                     cueBall: {
-                        x: this.API.whiteBall.x + window.innerWidth / 2,
-                        y: (window.innerHeight - 100) - Math.abs(this.API.whiteBall.y + (whiteRad / 2))
+                        x: ballx,
+                        y: bally
                     }
                 });
             }.bind(this));
         });
     }
     _renderMoves(payload) {
-        isRendering = true;
         return new Promise(resolve => {
             console.log('==========================================================');
             console.time('Parsing operation');
@@ -216,7 +216,6 @@ class Balls extends Component {
                 this.setState({ points: updates[counter] })
                 if (updates.length - 1 === counter) {
                     clearInterval(scheduleUpdates);
-                    isRendering = false;
                     resolve(true);
                     return;
                 }

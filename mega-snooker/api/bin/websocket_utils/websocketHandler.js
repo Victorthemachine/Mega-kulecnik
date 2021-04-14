@@ -87,7 +87,7 @@ module.exports = new class WebSocketHandler {
         })
     }
 
-    gameFinished() {
+    gameFinished(gameID) {
         FileManager.deleteGame(gameID);
     }
 }

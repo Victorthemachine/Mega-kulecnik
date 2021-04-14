@@ -118,6 +118,8 @@ let clientStatus = [];
 let startTheseNext = [];
 let userID = 0;
 
+let turn = 1;
+
 wss.on('listening', () => {
   console.log('WSS online');
   console.log(wss.address());
@@ -171,7 +173,7 @@ wss.on('connection', (ws, req) => {
           }
         }
         if (lobbyCheckValue === true) {
-          //Find the waiting client, notify to start (As of now only two players are playing in one game)
+          //Find the waiting client, notify to start (As of now only two players are playing in one game).
           clients.verified[lobby[0]].send('Start');
           WebSocketHandler.startUpGame(gameID);
           startTheseNext.push(gameID);
@@ -287,17 +289,25 @@ wss.on('connection', (ws, req) => {
               for (let i in statusLobby[gameID]) {
                 statusLobby[gameID][i] = 'Processing'
               }
-              const { win } = updatedCords;
+              let { win } = updatedCords;
+              console.log(turn);
+              if (turn === 5) {
+                win[0] = true;
+              } else {
+                turn++;
+              }
               console.log('=============================');
               console.log(win);
               console.log('=============================');
-              let isOver = true;
-              win.forEach(el => {
-                if (el === false) isOver = false;
+              let isOver = false;
+              win.forEach((el, index) => {
+                if (el === true) {
+                  isOver = index;
+                }
               });
-              if (isOver === true) {
+              if (isOver !== false) {
                 recepients.forEach(socket => {
-                  socket.send('Win');
+                  socket.send(`Win:${isOver + 1}`);
                 })
               }
             });

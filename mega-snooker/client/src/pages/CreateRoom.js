@@ -36,7 +36,7 @@ class CreateRoom extends Component {
 
   //TODO
   cancelGame() {
-    this.props.history.push('/lobby');
+    this.props.history.push('/menu');
   }
 
   render() {
@@ -52,9 +52,9 @@ class CreateRoom extends Component {
             <button onClick={this.cancelGame}>Zpět</button>
           </div>
           <div className='text'>
-            <p1> Kdy začne hra?
-            <br /></p1>
-            <p2> Hra začne jakmile tvůj kamarád zadá kód, který jsi mu nasdílel. Neopouštěj tuto stránku, pokud nechceš, aby se tato mistnost zrušila.</p2>
+            <p> Kdy začne hra?
+            <br /></p>
+            <p> Hra začne jakmile tvůj kamarád zadá kód, který jsi mu nasdílel. Neopouštěj tuto stránku, pokud nechceš, aby se tato mistnost zrušila.</p>
           </div>
         </div>
       </>
