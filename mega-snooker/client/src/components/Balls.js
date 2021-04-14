@@ -158,7 +158,12 @@ class Balls extends Component {
                 const { pageX, pageY } = event;
                 const ballx = (this.API.whiteBall.x + window.innerWidth / 2) + whiteRad / 2;
                 let rotatedPageY = window.innerHeight - pageY;
-                let bally = this.API.whiteBall.y - this.API.whiteBall.radius / 2 + window.innerHeight;
+                let bally = 0;
+                if (Math.abs(Math.abs(this.API.whiteBall.y) - rotatedPageY) <= 60) {
+                    bally = pageY + 100;
+                } else {
+                    bally = ((Math.abs(this.API.whiteBall.y) + whiteRad / 2));
+                }
                 resolve({
                     cursor: {
                         x: pageX,
